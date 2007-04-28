@@ -40,6 +40,13 @@
       <type>jar</type>
       <url>http://www.idega.com/</url>
     </dependency>
+    <dependency>
+      <groupId>bundles</groupId>
+      <artifactId>is.idega.idegaweb.egov.cases</artifactId>
+      <version>1.0.28</version>
+      <type>jar</type>
+      <url>http://www.idega.com/</url>
+    </dependency>
   </dependencies>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
