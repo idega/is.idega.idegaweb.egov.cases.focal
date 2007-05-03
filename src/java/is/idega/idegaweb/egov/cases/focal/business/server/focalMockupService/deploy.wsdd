@@ -1,0 +1,90 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from FocalMockupServiceService WSDL service -->
+
+  <service name="FocalMockup" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="urn:is.idega.idegaweb.egov.cases.focal"/>
+      <parameter name="wsdlServiceElement" value="FocalMockupServiceService"/>
+      <parameter name="schemaUnqualified" value="urn:is.idega.idegaweb.egov.cases.focal"/>
+      <parameter name="wsdlServicePort" value="FocalMockup"/>
+      <parameter name="className" value="is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FocalMockupSoapBindingSkeleton"/>
+      <parameter name="wsdlPortType" value="FocalMockupService"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <parameter name="allowedMethods" value="*"/>
+      <parameter name="scope" value="Session"/>
+
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:CustomerPersonalInformation"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:ProjectMetaData"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:ReturnedProjects"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:Status"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:FPStatus"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FPStatus"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:ArrayOfProjectMetaData"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[]"
+        innerType="cmp-ns:ProjectMetaData" xmlns:cmp-ns="urn:is.idega.idegaweb.egov.cases.focal"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:CaseData"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CaseData"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:is.idega.idegaweb.egov.cases.focal"
+        qname="ns:MainParty"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.MainParty"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>
