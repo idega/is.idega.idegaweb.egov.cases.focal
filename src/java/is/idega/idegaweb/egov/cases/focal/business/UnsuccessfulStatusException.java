@@ -1,19 +1,17 @@
 package is.idega.idegaweb.egov.cases.focal.business;
 
+import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
+
 /**
  * 
- * Last modified: $Date: 2007/05/04 09:22:19 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/04 12:04:16 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class UnsuccessfulStatusException extends Exception {
 
 	private static final long serialVersionUID = 8020380823364682303L;
-	
-	public static final int unknown_fail = 0;
-	public static final int no_customer = 1;
-	public static final int no_projects = 2;
 	
 	public UnsuccessfulStatusException()
     {
@@ -34,13 +32,13 @@ public class UnsuccessfulStatusException extends Exception {
         super(throwable);
     }
 	
-	private int status;
+	private Status status;
 
-	public int getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
