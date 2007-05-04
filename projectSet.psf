@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<psf version="2.0">
+  <provider id="org.eclipse.team.cvs.core.cvsnature">
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/com.idega.core.bundle,com.idega.core">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/is.idega.idegaweb.egov.cases.bundle,is.idega.idegaweb.egov.cases">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/axis.bundle,axis">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/axis-jaxrpc.bundle,axis-jaxrpc">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/servletapi.bundle,servletapi">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/myfaces-jsf-api.bundle,myfaces-jsf-api">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/myfaces-tomahawk.bundle,myfaces-tomahawk">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/jsp-api.bundle,jsp-api">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/ejb.bundle,ejb">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/jta.bundle,jta">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/com.idega.block.web2.0.bundle,com.idega.block.web2.0">
+    </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/maven-statcvs-plugin.bundle,maven-statcvs-plugin">
+    </project>
+  </provider>
+</psf>
