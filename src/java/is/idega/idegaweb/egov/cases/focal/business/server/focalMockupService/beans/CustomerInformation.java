@@ -2,12 +2,12 @@ package is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.be
 
 /**
  * 
- * Last modified: $Date: 2007/05/03 13:25:37 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 18:46:09 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
  * @version $Revision: 1.1 $
  */
-public class CustomerPersonalInformation {
+public class CustomerInformation {
 	
     public void setCustomerId(String project_id) { }
     public String getCustomerId() { return null; }
