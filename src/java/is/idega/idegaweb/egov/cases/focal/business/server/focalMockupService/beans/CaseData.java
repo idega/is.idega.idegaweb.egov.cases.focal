@@ -4,10 +4,10 @@ import java.util.Date;
 
 /**
  * 
- * Last modified: $Date: 2007/05/03 13:25:37 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 13:19:14 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class CaseData {
 	
@@ -19,6 +19,6 @@ public class CaseData {
     public String getCaseBody() { return null; }
     public void setDate(Date date) { }
     public Date getDate() { return null; }
-    
-//    TODO: add attachment support
+    public void setAttachments(Attachment[] atts) { }
+    public Attachment[] getAttachments() { return null; }
 }

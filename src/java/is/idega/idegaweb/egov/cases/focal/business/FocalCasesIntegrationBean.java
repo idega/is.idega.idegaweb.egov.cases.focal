@@ -11,6 +11,7 @@ import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Foc
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.MainParty;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,13 +25,14 @@ import java.util.logging.Logger;
 import javax.xml.rpc.ServiceException;
 
 import com.idega.business.IBOServiceBean;
+import com.idega.core.file.data.ICFile;
 
 /**
  * 
- * Last modified: $Date: 2007/05/04 12:04:16 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 13:19:14 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -126,7 +128,18 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			cdata.setDate(cal);
 			cdata.setCaseSubject(gcase.getSubject());
 			cdata.setCaseBody(gcase.getBody());
-//			TODO: add attachement
+			
+			ICFile file = gcase.getAttachment();
+			
+			byte[] serialized_file_value = new byte[file.getFileSize().intValue()];
+			file.getFileValueForWrite().write(serialized_file_value);
+			
+			Attachment att = new Attachment();
+			att.setFile(serialized_file_value);
+			att.setFileSize(file.getFileSize().longValue());
+			att.setFName(file.getName());
+			
+			cdata.setAttachments(new Attachment[] {att});
 			
 			try {
 				is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status status = service.createCase(cdata);

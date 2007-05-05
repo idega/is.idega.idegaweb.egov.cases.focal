@@ -38,8 +38,23 @@ Built on Oct 05, 2005 (05:23:37 EDT)-->
      <element name="status" nillable="true" type="impl:FPStatus"/>
     </sequence>
    </complexType>
+   <complexType name="Attachment">
+    <sequence>
+     <element name="FName" nillable="true" type="soapenc:string"/>
+     <element name="file" nillable="true" type="soapenc:base64Binary"/>
+     <element name="fileSize" type="xsd:long"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfAttachment">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:Attachment[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
    <complexType name="CaseData">
     <sequence>
+     <element name="attachments" nillable="true" type="impl:ArrayOfAttachment"/>
      <element name="caseBody" nillable="true" type="soapenc:string"/>
      <element name="caseSubject" nillable="true" type="soapenc:string"/>
      <element name="date" nillable="true" type="xsd:dateTime"/>

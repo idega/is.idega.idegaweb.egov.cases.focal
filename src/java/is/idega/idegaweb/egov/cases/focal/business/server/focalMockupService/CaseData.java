@@ -8,6 +8,8 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService;
 
 public class CaseData  implements java.io.Serializable {
+    private is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment[] attachments;
+
     private java.lang.String caseBody;
 
     private java.lang.String caseSubject;
@@ -20,14 +22,36 @@ public class CaseData  implements java.io.Serializable {
     }
 
     public CaseData(
+           is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment[] attachments,
            java.lang.String caseBody,
            java.lang.String caseSubject,
            java.util.Calendar date,
            java.lang.String projectId) {
+           this.attachments = attachments;
            this.caseBody = caseBody;
            this.caseSubject = caseSubject;
            this.date = date;
            this.projectId = projectId;
+    }
+
+
+    /**
+     * Gets the attachments value for this CaseData.
+     * 
+     * @return attachments
+     */
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment[] getAttachments() {
+        return attachments;
+    }
+
+
+    /**
+     * Sets the attachments value for this CaseData.
+     * 
+     * @param attachments
+     */
+    public void setAttachments(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment[] attachments) {
+        this.attachments = attachments;
     }
 
 
@@ -122,6 +146,9 @@ public class CaseData  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.attachments==null && other.getAttachments()==null) || 
+             (this.attachments!=null &&
+              java.util.Arrays.equals(this.attachments, other.getAttachments()))) &&
             ((this.caseBody==null && other.getCaseBody()==null) || 
              (this.caseBody!=null &&
               this.caseBody.equals(other.getCaseBody()))) &&
@@ -145,6 +172,17 @@ public class CaseData  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getAttachments() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getAttachments());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getAttachments(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
         if (getCaseBody() != null) {
             _hashCode += getCaseBody().hashCode();
         }
@@ -168,6 +206,12 @@ public class CaseData  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CaseData"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("attachments");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "attachments"));
+        elemField.setXmlType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "Attachment"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("caseBody");
         elemField.setXmlName(new javax.xml.namespace.QName("", "caseBody"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"));

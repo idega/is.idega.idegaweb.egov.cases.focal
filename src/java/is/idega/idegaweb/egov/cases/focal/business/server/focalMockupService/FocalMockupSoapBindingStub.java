@@ -98,6 +98,15 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "ArrayOfAttachment");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "Attachment");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
             qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "ArrayOfProjectMetaData");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[].class;
@@ -106,6 +115,13 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "Attachment");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CaseData");
             cachedSerQNames.add(qName);

@@ -7,10 +7,12 @@
 
 package is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService;
 
-public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FocalMockupService {
-	
+import java.io.File;
+import java.io.FileOutputStream;
+
+public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FocalMockupService{
     public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects findProjects(java.lang.String search_str) throws java.rmi.RemoteException {
-    
+    	
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects projects = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects();
     	
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[] project_meta_datas = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[] {
@@ -39,8 +41,32 @@ public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.
 
     public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status createCase(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CaseData case_data) throws java.rmi.RemoteException {
     	
+    	System.out.println("cia cia cia");
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status status = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status();
     	status.setSuccess(true);
+    	
+    	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Attachment[] attachements = case_data.getAttachments();
+    	System.out.println("ats: "+attachements.length);
+    	
+    	if(attachements !=  null) {
+    		
+    		for (int i = 0; i < attachements.length; i++) {
+    			
+    			System.out.println("filesize: "+attachements[i].getFileSize());
+    			System.out.println("fname: "+attachements[i].getFName());
+    			System.out.println("barray size: "+attachements[i].getFile().length);
+    			
+    			try {
+    				File simple_output = new File("/Users/civilis/tmp/pic_output.jpg");
+        			FileOutputStream output = new FileOutputStream(simple_output);
+        			output.write(attachements[i].getFile());
+        			output.close();
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+    	}
     	
         return status;
     }
@@ -63,4 +89,5 @@ public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.
     	
         return status;
     }
+
 }
