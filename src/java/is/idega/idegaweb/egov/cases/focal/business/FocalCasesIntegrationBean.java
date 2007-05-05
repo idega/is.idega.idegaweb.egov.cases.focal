@@ -30,10 +30,10 @@ import com.idega.core.file.data.ICFile;
 
 /**
  * 
- * Last modified: $Date: 2007/05/05 18:43:25 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 19:00:06 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -44,12 +44,8 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 
 	
 	/**
-	 * Finds projects by main party (customer) id or name(probably)
+	 * @see FocalCasesIntegration method description
 	 * 
-	 * @param search_txt - id or name(?)
-	 * @return list of is.idega.idegaweb.egov.cases.focal.business.beans.ProjectData objects
-	 * @throws UnsuccessfulStatusException - contains the cause (use getStatus()) of projects missing, if there was an objective reason for that - e.g. no customer exists, or customer has no projects
-	 * @throws Exception
 	 */
 	public List findProjects(String search_txt) throws UnsuccessfulStatusException, Exception {
 	
@@ -104,12 +100,8 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	}
 	
 	/**
+	 * @see FocalCasesIntegration method description
 	 * 
-	 * Creates cases under the same project
-	 * 
-	 * @param project_id - project to create under id
-	 * @param cases - list of is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg - status may be empty as it is used on return only
-	 * @return cases - the same list with status modified to each case move status
 	 */
 	public List createCasesUnderProject(String project_id, List cases) throws Exception {
 
@@ -159,6 +151,10 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		return cases;
 	}
 	
+	/**
+	 * @see FocalCasesIntegration method description
+	 * 
+	 */
 	public List findCustomers(String search_txt) throws Exception {
 		
 		FocalMockupService service = getFocalService();
@@ -183,6 +179,10 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		return customer_information_list;
 	}
 	
+	/**
+	 * @see FocalCasesIntegration method description
+	 * 
+	 */
 	public Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation customer_information) throws Exception {
 		
 		FocalMockupService service = getFocalService();
