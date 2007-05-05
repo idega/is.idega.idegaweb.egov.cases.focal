@@ -6,6 +6,8 @@
     </project>
     <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/is.idega.idegaweb.egov.cases.bundle,is.idega.idegaweb.egov.cases">
     </project>
+    <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/com.idega.block.process.bundle,com.idega.block.process">
+    </project>
     <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/axis.bundle,axis">
     </project>
     <project reference="1.0,:extssh:code.idega.com:/idega/cvs,bundles/axis-jaxrpc.bundle,axis-jaxrpc">
