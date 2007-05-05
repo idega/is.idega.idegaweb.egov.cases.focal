@@ -27,18 +27,20 @@ import javax.xml.rpc.ServiceException;
 
 import com.idega.business.IBOServiceBean;
 import com.idega.core.file.data.ICFile;
+import com.idega.idegaweb.IWMainApplication;
 
 /**
  * 
- * Last modified: $Date: 2007/05/05 19:00:06 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 20:29:38 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
 	private static final long serialVersionUID = -486408791846081399L;
 	private static final String service_url = "http://127.0.0.1:8080/services/FocalMockup";
+	private static final String focal_service_url_app_key = "focal.ws.url"; 
 	
 	Logger logger = Logger.getLogger(FocalCasesIntegrationBean.class.getName());
 
@@ -202,8 +204,12 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	}
 	
 	protected String getServiceUrl() {
-	
-//		TODO: try to lookup application property
+
+		IWMainApplication iwma = IWMainApplication.getDefaultIWMainApplication();
+		
+		if(iwma != null)
+			return (String)iwma.getSettings().getProperty(focal_service_url_app_key, service_url);
+		
 		return service_url;
 	}
 	
