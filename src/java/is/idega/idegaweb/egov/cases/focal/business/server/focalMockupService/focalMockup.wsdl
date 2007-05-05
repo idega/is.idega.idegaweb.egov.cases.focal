@@ -67,13 +67,20 @@ Built on Oct 05, 2005 (05:23:37 EDT)-->
      <element name="success" type="xsd:boolean"/>
     </sequence>
    </complexType>
-   <complexType name="CustomerPersonalInformation">
+   <complexType name="CustomerInformation">
     <sequence>
      <element name="customerId" nillable="true" type="soapenc:string"/>
      <element name="email" nillable="true" type="soapenc:string"/>
      <element name="name" nillable="true" type="soapenc:string"/>
      <element name="phone" nillable="true" type="soapenc:string"/>
     </sequence>
+   </complexType>
+   <complexType name="ArrayOfCustomerInformation">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:CustomerInformation[]"/>
+     </restriction>
+    </complexContent>
    </complexType>
   </schema>
  </wsdl:types>
@@ -86,7 +93,7 @@ Built on Oct 05, 2005 (05:23:37 EDT)-->
 
    <wsdl:message name="createUpdateCustomerRequest">
 
-      <wsdl:part name="personal_information" type="impl:CustomerPersonalInformation"/>
+      <wsdl:part name="personal_information" type="impl:CustomerInformation"/>
 
    </wsdl:message>
 
@@ -104,7 +111,7 @@ Built on Oct 05, 2005 (05:23:37 EDT)-->
 
    <wsdl:message name="findCustomerResponse">
 
-      <wsdl:part name="findCustomerReturn" type="impl:CustomerPersonalInformation"/>
+      <wsdl:part name="findCustomerReturn" type="impl:ArrayOfCustomerInformation"/>
 
    </wsdl:message>
 

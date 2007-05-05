@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 
 public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FocalMockupService{
     public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects findProjects(java.lang.String search_str) throws java.rmi.RemoteException {
-    	
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects projects = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ReturnedProjects();
     	
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[] project_meta_datas = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[] {
@@ -40,7 +39,6 @@ public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.
     }
 
     public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status createCase(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CaseData case_data) throws java.rmi.RemoteException {
-    	
     	System.out.println("cia cia cia");
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status status = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status();
     	status.setSuccess(true);
@@ -71,19 +69,19 @@ public class FocalMockupSoapBindingImpl implements is.idega.idegaweb.egov.cases.
         return status;
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation findCustomer(java.lang.String search_str) throws java.rmi.RemoteException {
-    	
-    	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation info = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation();
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[] findCustomer(java.lang.String search_str) throws java.rmi.RemoteException {
+    	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation info = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation();
     	
     	info.setCustomerId("some customer id");
     	info.setEmail("email@xx.lt");
     	info.setName("customer name");
     	info.setPhone("00-00-call-me-tonight");
     	
-        return info;
+        return  new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[] {info};
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation personal_information) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation personal_information) throws java.rmi.RemoteException {
+    	
     	is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status status = new is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status();
     	status.setSuccess(true);
     	

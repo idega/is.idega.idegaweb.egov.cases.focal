@@ -1,5 +1,5 @@
 /**
- * CustomerPersonalInformation.java
+ * CustomerInformation.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.3 Oct 05, 2005 (05:23:37 EDT) WSDL2Java emitter.
@@ -7,7 +7,7 @@
 
 package is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService;
 
-public class CustomerPersonalInformation  implements java.io.Serializable {
+public class CustomerInformation  implements java.io.Serializable {
     private java.lang.String customerId;
 
     private java.lang.String email;
@@ -16,10 +16,10 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
     private java.lang.String phone;
 
-    public CustomerPersonalInformation() {
+    public CustomerInformation() {
     }
 
-    public CustomerPersonalInformation(
+    public CustomerInformation(
            java.lang.String customerId,
            java.lang.String email,
            java.lang.String name,
@@ -32,7 +32,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Gets the customerId value for this CustomerPersonalInformation.
+     * Gets the customerId value for this CustomerInformation.
      * 
      * @return customerId
      */
@@ -42,7 +42,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Sets the customerId value for this CustomerPersonalInformation.
+     * Sets the customerId value for this CustomerInformation.
      * 
      * @param customerId
      */
@@ -52,7 +52,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Gets the email value for this CustomerPersonalInformation.
+     * Gets the email value for this CustomerInformation.
      * 
      * @return email
      */
@@ -62,7 +62,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Sets the email value for this CustomerPersonalInformation.
+     * Sets the email value for this CustomerInformation.
      * 
      * @param email
      */
@@ -72,7 +72,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Gets the name value for this CustomerPersonalInformation.
+     * Gets the name value for this CustomerInformation.
      * 
      * @return name
      */
@@ -82,7 +82,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Sets the name value for this CustomerPersonalInformation.
+     * Sets the name value for this CustomerInformation.
      * 
      * @param name
      */
@@ -92,7 +92,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Gets the phone value for this CustomerPersonalInformation.
+     * Gets the phone value for this CustomerInformation.
      * 
      * @return phone
      */
@@ -102,7 +102,7 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
 
     /**
-     * Sets the phone value for this CustomerPersonalInformation.
+     * Sets the phone value for this CustomerInformation.
      * 
      * @param phone
      */
@@ -112,8 +112,8 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof CustomerPersonalInformation)) return false;
-        CustomerPersonalInformation other = (CustomerPersonalInformation) obj;
+        if (!(obj instanceof CustomerInformation)) return false;
+        CustomerInformation other = (CustomerInformation) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -163,10 +163,10 @@ public class CustomerPersonalInformation  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(CustomerPersonalInformation.class, true);
+        new org.apache.axis.description.TypeDesc(CustomerInformation.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerPersonalInformation"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerInformation"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("customerId");
         elemField.setXmlName(new javax.xml.namespace.QName("", "customerId"));

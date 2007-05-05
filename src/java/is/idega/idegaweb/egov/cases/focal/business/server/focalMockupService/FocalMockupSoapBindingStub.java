@@ -49,8 +49,8 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.setName("findCustomer");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "search_str"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://schemas.xmlsoap.org/soap/encoding/", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerPersonalInformation"));
-        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation.class);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "ArrayOfCustomerInformation"));
+        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "findCustomerReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -58,7 +58,7 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("createUpdateCustomer");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "personal_information"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerPersonalInformation"), is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "personal_information"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerInformation"), is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "Status"));
         oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status.class);
@@ -107,6 +107,15 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
+            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "ArrayOfCustomerInformation");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerInformation");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
             qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "ArrayOfProjectMetaData");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.ProjectMetaData[].class;
@@ -130,9 +139,9 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerPersonalInformation");
+            qName = new javax.xml.namespace.QName("urn:is.idega.idegaweb.egov.cases.focal", "CustomerInformation");
             cachedSerQNames.add(qName);
-            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation.class;
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -301,7 +310,7 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation findCustomer(java.lang.String search_str) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[] findCustomer(java.lang.String search_str) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -322,9 +331,9 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation) _resp;
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation.class);
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[]) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -332,7 +341,7 @@ public class FocalMockupSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerPersonalInformation personal_information) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation personal_information) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
