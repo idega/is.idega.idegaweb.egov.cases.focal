@@ -29,10 +29,10 @@ import com.idega.core.file.data.ICFile;
 
 /**
  * 
- * Last modified: $Date: 2007/05/05 13:19:14 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 15:18:47 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -132,7 +132,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			ICFile file = gcase.getAttachment();
 			
 			byte[] serialized_file_value = new byte[file.getFileSize().intValue()];
-			file.getFileValueForWrite().write(serialized_file_value);
+			file.getFileValue().read(serialized_file_value);
 			
 			Attachment att = new Attachment();
 			att.setFile(serialized_file_value);
