@@ -5,6 +5,7 @@ import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
 import is.idega.idegaweb.egov.cases.focal.business.beans.ProjectData;
 import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CaseData;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.CustomerInformation;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FPStatus;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FocalMockupService;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.FocalMockupServiceServiceLocator;
@@ -29,10 +30,10 @@ import com.idega.core.file.data.ICFile;
 
 /**
  * 
- * Last modified: $Date: 2007/05/05 15:18:47 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/05 18:43:25 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -73,7 +74,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		
 		ProjectMetaData[] projects_data = projects_ret.getProjects();
 		
-		if(projects_data == null) {
+		if(projects_data == null || projects_data.length == 0) {
 			
 			UnsuccessfulStatusException ex = new UnsuccessfulStatusException("Projects were not set, but status set to success");
 			ex.setStatus(new Status(Status.unknown_fail));
@@ -156,6 +157,48 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		}
 		
 		return cases;
+	}
+	
+	public List findCustomers(String search_txt) throws Exception {
+		
+		FocalMockupService service = getFocalService();
+		CustomerInformation[] informations = service.findCustomer(search_txt);
+		
+		if(informations == null || informations.length == 0)
+			return null;
+		
+		List customer_information_list = new ArrayList();
+		
+		for (int i = 0; i < informations.length; i++) {
+			
+			is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation customer_info = new is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation();
+			customer_info.setCustomerId(informations[i].getCustomerId());
+			customer_info.setName(informations[i].getName());
+			customer_info.setEmail(informations[i].getEmail());
+			customer_info.setPhone(informations[i].getEmail());
+			
+			customer_information_list.add(customer_info);
+		}
+		
+		return customer_information_list;
+	}
+	
+	public Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation customer_information) throws Exception {
+		
+		FocalMockupService service = getFocalService();
+		
+		CustomerInformation ci = new CustomerInformation();
+		ci.setCustomerId(customer_information.getCustomerId());
+		ci.setName(customer_information.getName());
+		ci.setEmail(customer_information.getEmail());
+		ci.setPhone(customer_information.getPhone());
+		
+		is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status stat = service.createUpdateCustomer(ci);
+		
+		if(stat.isSuccess())
+			return new Status(Status.success);
+		
+		return new Status(Status.unknown_fail);
 	}
 	
 	protected String getServiceUrl() {
