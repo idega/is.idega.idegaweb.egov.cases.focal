@@ -1,0 +1,80 @@
+.casesTable td, th {
+	font-size: 10px;
+	empty-cells: show;
+}
+
+.casesTable tbody tr td {
+	padding: 3px;
+	white-space: nowrap;
+}
+
+.casesTable tbody tr td a {
+	font-size: 10px;
+	text-decoration: none;
+}
+
+.casesTable thead tr th {
+	text-align: left;
+	padding: 3px;
+	font-weight: bold;
+	color: #595A54;
+	border-top: 1px solid #D7D7D7;
+	border-bottom: 1px solid #D7D7D7;
+}
+
+.casesTable tfoot tr td {
+	text-align: left;
+	padding: 3px;
+	font-weight: bold;
+	color: #595A54;
+	border-top: 1px solid #D7D7D7;
+	border-bottom: 1px solid #D7D7D7;
+}
+
+.casesTable .casesTable_oddRow {
+	background-color: #EFEFEF;	
+}
+
+.casesTable .casesTable_evenRow {
+	background-color: #FFFFFF;	
+}
+
+.statisticsLayer TH {
+	width : 100px;
+}
+
+.statisticsLayer .name{
+	width : 300px;
+}
+
+table.adminTable tbody tr {
+	background-color: #E6E6E6;
+	text-align: left;
+}
+
+table.adminTable tbody tr.isPrivate {
+	background-color: #fff0cc;
+}
+
+table.adminTable tbody tr.isReview {
+	background-color: #cce7ff;
+}
+table.adminTable thead tr {
+	background-color: #C0E0FC;
+	text-align: left;
+}
+table.adminTable th.firstColumn, table.adminTable td.firstColumn {
+	padding-left: 17px;
+}
+
+ul.legend li.isPrivate {
+	color: #f09e00;
+}
+
+ul.legend li.isReview {
+	color: #0088ff;
+}
+
+div.info div#phone, div.info div#email {
+	float: right;
+}
