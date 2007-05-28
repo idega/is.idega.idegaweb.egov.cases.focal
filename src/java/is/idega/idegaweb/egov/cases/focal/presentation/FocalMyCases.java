@@ -122,7 +122,12 @@ public class FocalMyCases extends MyCases {
 				break;
 				
 			case ACTION_MOVE_FOCAL:
-				showProjectSearch(iwc, false);
+				String values[] = iwc.getParameterValues(PARAMETER_CASE_PK);
+				if(values != null && values.length > 0) {
+					showProjectSearch(iwc, false);
+				} else {
+					showList(iwc);
+				}
 				break;
 				
 			case ACTION_SAVE_FOCAL:
@@ -365,6 +370,58 @@ public class FocalMyCases extends MyCases {
 		cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("sender");
 		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_name", "Customer")));
+		
+		cCell = cRow.createHeaderCell();
+		cCell.setStyleClass("action");
+		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_action", "Action")));
+		
+		cGroup = customerTable.createBodyRowGroup();
+		
+		String casesPKs[] = iwc.getParameterValues(PARAMETER_CASE_PK);
+		for(int i = 0; i < casesPKs.length; i++) {
+			GeneralCase theCase = null;
+			try {
+				theCase = getBusiness().getGeneralCase(casesPKs[i]);
+				User owner = theCase.getOwner();
+				
+				cRow = cGroup.createRow();
+				if (i == 1) {
+					cRow.setStyleClass("firstRow");
+				}
+				else if (i == (casesPKs.length - 1)) {
+					cRow.setStyleClass("lastRow");
+				}
+				
+				cCell = cRow.createCell();
+				cCell.setStyleClass("firstColumn");
+				cCell.setStyleClass("caseNumber");
+				cCell.add(new Text(theCase.getSubject()));
+				
+				cCell = cRow.createCell();
+				cCell.setStyleClass("lastColumn");
+				cCell.setStyleClass("sender");
+				
+				if (owner != null) {
+					cCell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
+				}
+				else {
+					cCell.add(new Text("-"));
+				}
+				
+				cCell = cRow.createCell();
+				cCell.setStyleClass("view");
+				Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+				createCustomer.setStyleClass("homeButton");
+				createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+				createCustomer.setToFormSubmit(form);
+				cCell.add(createCustomer);
+			} catch(RemoteException re) {
+				re.printStackTrace();
+			} catch (FinderException fe) {
+				fe.printStackTrace();
+				throw new IBORuntimeException(fe);
+			}
+		}
 		
 		customerSection.add(customerTable);
 		form.add(customerSection);
