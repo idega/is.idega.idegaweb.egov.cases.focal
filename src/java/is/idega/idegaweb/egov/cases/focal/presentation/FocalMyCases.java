@@ -15,6 +15,7 @@ import is.idega.idegaweb.egov.cases.presentation.MyCases;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class FocalMyCases extends MyCases {
 	}
 	
 	protected void present(IWContext iwc) throws Exception {
-		/*Enumeration params = iwc.getParameterNames();
+		Enumeration params = iwc.getParameterNames();
 		while(params.hasMoreElements()) {
 			String next = (String) params.nextElement();
 			String print = next + ":";
@@ -102,7 +103,7 @@ public class FocalMyCases extends MyCases {
 				print += values[i] + ",";
 			}
 			System.out.println(print);
-		}*/
+		}
 		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
 		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
 		
