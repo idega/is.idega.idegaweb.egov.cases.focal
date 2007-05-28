@@ -178,6 +178,7 @@ public class FocalMyCases extends MyCases {
 		projectSection.add(searchField);
 		
 		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
+		next.setStyleClass("homeButton");
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 		next.setToFormSubmit(form);
 		projectSection.add(next);
@@ -217,22 +218,16 @@ public class FocalMyCases extends MyCases {
 		
 		String searchKey = iwc.getParameter(PARAMETER_PROJECT_SEARCH_KEY);
 		if(searchKey == null) {
-//			Layer errorMessageSection = new Layer(Layer.DIV);
-//			errorMessageSection.setStyleClass("notificationSection");
-			
-			Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found"));
-			projectSection.add(noProjectsFound);
-			
-//			projectSection.add(errorMessageSection);
+			row = group.createRow();
+			cell = row.createHeaderCell();
+			cell.setStyleClass("sender");
+			cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 		} else {
 			if(searchKey.equals("")) {
-//				Layer errorMessageSection = new Layer(Layer.DIV);
-//				errorMessageSection.setStyleClass("notificationSection");
-				
-				Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found"));
-				projectSection.add(noProjectsFound);
-				
-//				projectSection.add(errorMessageSection);
+				row = group.createRow();
+				cell = row.createHeaderCell();
+				cell.setStyleClass("sender");
+				cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 			} else {
 				try {
 					List projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
@@ -269,22 +264,14 @@ public class FocalMyCases extends MyCases {
 							cell.add(select);
 						}
 					} else {
-//						Layer errorMessageSection = new Layer(Layer.DIV);
-//						errorMessageSection.setStyleClass("notificationSection");
-						
-						Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_project_noprojects", "No projects found"));
-						projectSection.add(noProjectsFound);
-						
-//						projectSection.add(errorMessageSection);
+						row = group.createRow();
+						cell = row.createHeaderCell();
+						cell.setStyleClass("sender");
+						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 					}
 				} catch(UnsuccessfulStatusException use) {
-//					Layer errorMessageSection = new Layer(Layer.DIV);
-//					errorMessageSection.setStyleClass("notificationSection");
-//					
 					Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_status_exception_message", "UnsuccessfulStatusException"));
 					projectSection.add(noProjectsFound);
-					
-//					projectSection.add(errorMessageSection);
 				} catch(Exception e) {
 					List tempData = new ArrayList();
 					ProjectData temp = new ProjectData();
@@ -337,9 +324,6 @@ public class FocalMyCases extends MyCases {
 						select.setId(theProject.getProjectId());
 						cell.add(select);
 					}
-					
-//					Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_generic_exception_message", "Exception"));
-//					projectSection.add(noProjectsFound);
 				}
 			}
 		}
