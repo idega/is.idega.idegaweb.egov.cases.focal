@@ -7,9 +7,8 @@ import is.idega.idegaweb.egov.cases.data.GeneralCase;
 import is.idega.idegaweb.egov.cases.focal.IWBundleStarter;
 import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
 import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
-import is.idega.idegaweb.egov.cases.focal.business.UnsuccessfulStatusException;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
-import is.idega.idegaweb.egov.cases.focal.business.beans.ProjectData;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.ProjectInfo;
 import is.idega.idegaweb.egov.cases.presentation.MyCases;
 
 import java.rmi.RemoteException;
@@ -236,10 +235,11 @@ public class FocalMyCases extends MyCases {
 			} else {
 				try {
 					List projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
-					if(projects.size() > 0) {
+					
+					if(projects != null && !projects.isEmpty()) {
 						Iterator iter = projects.iterator();
 						while (iter.hasNext()) {
-							ProjectData theProject = (ProjectData) iter.next();
+							ProjectInfo theProject = (ProjectInfo) iter.next();
 							
 							int iRow = 1;
 							
@@ -254,18 +254,18 @@ public class FocalMyCases extends MyCases {
 							cell = row.createCell();
 							cell.setStyleClass("firstColumn");
 							cell.setStyleClass("caseNumber");
-							cell.add(new Text(theProject.getProjectName()));
+							cell.add(new Text(theProject.getName()));
 							
 							cell = row.createCell();
 							cell.setStyleClass("lastColumn");
 							cell.setStyleClass("caseNumber");
-							cell.add(new Text(theProject.getFirstPartyName()));
+							cell.add(new Text(theProject.getCustomer()));
 							
 							cell = row.createCell();
 							cell.setStyleClass("view");
 							Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
 							select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);return false;");
-							select.setId(theProject.getProjectId());
+							select.setId(theProject.getNumber());
 							cell.add(select);
 						}
 					} else {
@@ -274,33 +274,32 @@ public class FocalMyCases extends MyCases {
 						cell.setStyleClass("sender");
 						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 					}
-				} catch(UnsuccessfulStatusException use) {
+				} /* this exception is not thrown anymore
+				catch(UnsuccessfulStatusException use) {
 					Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_status_exception_message", "UnsuccessfulStatusException"));
 					projectSection.add(noProjectsFound);
-				} catch(Exception e) {
+				}*/
+				catch(Exception e) {
 					List tempData = new ArrayList();
-					ProjectData temp = new ProjectData();
-					temp.setProjectId("project1");
-					temp.setProjectName("NK Projektas");
-					temp.setFirstPartyId("tryggvil");
-					temp.setFirstPartyName("Tryggvi Larusson");
+					ProjectInfo temp = new ProjectInfo();
+					temp.setNumber("project1");
+					temp.setName("NK Projektas");
+					temp.setCustomer("Tryggvi Larusson");
 					tempData.add(temp);
-					temp = new ProjectData();
-					temp.setProjectId("project2");
-					temp.setProjectName("IT Projektas");
-					temp.setFirstPartyId("alexis");
-					temp.setFirstPartyName("Aleksandras Skrynikovas");
+					temp = new ProjectInfo();
+					temp.setNumber("project2");
+					temp.setName("IT Projektas");
+					temp.setCustomer("Aleksandras Skrynikovas");
 					tempData.add(temp);
-					temp = new ProjectData();
-					temp.setProjectId("project3");
-					temp.setProjectName("Investicinis Projektas");
-					temp.setFirstPartyId("civilis");
-					temp.setFirstPartyName("Vytautas Civilis");
+					temp = new ProjectInfo();
+					temp.setNumber("project3");
+					temp.setName("Investicinis Projektas");
+					temp.setCustomer("Vytautas Civilis");
 					tempData.add(temp);
 					
 					Iterator iter = tempData.iterator();
 					while (iter.hasNext()) {
-						ProjectData theProject = (ProjectData) iter.next();
+						ProjectInfo theProject = (ProjectInfo) iter.next();
 						
 						int iRow = 1;
 						
@@ -315,18 +314,18 @@ public class FocalMyCases extends MyCases {
 						cell = row.createCell();
 						cell.setStyleClass("firstColumn");
 						cell.setStyleClass("caseNumber");
-						cell.add(new Text(theProject.getProjectName()));
+						cell.add(new Text(theProject.getName()));
 						
 						cell = row.createCell();
 						cell.setStyleClass("lastColumn");
 						cell.setStyleClass("caseNumber");
-						cell.add(new Text(theProject.getFirstPartyName()));
+						cell.add(new Text(theProject.getCustomer()));
 						
 						cell = row.createCell();
 						cell.setStyleClass("view");
 						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
 						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow();return false;");
-						select.setId(theProject.getProjectId());
+						select.setId(theProject.getNumber());
 						cell.add(select);
 					}
 				}
