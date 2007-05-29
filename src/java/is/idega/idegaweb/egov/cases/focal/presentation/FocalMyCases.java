@@ -245,18 +245,21 @@ public class FocalMyCases extends MyCases {
 			row = group.createRow();
 			cell = row.createHeaderCell();
 			cell.setStyleClass("sender");
+			cell.setColumnSpan(3);
 			cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 		} else {
 			if(searchKey.equals("")) {
 				row = group.createRow();
 				cell = row.createHeaderCell();
 				cell.setStyleClass("sender");
+				cell.setColumnSpan(3);
 				cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 			} else {
 				try {
 					List projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
 					
 					if(projects != null && !projects.isEmpty()) {
+						int rowCount = 0;
 						Iterator iter = projects.iterator();
 						while (iter.hasNext()) {
 							ProjectInfo theProject = (ProjectInfo) iter.next();
@@ -264,6 +267,7 @@ public class FocalMyCases extends MyCases {
 							int iRow = 1;
 							
 							row = group.createRow();
+							row.setId("focalRow" + rowCount);
 							if (iRow == 1) {
 								row.setStyleClass("firstRow");
 							}
@@ -284,71 +288,75 @@ public class FocalMyCases extends MyCases {
 							cell = row.createCell();
 							cell.setStyleClass("view");
 							Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
-							select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);return false;");
-							select.setId(theProject.getNumber());
+							select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
+							select.setNoURL();
+							String projectId = theProject.getNumber();
+							projectId = projectId.replaceAll("/", "-");
+							select.setId(projectId);
 							cell.add(select);
+							rowCount++;
 						}
 					} else {
 						row = group.createRow();
 						cell = row.createHeaderCell();
 						cell.setStyleClass("sender");
+						cell.setColumnSpan(3);
 						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 					}
-				} /* this exception is not thrown anymore
-				catch(UnsuccessfulStatusException use) {
-					Text noProjectsFound = new Text(getResourceBundle(iwc).getLocalizedString("focal_status_exception_message", "UnsuccessfulStatusException"));
-					projectSection.add(noProjectsFound);
-				}*/
-				catch(Exception e) {
-					List tempData = new ArrayList();
-					ProjectInfo temp = new ProjectInfo();
-					temp.setNumber("project1");
-					temp.setName("NK Projektas");
-					temp.setCustomer("Tryggvi Larusson");
-					tempData.add(temp);
-					temp = new ProjectInfo();
-					temp.setNumber("project2");
-					temp.setName("IT Projektas");
-					temp.setCustomer("Aleksandras Skrynikovas");
-					tempData.add(temp);
-					temp = new ProjectInfo();
-					temp.setNumber("project3");
-					temp.setName("Investicinis Projektas");
-					temp.setCustomer("Vytautas Civilis");
-					tempData.add(temp);
-					
-					Iterator iter = tempData.iterator();
-					while (iter.hasNext()) {
-						ProjectInfo theProject = (ProjectInfo) iter.next();
-						
-						int iRow = 1;
-						
-						row = group.createRow();
-						if (iRow == 1) {
-							row.setStyleClass("firstRow");
-						}
-						else if (!iter.hasNext()) {
-							row.setStyleClass("lastRow");
-						}
-						
-						cell = row.createCell();
-						cell.setStyleClass("firstColumn");
-						cell.setStyleClass("caseNumber");
-						cell.add(new Text(theProject.getName()));
-						
-						cell = row.createCell();
-						cell.setStyleClass("lastColumn");
-						cell.setStyleClass("caseNumber");
-						cell.add(new Text(theProject.getCustomer()));
-						
-						cell = row.createCell();
-						cell.setStyleClass("view");
-						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
-						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow(e);return false;");
-						select.setNoURL();
-						select.setId(theProject.getNumber());
-						cell.add(select);
-					}
+				} catch(Exception e) {
+//					List tempData = new ArrayList();
+//					ProjectInfo temp = new ProjectInfo();
+//					temp.setNumber("project1");
+//					temp.setName("NK Projektas");
+//					temp.setCustomer("Tryggvi Larusson");
+//					tempData.add(temp);
+//					temp = new ProjectInfo();
+//					temp.setNumber("project2");
+//					temp.setName("IT Projektas");
+//					temp.setCustomer("Aleksandras Skrynikovas");
+//					tempData.add(temp);
+//					temp = new ProjectInfo();
+//					temp.setNumber("project3");
+//					temp.setName("Investicinis Projektas");
+//					temp.setCustomer("Vytautas Civilis");
+//					tempData.add(temp);
+//					
+//					int rowCount = 0;
+//					Iterator iter = tempData.iterator();
+//					while (iter.hasNext()) {
+//						ProjectInfo theProject = (ProjectInfo) iter.next();
+//						
+//						
+//						int iRow = 1;
+//						
+//						row = group.createRow();
+//						row.setId("focalRow" + rowCount);
+//						if (iRow == 1) {
+//							row.setStyleClass("firstRow");
+//						}
+//						else if (!iter.hasNext()) {
+//							row.setStyleClass("lastRow");
+//						}
+//						
+//						cell = row.createCell();
+//						cell.setStyleClass("firstColumn");
+//						cell.setStyleClass("caseNumber");
+//						cell.add(new Text(theProject.getName()));
+//						
+//						cell = row.createCell();
+//						cell.setStyleClass("lastColumn");
+//						cell.setStyleClass("caseNumber");
+//						cell.add(new Text(theProject.getCustomer()));
+//						
+//						cell = row.createCell();
+//						cell.setStyleClass("view");
+//						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
+//						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
+//						select.setNoURL();
+//						select.setId(theProject.getNumber());
+//						cell.add(select);
+//						rowCount++;
+//					}
 				}
 			}
 		}
@@ -418,7 +426,6 @@ public class FocalMyCases extends MyCases {
 				cCell.add(new Text(theCase.getSubject()));
 				
 				cCell = cRow.createCell();
-				cCell.setStyleClass("lastColumn");
 				cCell.setStyleClass("sender");
 				
 				if (owner != null) {
@@ -428,6 +435,7 @@ public class FocalMyCases extends MyCases {
 					
 					cCell = cRow.createCell();
 					cCell.setStyleClass("view");
+					cCell.setStyleClass("lastColumn");
 					Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
 					createCustomer.setStyleClass("homeButton");
 					createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
@@ -436,6 +444,15 @@ public class FocalMyCases extends MyCases {
 				}
 				else {
 					cCell.add(new Text("-"));
+					
+					cCell = cRow.createCell();
+					cCell.setStyleClass("view");
+					cCell.setStyleClass("lastColumn");
+//					Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+//					createCustomer.setStyleClass("homeButton");
+//					createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+//					createCustomer.setToFormSubmit(form);
+//					cCell.add(createCustomer);
 				}
 			} catch(RemoteException re) {
 				re.printStackTrace();

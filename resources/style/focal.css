@@ -123,3 +123,8 @@ div.searchSection {
 div.tableSection {
 	
 }
+
+table.adminTable tbody tr.selectedProject {
+	background-color:#75206E;
+	text-align:left;
+}
