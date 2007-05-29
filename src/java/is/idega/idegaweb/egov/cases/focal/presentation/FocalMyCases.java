@@ -188,16 +188,24 @@ public class FocalMyCases extends MyCases {
 		heading.setStyleClass("topSubHeader");
 		projectSection.add(heading);
 		
+		Layer searchSection = new Layer(Layer.DIV);
+		searchSection.setStyleClass("searchSection");
+		
 		TextInput searchField = new TextInput();
 		searchField.setLabel("Search text");
 		searchField.setName(PARAMETER_PROJECT_SEARCH_KEY);
-		projectSection.add(searchField);
+		searchSection.add(searchField);
 		
 		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
 		next.setStyleClass("searchButton");
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 		next.setToFormSubmit(form);
-		projectSection.add(next);
+		searchSection.add(next);
+		
+		projectSection.add(searchSection);
+		
+		Layer tableSection = new Layer(Layer.DIV);
+		tableSection.setStyleClass("tableSection");
 
 		Table2 table = new Table2();
 		table.setWidth("100%");
@@ -337,14 +345,15 @@ public class FocalMyCases extends MyCases {
 						cell.setStyleClass("view");
 						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
 						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow(e);return false;");
+						select.setNoURL();
 						select.setId(theProject.getNumber());
 						cell.add(select);
 					}
 				}
 			}
 		}
-
-		projectSection.add(table);
+		tableSection.add(table);
+		projectSection.add(tableSection);
 		form.add(projectSection);
 		
 		Layer customerSection = new Layer(Layer.DIV);

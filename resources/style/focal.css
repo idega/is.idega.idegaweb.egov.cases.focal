@@ -92,7 +92,7 @@ a.searchButton {
 	background:transparent url(/content/files/public/style/images/buttons/blackLeftBlue.gif) no-repeat scroll left center;
 	color:#FFFFFF;
 	display:inline;
-	float:left;
+	/*float:left;*/
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:11px;
 	font-weight:bold;
@@ -109,11 +109,17 @@ a.searchButton:hover {
 }
 a.searchButton span.buttonSpan {
 	background:transparent url(/content/files/public/style/images/buttons/blackRightBlue.gif) no-repeat scroll right center;
-	display:block;
-	float:left;
+	display:inline;
+	/*float:left;*/
 	line-height:20px;
 	padding:0pt 24px 0pt 12px;
 }
 a.searchButton:hover span.buttonSpan {
 	background-image:url(/content/files/public/style/images/buttons/blueRightBlue.gif);
+}
+div.searchSection {
+
+}
+div.tableSection {
+	
 }
