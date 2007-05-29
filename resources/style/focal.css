@@ -59,6 +59,11 @@ table.adminTable tbody tr.isPrivate {
 table.adminTable tbody tr.isReview {
 	background-color: #cce7ff;
 }
+
+table.adminTable tbody tr.isInFocal {
+	background-color: #fff0cc;
+}
+
 table.adminTable thead tr {
 	background-color: #C0E0FC;
 	text-align: left;
@@ -75,6 +80,40 @@ ul.legend li.isReview {
 	color: #0088ff;
 }
 
+ul.legend li.isInFocal {
+	color: #0088ff;
+}
+
 div.info div#phone, div.info div#email {
 	float: right;
+}
+
+a.searchButton {
+	background:transparent url(/content/files/public/style/images/buttons/blackLeftBlue.gif) no-repeat scroll left center;
+	color:#FFFFFF;
+	display:block;
+	float:left;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	height:auto;
+	line-height:20px;
+	margin-right:8px;
+	padding:0pt 0pt 0pt 6px;
+	text-decoration:none;
+	text-transform:uppercase;
+	text-align: center;
+}
+a.searchButton:hover {
+	background-image:url(/content/files/public/style/images/buttons/blueLeftBlue.gif);
+}
+a.searchButton span.buttonSpan {
+	background:transparent url(/content/files/public/style/images/buttons/blackRightBlue.gif) no-repeat scroll right center;
+	display:block;
+	float:left;
+	line-height:20px;
+	padding:0pt 24px 0pt 12px;
+}
+a.searchButton:hover span.buttonSpan {
+	background-image:url(/content/files/public/style/images/buttons/blueRightBlue.gif);
 }
