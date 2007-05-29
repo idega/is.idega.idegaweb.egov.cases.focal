@@ -21,10 +21,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/05/28 16:49:17 $ by $Author: civilis $
+ * Last modified: $Date: 2007/05/29 11:03:42 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -84,8 +84,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		ProjectServiceLocator locator = new ProjectServiceLocator();
 		Project service = locator.getDomino();
 		
-		String[] loging_pass = //getLoginAndPassword();
-			new String[] {"idega", "f3r5kur"};
+		String[] loging_pass = getLoginAndPassword();
 		
 		if(loging_pass == null)
 			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
