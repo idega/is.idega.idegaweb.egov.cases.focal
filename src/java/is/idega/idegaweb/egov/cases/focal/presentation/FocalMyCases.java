@@ -663,7 +663,12 @@ public class FocalMyCases extends MyCases {
 		}
 		casesSection.add(table);
 		form.add(casesSection);
-		form.add(getLegend(iwc));
+		
+		Layer legendSection = new Layer(Layer.DIV);
+		legendSection.setStyleClass("formSection");
+		legendSection.add(getLegend(iwc));
+		
+		form.add(legendSection);
 		
 		Layer bottom = new Layer(Layer.DIV);
 		bottom.setStyleClass("bottom");
@@ -681,6 +686,7 @@ public class FocalMyCases extends MyCases {
 	protected Lists getLegend(IWContext iwc) throws RemoteException {
 		Lists list = super.getLegend(iwc);
 
+		list.setStyleClass("formSection");
 		ListItem item = new ListItem();
 		item.setStyleClass("isInFocal");
 		item.add(new Text(getResourceBundle().getLocalizedString("legend.is_inFocal", "Is In Focal")));
