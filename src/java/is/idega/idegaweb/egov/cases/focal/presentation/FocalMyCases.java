@@ -336,7 +336,7 @@ public class FocalMyCases extends MyCases {
 						cell = row.createCell();
 						cell.setStyleClass("view");
 						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
-						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow();return false;");
+						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow(e);return false;");
 						select.setId(theProject.getNumber());
 						cell.add(select);
 					}
