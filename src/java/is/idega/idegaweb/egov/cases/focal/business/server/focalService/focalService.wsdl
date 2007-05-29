@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:DefaultNamespace"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="urn:DefaultNamespace" xmlns:intf="urn:DefaultNamespace"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:message name="FINDCUSTOMERRequest">
+		<wsdl:part name="STRSOCSECNUM" type="xsd:string" />
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+		<wsdl:part name="STRUSERNAME" type="xsd:string" />
+		<wsdl:part name="STRPASSWORD" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="GETPROJECTLISTResponse">
+		<wsdl:part name="GETPROJECTLISTReturn" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="GETPROJECTLISTRequest">
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+		<wsdl:part name="STRUSERNAME" type="xsd:string" />
+		<wsdl:part name="STRPASSWORD" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="FINDCUSTOMERResponse">
+		<wsdl:part name="FINDCUSTOMERReturn" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:portType name="Project">
+		<wsdl:operation name="GETPROJECTLIST"
+			parameterOrder="STRPROFILEKEY STRUSERNAME STRPASSWORD">
+			<wsdl:input message="impl:GETPROJECTLISTRequest"
+				name="GETPROJECTLISTRequest" />
+			<wsdl:output message="impl:GETPROJECTLISTResponse"
+				name="GETPROJECTLISTResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="FINDCUSTOMER"
+			parameterOrder="STRSOCSECNUM STRPROFILEKEY STRUSERNAME STRPASSWORD">
+			<wsdl:input message="impl:FINDCUSTOMERRequest"
+				name="FINDCUSTOMERRequest" />
+			<wsdl:output message="impl:FINDCUSTOMERResponse"
+				name="FINDCUSTOMERResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="DominoSoapBinding" type="impl:Project">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GETPROJECTLIST">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="GETPROJECTLISTRequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="GETPROJECTLISTResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="FINDCUSTOMER">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="FINDCUSTOMERRequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="FINDCUSTOMERResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ProjectService">
+		<wsdl:port binding="impl:DominoSoapBinding" name="Domino">
+			<wsdlsoap:address
+				location="http://vefur02.hopvinnukerfi.is:80/DEMO/Idega/IdegaWeb.nsf/IdegaProject?OpenWebService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
