@@ -21,6 +21,7 @@ handler_overview=Handler overview
 iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalCaseMover.name=FocalCaseMover
 iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalCaseViewer.name=FocalCaseViewer
 iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalMyCases.name=FocalMyCases
+legend.is_inFocal=Is In Focal
 legend.is_review=Is review
 message=Message
 move_focal=Move to Focal

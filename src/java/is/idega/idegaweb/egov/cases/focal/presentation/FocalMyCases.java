@@ -42,6 +42,8 @@ import com.idega.presentation.TableRowGroup;
 import com.idega.presentation.remotescripting.RemoteScriptHandler;
 import com.idega.presentation.text.Heading1;
 import com.idega.presentation.text.Link;
+import com.idega.presentation.text.ListItem;
+import com.idega.presentation.text.Lists;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.CheckBox;
 import com.idega.presentation.ui.DropdownMenu;
@@ -80,6 +82,8 @@ public class FocalMyCases extends MyCases {
 	protected static final int ACTION_SAVE = 3;
 	protected static final int ACTION_MOVE_FOCAL = 4;
 	protected static final int ACTION_SAVE_FOCAL = 5;
+	protected static final int ACTION_CREATE_CUSTOMER = 6;
+	protected static final int ACTION_UPDATE_CUSTOMER = 7;
 
 	protected boolean showCheckBox() {
 		return true;
@@ -133,6 +137,14 @@ public class FocalMyCases extends MyCases {
 				saveToFocal(iwc);
 				showList(iwc);
 				break;
+				
+			case ACTION_CREATE_CUSTOMER:
+				showProjectSearch(iwc, false);
+				break;
+				
+			case ACTION_UPDATE_CUSTOMER:
+				showProjectSearch(iwc, false);
+				break;
 		}
 	}
 	
@@ -182,7 +194,7 @@ public class FocalMyCases extends MyCases {
 		projectSection.add(searchField);
 		
 		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
-		next.setStyleClass("homeButton");
+		next.setStyleClass("searchButton");
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 		next.setToFormSubmit(form);
 		projectSection.add(next);
@@ -402,23 +414,28 @@ public class FocalMyCases extends MyCases {
 				
 				if (owner != null) {
 					cCell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
+				
+//					List customers = getFocalCasesIntegration(iwc).findCustomers(owner.getFirstName());
+					
+					cCell = cRow.createCell();
+					cCell.setStyleClass("view");
+					Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+					createCustomer.setStyleClass("homeButton");
+					createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+					createCustomer.setToFormSubmit(form);
+					cCell.add(createCustomer);
 				}
 				else {
 					cCell.add(new Text("-"));
 				}
-				
-				cCell = cRow.createCell();
-				cCell.setStyleClass("view");
-				Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-				createCustomer.setStyleClass("homeButton");
-				createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
-				createCustomer.setToFormSubmit(form);
-				cCell.add(createCustomer);
 			} catch(RemoteException re) {
 				re.printStackTrace();
 			} catch (FinderException fe) {
 				fe.printStackTrace();
 				throw new IBORuntimeException(fe);
+			} catch(Exception e) {
+				e.printStackTrace();
+				//TODO
 			}
 		}
 		
@@ -470,6 +487,9 @@ public class FocalMyCases extends MyCases {
 	private void showList(IWContext iwc) throws RemoteException {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
+		
+		Layer casesSection = new Layer(Layer.DIV);
+		casesSection.setStyleClass("formSection");
 
 		Table2 table = new Table2();
 		table.setWidth("100%");
@@ -551,6 +571,9 @@ public class FocalMyCases extends MyCases {
 			if (theCase.isPrivate()) {
 				row.setStyleClass("isPrivate");
 			}
+			if (theCase.getExternalId() != null && !theCase.getExternalId().equals("")) {
+				row.setStyleClass("isInFocal");
+			}
 			if (status.equals(getCasesBusiness(iwc).getCaseStatusReview())) {
 				row.setStyleClass("isReview");
 			}
@@ -612,8 +635,8 @@ public class FocalMyCases extends MyCases {
 				row.setStyleClass("oddRow");
 			}
 		}
-
-		form.add(table);
+		casesSection.add(table);
+		form.add(casesSection);
 		form.add(getLegend(iwc));
 		
 		Layer bottom = new Layer(Layer.DIV);
@@ -627,6 +650,17 @@ public class FocalMyCases extends MyCases {
 		bottom.add(back);
 
 		add(form);
+	}
+	
+	protected Lists getLegend(IWContext iwc) throws RemoteException {
+		Lists list = super.getLegend(iwc);
+
+		ListItem item = new ListItem();
+		item.setStyleClass("isInFocal");
+		item.add(new Text(getResourceBundle().getLocalizedString("legend.is_inFocal", "Is In Focal")));
+		list.add(item);
+
+		return list;
 	}
 	
 	protected void showProcessor(IWContext iwc, Object casePK) throws RemoteException {
