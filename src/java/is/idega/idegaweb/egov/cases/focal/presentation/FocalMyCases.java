@@ -287,7 +287,7 @@ public class FocalMyCases extends MyCases {
 							
 							cell = row.createCell();
 							cell.setStyleClass("view");
-							Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
+							Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")));
 							select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
 							select.setNoURL();
 							String projectId = theProject.getNumber();
@@ -304,59 +304,55 @@ public class FocalMyCases extends MyCases {
 						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 					}
 				} catch(Exception e) {
-//					List tempData = new ArrayList();
-//					ProjectInfo temp = new ProjectInfo();
-//					temp.setNumber("project1");
-//					temp.setName("NK Projektas");
-//					temp.setCustomer("Tryggvi Larusson");
-//					tempData.add(temp);
-//					temp = new ProjectInfo();
-//					temp.setNumber("project2");
-//					temp.setName("IT Projektas");
-//					temp.setCustomer("Aleksandras Skrynikovas");
-//					tempData.add(temp);
-//					temp = new ProjectInfo();
-//					temp.setNumber("project3");
-//					temp.setName("Investicinis Projektas");
-//					temp.setCustomer("Vytautas Civilis");
-//					tempData.add(temp);
-//					
-//					int rowCount = 0;
-//					Iterator iter = tempData.iterator();
-//					while (iter.hasNext()) {
-//						ProjectInfo theProject = (ProjectInfo) iter.next();
-//						
-//						
-//						int iRow = 1;
-//						
-//						row = group.createRow();
-//						row.setId("focalRow" + rowCount);
-//						if (iRow == 1) {
-//							row.setStyleClass("firstRow");
-//						}
-//						else if (!iter.hasNext()) {
-//							row.setStyleClass("lastRow");
-//						}
-//						
-//						cell = row.createCell();
-//						cell.setStyleClass("firstColumn");
-//						cell.setStyleClass("caseNumber");
-//						cell.add(new Text(theProject.getName()));
-//						
-//						cell = row.createCell();
-//						cell.setStyleClass("lastColumn");
-//						cell.setStyleClass("caseNumber");
-//						cell.add(new Text(theProject.getCustomer()));
-//						
-//						cell = row.createCell();
-//						cell.setStyleClass("view");
-//						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")));
-//						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
-//						select.setNoURL();
-//						select.setId(theProject.getNumber());
-//						cell.add(select);
-//						rowCount++;
-//					}
+/*					List tempData = new ArrayList();
+					ProjectInfo temp = new ProjectInfo();
+					temp.setNumber("project1");
+					temp.setName("NK Projektas");
+					temp.setCustomer("Tryggvi Larusson");
+					tempData.add(temp);
+					temp = new ProjectInfo();
+					temp.setNumber("project2");
+					temp.setName("IT Projektas");
+					temp.setCustomer("Aleksandras Skrynikovas");
+					tempData.add(temp);
+					temp = new ProjectInfo();
+					temp.setNumber("project3");
+					temp.setName("Investicinis Projektas");
+					temp.setCustomer("Vytautas Civilis");
+					tempData.add(temp);
+					
+					Iterator iter = tempData.iterator();
+					while (iter.hasNext()) {
+						ProjectInfo theProject = (ProjectInfo) iter.next();
+						
+						int iRow = 1;
+						
+						row = group.createRow();
+						if (iRow == 1) {
+							row.setStyleClass("firstRow");
+						}
+						else if (!iter.hasNext()) {
+							row.setStyleClass("lastRow");
+						}
+						
+						cell = row.createCell();
+						cell.setStyleClass("firstColumn");
+						cell.setStyleClass("caseNumber");
+						cell.add(new Text(theProject.getName()));
+						
+						cell = row.createCell();
+						cell.setStyleClass("lastColumn");
+						cell.setStyleClass("caseNumber");
+						cell.add(new Text(theProject.getCustomer()));
+						
+						cell = row.createCell();
+						cell.setStyleClass("view");
+						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")));
+						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow(e);return false;");
+						select.setNoURL();
+						select.setId(theProject.getNumber());
+						cell.add(select);
+					}*/
 				}
 			}
 		}
@@ -540,7 +536,7 @@ public class FocalMyCases extends MyCases {
 		TableCell2 cell = row.createHeaderCell();
 		cell.setStyleClass("firstColumn");
 		cell.setStyleClass("caseNumber");
-		cell.add(new Text(getResourceBundle().getLocalizedString(getPrefix() + "case_nr", "Case nr.")));
+		cell.add(new Text(getResourceBundle().getLocalizedString("case_nr", "Case nr.")));
 
 		cell = row.createHeaderCell();
 		cell.setStyleClass("sender");
@@ -644,7 +640,7 @@ public class FocalMyCases extends MyCases {
 
 			cell = row.createCell();
 			cell.setStyleClass("view");
-			Link edit = getProcessLink(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString(getPrefix() + "view_case", "View case")), theCase);
+			Link edit = getProcessLink(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")), theCase);
 			cell.add(edit);
 			
 			CheckBox box = new CheckBox(PARAMETER_CASE_PK, theCase.getPrimaryKey().toString());
@@ -721,7 +717,7 @@ public class FocalMyCases extends MyCases {
 
 		form.add(getPersonInfo(iwc, owner));
 
-		Heading1 heading = new Heading1(getResourceBundle().getLocalizedString(getPrefix() + "case_overview", "Case overview"));
+		Heading1 heading = new Heading1(getResourceBundle().getLocalizedString("case_overview", "Case overview"));
 		heading.setStyleClass("subHeader");
 		heading.setStyleClass("topSubHeader");
 		form.add(heading);
@@ -731,7 +727,7 @@ public class FocalMyCases extends MyCases {
 		form.add(section);
 
 		if (theCase.isPrivate()) {
-			section.add(getAttentionLayer(getResourceBundle().getLocalizedString(getPrefix() + "case.is_private", "The sender wishes that this case be handled as confidential.")));
+			section.add(getAttentionLayer(getResourceBundle().getLocalizedString("case.is_private", "The sender wishes that this case be handled as confidential.")));
 		}
 
 		Layer clear = new Layer(Layer.DIV);
@@ -855,7 +851,7 @@ public class FocalMyCases extends MyCases {
 		element.setStyleClass("formItem");
 		element.setStyleClass("informationItem");
 		label = new Label();
-		label.setLabel(getResourceBundle().getLocalizedString(getPrefix() + "message", "Message"));
+		label.setLabel(getResourceBundle().getLocalizedString("message", "Message"));
 		element.add(label);
 		element.add(message);
 		section.add(element);

@@ -55,7 +55,7 @@ public class FocalCaseMover extends Block {
 		projectSection.setStyleClass("formSection");
 		
 		
-		Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString("case_overview", "Find project in Focal"));
+		Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString("find_project_focal_label", "Find project in Focal"));
 		heading.setStyleClass("subHeader");
 		heading.setStyleClass("topSubHeader");
 		projectSection.add(heading);
@@ -64,7 +64,7 @@ public class FocalCaseMover extends Block {
 		searchField.setLabel("Search text");
 		projectSection.add(searchField);
 		
-		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("process", "Find"));
+		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find", "Find"));
 //		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		next.setToFormSubmit(form);
 		projectSection.add(next);
@@ -93,7 +93,7 @@ public class FocalCaseMover extends Block {
 		TableCell2 cell = row.createHeaderCell();
 		cell.setStyleClass("firstColumn");
 		cell.setStyleClass("caseNumber");
-		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("case_nr", "Project name")));
+		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_name", "Project name")));
 
 		cell = row.createHeaderCell();
 		cell.setStyleClass("sender");
@@ -238,7 +238,7 @@ public class FocalCaseMover extends Block {
 		Layer customerSection = new Layer(Layer.DIV);
 		customerSection.setStyleClass("formSection");
 		
-		heading = new Heading1(getResourceBundle(iwc).getLocalizedString("case_overview", "Cases to be moved"));
+		heading = new Heading1(getResourceBundle(iwc).getLocalizedString("focal_cases_tobemoved", "Cases to be moved"));
 		heading.setStyleClass("subHeader");
 		heading.setStyleClass("topSubHeader");
 		customerSection.add(heading);
@@ -267,7 +267,7 @@ public class FocalCaseMover extends Block {
 		cell = row.createHeaderCell();
 		cell.setStyleClass("firstColumn");
 		cell.setStyleClass("caseNumber");
-		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("case_nr", "Case name")));
+		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_case_name", "Case name")));
 
 		cell = row.createHeaderCell();
 		cell.setStyleClass("sender");

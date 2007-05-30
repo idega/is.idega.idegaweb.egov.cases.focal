@@ -1,0 +1,49 @@
+back=Back
+case_category=Case category
+case_nr=Case nr.
+case_overview=Case overview
+case_type=Case type
+create=Create
+created_date=Created date
+
+find_project_focal=Find projects
+find_project_focal_label=Find project in Focal
+focal_case_name=Case name
+focal_cases_tobemoved=Cases to be moved
+focal_customer_action=Action
+focal_customer_id=Customer
+focal_customer_name=Customer
+focal_generic_exception_message=Exception
+focal_project_empty_search=No projects found
+focal_project_name=Project name
+focal_project_select=Select
+
+handler=Handler
+handler_overview=Handler overview
+iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalCaseMover.name=FocalCaseMover
+iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalCaseViewer.name=FocalCaseViewer
+iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalMyCases.name=FocalMyCases
+legend.is_inFocal=Is In Focal
+legend.is_review=Is review
+message=Message
+move_focal=Move to Focal
+process=Process
+reply=Reply
+save=Save to Focal
+sender=Sender
+status=Status
+view=View
+view_case=View case
+
+case_creator.no_sub_category=No sub category
+sub_case_category=Sub case category
+
+attachment=Attachment
+my_page=My page
+timestamp=Timestamp
+find=Find
+
+case.is_private=The sender wishes that this case be handled as confidential.
+case_viewer.view_case=View case
+reactivate_case=Reactivate case
+review_case=Review case

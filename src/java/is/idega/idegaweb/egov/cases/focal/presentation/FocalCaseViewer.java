@@ -101,7 +101,7 @@ public class FocalCaseViewer extends CaseViewer {
 			}
 			IWTimestamp created = new IWTimestamp(theCase.getCreated());
 
-			form.add(getHeader(iwrb.getLocalizedString(getPrefix() + "case_viewer.view_case", "View case")));
+			form.add(getHeader(iwrb.getLocalizedString("case_viewer.view_case", "View case")));
 
 			form.add(getPersonInfo(iwc, theCase.getOwner()));
 
@@ -120,7 +120,7 @@ public class FocalCaseViewer extends CaseViewer {
 			Layer createdDate = new Layer(Layer.SPAN);
 			createdDate.add(new Text(created.getLocaleDateAndTime(iwc.getCurrentLocale(), IWTimestamp.SHORT, IWTimestamp.SHORT)));
 
-			Heading1 heading = new Heading1(iwrb.getLocalizedString(getPrefix() + "case_overview", "Case overview"));
+			Heading1 heading = new Heading1(iwrb.getLocalizedString("case_overview", "Case overview"));
 			heading.setStyleClass("subHeader");
 			heading.setStyleClass("topSubHeader");
 			form.add(heading);
@@ -130,7 +130,7 @@ public class FocalCaseViewer extends CaseViewer {
 			form.add(section);
 
 			if (theCase.isPrivate()) {
-				section.add(getAttentionLayer(iwrb.getLocalizedString(getPrefix() + "case.is_private", "The sender wishes that this case be handled as confidential.")));
+				section.add(getAttentionLayer(iwrb.getLocalizedString("case.is_private", "The sender wishes that this case be handled as confidential.")));
 			}
 
 			if (getCasesBusiness(iwc).useTypes()) {
@@ -202,7 +202,7 @@ public class FocalCaseViewer extends CaseViewer {
 			formItem.setStyleClass("formItem");
 			formItem.setStyleClass("informationItem");
 			label = new Label();
-			label.setLabel(iwrb.getLocalizedString(getPrefix() + "message", "Message"));
+			label.setLabel(iwrb.getLocalizedString("message", "Message"));
 			formItem.add(label);
 			formItem.add(message);
 			section.add(formItem);
@@ -287,14 +287,14 @@ public class FocalCaseViewer extends CaseViewer {
 			}
 
 			if (status.equals(getCasesBusiness(iwc).getCaseStatusInactive()) || status.equals(getCasesBusiness(iwc).getCaseStatusReady())) {
-				Link next = getButtonLink(iwrb.getLocalizedString(getPrefix() + "reactivate_case", "Reactivate case"));
+				Link next = getButtonLink(iwrb.getLocalizedString("reactivate_case", "Reactivate case"));
 				next.addParameter(PARAMETER_ACTION_REACTIVATE, Boolean.TRUE.toString());
 				next.addParameter(PARAMETER_CASE_PK, theCase.getPrimaryKey().toString());
 				next.maintainParameter(iwc.getParameter(getCasesBusiness(iwc).getSelectedCaseParameter()), iwc);
 				bottom.add(next);
 			}
 			else if (iwc.getCurrentUser().equals(owner) && status.equals(getCasesBusiness(iwc).getCaseStatusOpen())) {
-				Link next = getButtonLink(iwrb.getLocalizedString(getPrefix() + "review_case", "Review case"));
+				Link next = getButtonLink(iwrb.getLocalizedString("review_case", "Review case"));
 				next.addParameter(PARAMETER_ACTION_REVIEW, Boolean.TRUE.toString());
 				next.addParameter(PARAMETER_CASE_PK, theCase.getPrimaryKey().toString());
 				next.maintainParameter(iwc.getParameter(getCasesBusiness(iwc).getSelectedCaseParameter()), iwc);
