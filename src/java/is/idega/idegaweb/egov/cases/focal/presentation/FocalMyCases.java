@@ -70,6 +70,8 @@ public class FocalMyCases extends MyCases {
 	private static final String PARAMETER_CASE_TYPE_PK = "prm_case_type_pk";
 	
 	private static final String FOCAL_JS = "/idegaweb/bundles/is.idega.idegaweb.egov.cases.focal.bundle/resources/javascript/focal.js";
+	private static final String DWR_ENGINE_JS = "/dwr/engine.js";
+	private static final String DWR_FOCAL_JS = "/dwr/interface/FocalCasesIntegration.js";
 
 	protected static final int ACTION_VIEW = 1;
 	protected static final int ACTION_PROCESS = 2;
@@ -87,17 +89,9 @@ public class FocalMyCases extends MyCases {
 	}
 	
 	protected void present(IWContext iwc) throws Exception {
-//		Enumeration params = iwc.getParameterNames();
-//		while(params.hasMoreElements()) {
-//			String next = (String) params.nextElement();
-//			String print = next + ":";
-//			String[] values = iwc.getParameterValues(next);
-//			for(int i = 0; i < values.length; i++) {
-//				print += values[i] + ",";
-//			}
-//			System.out.println(print);
-//		}
 		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
+		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, DWR_ENGINE_JS);
+		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, DWR_FOCAL_JS);
 		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
 		
 		switch (parseAction(iwc)) {
@@ -165,10 +159,13 @@ public class FocalMyCases extends MyCases {
 				getExportCasesManagement(iwc).updateCasesExternalId(projectId, cases);
 			}
 		} catch(RemoteException re) {
+			re.printStackTrace();
 //			TODO
 		} catch(FinderException fe) {
+			fe.printStackTrace();
 //			TODO
 		} catch(Exception e) {
+			e.printStackTrace();
 //			TODO
 		}
 	}
@@ -194,6 +191,7 @@ public class FocalMyCases extends MyCases {
 		TextInput searchField = new TextInput();
 		searchField.setLabel("Search text");
 		searchField.setName(PARAMETER_PROJECT_SEARCH_KEY);
+//		searchField.setOnKeyUp("doProjectSearch(this.value);");
 		searchSection.add(searchField);
 		
 		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
@@ -242,69 +240,90 @@ public class FocalMyCases extends MyCases {
 		
 		String searchKey = iwc.getParameter(PARAMETER_PROJECT_SEARCH_KEY);
 		if(searchKey == null) {
+			//Error - handle this
 			row = group.createRow();
 			cell = row.createHeaderCell();
-			cell.setStyleClass("sender");
+			cell.setStyleClass("focalErrorNotice");
 			cell.setColumnSpan(3);
-			cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
+			cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
 		} else {
 			if(searchKey.equals("")) {
+				//User enters nothing
 				row = group.createRow();
 				cell = row.createHeaderCell();
-				cell.setStyleClass("sender");
+				cell.setStyleClass("focalInfoNotice");
 				cell.setColumnSpan(3);
-				cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
+				cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_no_search", "No input")));
 			} else {
+				List projects = null;
 				try {
-					List projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
-					
-					if(projects != null && !projects.isEmpty()) {
-						int rowCount = 0;
-						Iterator iter = projects.iterator();
-						while (iter.hasNext()) {
-							ProjectInfo theProject = (ProjectInfo) iter.next();
-							
-							int iRow = 1;
-							
+					if(searchKey.equals("*")) {
+						//User enters wildcard symbol *
+						projects = getFocalCasesIntegration(iwc).findProjects("*");
+					} else {
+						//User enters something
+						projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
+					}
+					if(projects != null) {
+						if(projects.isEmpty()) {
 							row = group.createRow();
-							row.setId("focalRow" + rowCount);
-							if (iRow == 1) {
-								row.setStyleClass("firstRow");
+							cell = row.createHeaderCell();
+							cell.setStyleClass("focalInfoNotice");
+							cell.setColumnSpan(3);
+							cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects match your search")));
+						} else {
+							int rowCount = 0;
+							Iterator iter = projects.iterator();
+							while (iter.hasNext()) {
+								ProjectInfo theProject = (ProjectInfo) iter.next();
+								
+								int iRow = 1;
+								
+								row = group.createRow();
+								row.setId("focalRow" + rowCount);
+								if (iRow == 1) {
+									row.setStyleClass("firstRow");
+								}
+								else if (!iter.hasNext()) {
+									row.setStyleClass("lastRow");
+								}
+								
+								cell = row.createCell();
+								cell.setStyleClass("firstColumn");
+								cell.setStyleClass("caseNumber");
+								cell.add(new Text(theProject.getName()));
+								
+								cell = row.createCell();
+								cell.setStyleClass("lastColumn");
+								cell.setStyleClass("caseNumber");
+								cell.add(new Text(theProject.getCustomer()));
+								
+								cell = row.createCell();
+								cell.setStyleClass("view");
+								Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")));
+								select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
+								select.setNoURL();
+								String projectId = theProject.getNumber();
+								projectId = projectId.replaceAll("/", "-");
+								select.setId(projectId);
+								cell.add(select);
+								rowCount++;
 							}
-							else if (!iter.hasNext()) {
-								row.setStyleClass("lastRow");
-							}
-							
-							cell = row.createCell();
-							cell.setStyleClass("firstColumn");
-							cell.setStyleClass("caseNumber");
-							cell.add(new Text(theProject.getName()));
-							
-							cell = row.createCell();
-							cell.setStyleClass("lastColumn");
-							cell.setStyleClass("caseNumber");
-							cell.add(new Text(theProject.getCustomer()));
-							
-							cell = row.createCell();
-							cell.setStyleClass("view");
-							Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")));
-							select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
-							select.setNoURL();
-							String projectId = theProject.getNumber();
-							projectId = projectId.replaceAll("/", "-");
-							select.setId(projectId);
-							cell.add(select);
-							rowCount++;
 						}
 					} else {
 						row = group.createRow();
 						cell = row.createHeaderCell();
-						cell.setStyleClass("sender");
+						cell.setStyleClass("focalErrorNotice");
 						cell.setColumnSpan(3);
-						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
+						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
 					}
 				} catch(Exception e) {
 					e.printStackTrace();
+					row = group.createRow();
+					cell = row.createHeaderCell();
+					cell.setStyleClass("focalErrorNotice");
+					cell.setColumnSpan(3);
+					cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
 				}
 			}
 		}
@@ -341,7 +360,7 @@ public class FocalMyCases extends MyCases {
 		TableCell2 cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("firstColumn");
 		cCell.setStyleClass("caseNumber");
-		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_case_name", "Case Nr")));
+		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_case_nr", "Case Nr")));
 
 		cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("sender");

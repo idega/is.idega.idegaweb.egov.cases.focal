@@ -8,15 +8,17 @@ created_date=Created date
 
 find_project_focal=Find projects
 find_project_focal_label=Find project in Focal
-focal_case_name=Case name
+focal_case_nr=Case Nr
 focal_cases_tobemoved=Cases to be moved
-focal_customer_action=Action
+focal_customer_action=Create/Update
 focal_customer_id=Customer
 focal_customer_name=Customer
 focal_generic_exception_message=Exception
-focal_project_empty_search=No projects found
+focal_project_no_search=No input
+focal_project_empty_search=No projects match your search
 focal_project_name=Project name
 focal_project_select=Select
+focal_project_error_search=Could not get project list
 
 handler=Handler
 handler_overview=Handler overview
