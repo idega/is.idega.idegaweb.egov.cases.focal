@@ -8,13 +8,13 @@ import is.idega.idegaweb.egov.cases.focal.IWBundleStarter;
 import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
 import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Customer;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.ProjectInfo;
 import is.idega.idegaweb.egov.cases.presentation.MyCases;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,19 +61,13 @@ import com.idega.util.text.TextSoap;
 public class FocalMyCases extends MyCases {
 	
 	public static final String PARAMETER_ACTION = "cp_prm_action";
-
 	public static final String PARAMETER_CASE_PK = "prm_case_pk";
 	public static final String PARAMETER_PROJECT_PK = "prm_project_pk";
-//	protected static final String PARAMETER_REPLY = "prm_reply";
-//	protected static final String PARAMETER_STATUS = "prm_status";
-//	protected static final String PARAMETER_USER = "prm_iser";
-//	protected static final String PARAMETER_MESSAGE = "prm_message";
+	public static final String PARAMETER_PROJECT_SEARCH_KEY = "prm_project_search_key";
 	
 	private static final String PARAMETER_CASE_CATEGORY_PK = "prm_case_category_pk";
 	private static final String PARAMETER_SUB_CASE_CATEGORY_PK = "prm_sub_case_category_pk";
 	private static final String PARAMETER_CASE_TYPE_PK = "prm_case_type_pk";
-	
-	private static final String PARAMETER_PROJECT_SEARCH_KEY = "prm_project_search_key";
 	
 	private static final String FOCAL_JS = "/idegaweb/bundles/is.idega.idegaweb.egov.cases.focal.bundle/resources/javascript/focal.js";
 
@@ -84,10 +78,6 @@ public class FocalMyCases extends MyCases {
 	protected static final int ACTION_SAVE_FOCAL = 5;
 	protected static final int ACTION_CREATE_CUSTOMER = 6;
 	protected static final int ACTION_UPDATE_CUSTOMER = 7;
-
-	protected boolean showCheckBox() {
-		return true;
-	}
 	
 	private int parseAction(IWContext iwc) {
 		if (iwc.isParameterSet(PARAMETER_ACTION)) {
@@ -97,16 +87,16 @@ public class FocalMyCases extends MyCases {
 	}
 	
 	protected void present(IWContext iwc) throws Exception {
-		Enumeration params = iwc.getParameterNames();
-		while(params.hasMoreElements()) {
-			String next = (String) params.nextElement();
-			String print = next + ":";
-			String[] values = iwc.getParameterValues(next);
-			for(int i = 0; i < values.length; i++) {
-				print += values[i] + ",";
-			}
-			System.out.println(print);
-		}
+//		Enumeration params = iwc.getParameterNames();
+//		while(params.hasMoreElements()) {
+//			String next = (String) params.nextElement();
+//			String print = next + ":";
+//			String[] values = iwc.getParameterValues(next);
+//			for(int i = 0; i < values.length; i++) {
+//				print += values[i] + ",";
+//			}
+//			System.out.println(print);
+//		}
 		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
 		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
 		
@@ -127,7 +117,7 @@ public class FocalMyCases extends MyCases {
 			case ACTION_MOVE_FOCAL:
 				String values[] = iwc.getParameterValues(PARAMETER_CASE_PK);
 				if(values != null && values.length > 0) {
-					showProjectSearch(iwc, false);
+					showProjectSearch(iwc);
 				} else {
 					showList(iwc);
 				}
@@ -139,13 +129,23 @@ public class FocalMyCases extends MyCases {
 				break;
 				
 			case ACTION_CREATE_CUSTOMER:
-				showProjectSearch(iwc, false);
+				createCustomer(iwc);
+				showProjectSearch(iwc);
 				break;
 				
 			case ACTION_UPDATE_CUSTOMER:
-				showProjectSearch(iwc, false);
+				updateCustomer(iwc);
+				showProjectSearch(iwc);
 				break;
 		}
+	}
+	
+	protected void createCustomer(IWContext iwc) {
+		
+	}
+	
+	protected void updateCustomer(IWContext iwc) {
+		
 	}
 	
 	protected void saveToFocal(IWContext iwc) {
@@ -173,7 +173,7 @@ public class FocalMyCases extends MyCases {
 		}
 	}
 	
-	protected void showProjectSearch(IWContext iwc, boolean multipleParty) {
+	protected void showProjectSearch(IWContext iwc) {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
 		form.addParameter(PARAMETER_PROJECT_PK, "");
@@ -304,55 +304,7 @@ public class FocalMyCases extends MyCases {
 						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects found")));
 					}
 				} catch(Exception e) {
-/*					List tempData = new ArrayList();
-					ProjectInfo temp = new ProjectInfo();
-					temp.setNumber("project1");
-					temp.setName("NK Projektas");
-					temp.setCustomer("Tryggvi Larusson");
-					tempData.add(temp);
-					temp = new ProjectInfo();
-					temp.setNumber("project2");
-					temp.setName("IT Projektas");
-					temp.setCustomer("Aleksandras Skrynikovas");
-					tempData.add(temp);
-					temp = new ProjectInfo();
-					temp.setNumber("project3");
-					temp.setName("Investicinis Projektas");
-					temp.setCustomer("Vytautas Civilis");
-					tempData.add(temp);
-					
-					Iterator iter = tempData.iterator();
-					while (iter.hasNext()) {
-						ProjectInfo theProject = (ProjectInfo) iter.next();
-						
-						int iRow = 1;
-						
-						row = group.createRow();
-						if (iRow == 1) {
-							row.setStyleClass("firstRow");
-						}
-						else if (!iter.hasNext()) {
-							row.setStyleClass("lastRow");
-						}
-						
-						cell = row.createCell();
-						cell.setStyleClass("firstColumn");
-						cell.setStyleClass("caseNumber");
-						cell.add(new Text(theProject.getName()));
-						
-						cell = row.createCell();
-						cell.setStyleClass("lastColumn");
-						cell.setStyleClass("caseNumber");
-						cell.add(new Text(theProject.getCustomer()));
-						
-						cell = row.createCell();
-						cell.setStyleClass("view");
-						Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")));
-						select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow(e);return false;");
-						select.setNoURL();
-						select.setId(theProject.getNumber());
-						cell.add(select);
-					}*/
+					e.printStackTrace();
 				}
 			}
 		}
@@ -389,7 +341,7 @@ public class FocalMyCases extends MyCases {
 		TableCell2 cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("firstColumn");
 		cCell.setStyleClass("caseNumber");
-		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_case_name", "Case name")));
+		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_case_name", "Case Nr")));
 
 		cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("sender");
@@ -397,7 +349,7 @@ public class FocalMyCases extends MyCases {
 		
 		cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("action");
-		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_action", "Action")));
+		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_action", "Create/Update")));
 		
 		cGroup = customerTable.createBodyRowGroup();
 		
@@ -419,7 +371,7 @@ public class FocalMyCases extends MyCases {
 				cCell = cRow.createCell();
 				cCell.setStyleClass("firstColumn");
 				cCell.setStyleClass("caseNumber");
-				cCell.add(new Text(theCase.getSubject()));
+				cCell.add(new Text(theCase.getCaseNumber()));
 				
 				cCell = cRow.createCell();
 				cCell.setStyleClass("sender");
@@ -427,14 +379,21 @@ public class FocalMyCases extends MyCases {
 				if (owner != null) {
 					cCell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
 				
-//					List customers = getFocalCasesIntegration(iwc).findCustomers(owner.getFirstName());
+					Customer customer = getFocalCasesIntegration(iwc).findCustomer(owner.getFirstName());
 					
 					cCell = cRow.createCell();
 					cCell.setStyleClass("view");
 					cCell.setStyleClass("lastColumn");
-					Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+					Link createCustomer = null;
+					if(customer != null) {
+						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
+						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
+					} else {
+						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
+					}
 					createCustomer.setStyleClass("homeButton");
-					createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+					
 					createCustomer.setToFormSubmit(form);
 					cCell.add(createCustomer);
 				}
@@ -444,11 +403,6 @@ public class FocalMyCases extends MyCases {
 					cCell = cRow.createCell();
 					cCell.setStyleClass("view");
 					cCell.setStyleClass("lastColumn");
-//					Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-//					createCustomer.setStyleClass("homeButton");
-//					createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
-//					createCustomer.setToFormSubmit(form);
-//					cCell.add(createCustomer);
 				}
 			} catch(RemoteException re) {
 				re.printStackTrace();
