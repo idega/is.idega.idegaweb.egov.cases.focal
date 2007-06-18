@@ -7,14 +7,125 @@
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<schema targetNamespace="urn:DefaultNamespace"
+			xmlns="http://www.w3.org/2001/XMLSchema">
+			<import
+				namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="CASEDATA">
+				<sequence>
+					<element name="SOCSECNUM" type="xsd:string" />
+					<element name="CUSTOMERNAME" type="xsd:string" />
+					<element name="SUBJECT" type="xsd:string" />
+					<element name="DATE" type="xsd:string" />
+					<element name="BODY" type="xsd:string" />
+					<element name="PROJECTNAME" type="xsd:string" />
+					<element name="PROJECTNUMBER" type="xsd:string" />
+				</sequence>
+			</complexType>
+			<complexType name="RETURNSTATUS">
+				<sequence>
+					<element name="STATUS" type="xsd:string" />
+					<element name="ERRORTEXT" type="xsd:string" />
+				</sequence>
+			</complexType>
+			<complexType name="CUSTOMERBASE">
+				<sequence>
+					<element name="ADDRESS1" type="xsd:string" />
+					<element name="ADDRESS2" type="xsd:string" />
+					<element name="COUNTY" type="xsd:string" />
+					<element name="COUNTRY" type="xsd:string" />
+					<element name="EMAIL" type="xsd:string" />
+					<element name="FAX" type="xsd:string" />
+					<element name="HOMEPAGE" type="xsd:string" />
+					<element name="LANGUAGE" type="xsd:string" />
+					<element name="PHONEWORK" type="xsd:string" />
+					<element name="POSTADDRESS" type="xsd:string" />
+					<element name="SOCSECNUM" type="xsd:string" />
+					<element name="STATUS" type="xsd:string" />
+					<element name="TARGETMAIL" type="xsd:boolean" />
+				</sequence>
+			</complexType>
+			<complexType name="COMPANYINFO">
+				<complexContent>
+					<extension base="impl:CUSTOMERBASE">
+						<sequence>
+							<element name="COMPANYNAME"
+								type="xsd:string" />
+							<element name="LOCATION" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="EMPLOYEEINFO">
+				<complexContent>
+					<extension base="impl:CUSTOMERBASE">
+						<sequence>
+							<element name="AVARP" type="xsd:string" />
+							<element name="BEEPER" type="xsd:string" />
+							<element name="CARPHONE" type="xsd:string" />
+							<element name="COMPANYNAME"
+								type="xsd:string" />
+							<element name="DEPARTMENT"
+								type="xsd:string" />
+							<element name="EMPLOYEENAME"
+								type="xsd:string" />
+							<element name="FAXOFFICE" type="xsd:string" />
+							<element name="GSM" type="xsd:string" />
+							<element name="PHONEHOME" type="xsd:string" />
+							<element name="PHONEOFFICE"
+								type="xsd:string" />
+							<element name="SEPERATOR" type="xsd:string" />
+							<element name="TITLE" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="PERSONINFO">
+				<complexContent>
+					<extension base="impl:CUSTOMERBASE">
+						<sequence>
+							<element name="AVARP" type="xsd:string" />
+							<element name="BEEPER" type="xsd:string" />
+							<element name="CARPHONE" type="xsd:string" />
+							<element name="GSM" type="xsd:string" />
+							<element name="PERSONNAME"
+								type="xsd:string" />
+							<element name="PHONEHOME" type="xsd:string" />
+							<element name="PHONEOFFICE"
+								type="xsd:string" />
+							<element name="SEPERATOR" type="xsd:string" />
+							<element name="TITLE" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="CREATEUPDATECOMPANYResponse">
+		<wsdl:part name="CREATEUPDATECOMPANYReturn"
+			type="impl:RETURNSTATUS" />
+	</wsdl:message>
+	<wsdl:message name="NEWPROJECTRequest">
+		<wsdl:part name="CD" type="impl:CASEDATA" />
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+		<wsdl:part name="STRUSERNAME" type="xsd:string" />
+		<wsdl:part name="STRPASSWORD" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="GETPROFILEDOCUMENTRequest">
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="CREATEUPDATEEMPLOYEERequest">
+		<wsdl:part name="EI" type="impl:EMPLOYEEINFO" />
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+		<wsdl:part name="STRUSERNAME" type="xsd:string" />
+		<wsdl:part name="STRPASSWORD" type="xsd:string" />
+	</wsdl:message>
 	<wsdl:message name="FINDCUSTOMERRequest">
 		<wsdl:part name="STRSOCSECNUM" type="xsd:string" />
 		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
 		<wsdl:part name="STRUSERNAME" type="xsd:string" />
 		<wsdl:part name="STRPASSWORD" type="xsd:string" />
-	</wsdl:message>
-	<wsdl:message name="GETPROJECTLISTResponse">
-		<wsdl:part name="GETPROJECTLISTReturn" type="xsd:string" />
 	</wsdl:message>
 	<wsdl:message name="GETPROJECTLISTRequest">
 		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
@@ -23,6 +134,35 @@
 	</wsdl:message>
 	<wsdl:message name="FINDCUSTOMERResponse">
 		<wsdl:part name="FINDCUSTOMERReturn" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="CREATEUPDATEEMPLOYEEResponse">
+		<wsdl:part name="CREATEUPDATEEMPLOYEEReturn"
+			type="impl:RETURNSTATUS" />
+	</wsdl:message>
+	<wsdl:message name="CREATEUPDATECOMPANYRequest">
+		<wsdl:part name="CI" type="impl:COMPANYINFO" />
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+		<wsdl:part name="STRUSERNAME" type="xsd:string" />
+		<wsdl:part name="STRPASSWORD" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="CREATEUPDATEPERSONResponse">
+		<wsdl:part name="CREATEUPDATEPERSONReturn"
+			type="impl:RETURNSTATUS" />
+	</wsdl:message>
+	<wsdl:message name="GETPROFILEDOCUMENTResponse">
+		<wsdl:part name="GETPROFILEDOCUMENTReturn" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="NEWPROJECTResponse">
+		<wsdl:part name="NEWPROJECTReturn" type="impl:RETURNSTATUS" />
+	</wsdl:message>
+	<wsdl:message name="GETPROJECTLISTResponse">
+		<wsdl:part name="GETPROJECTLISTReturn" type="xsd:string" />
+	</wsdl:message>
+	<wsdl:message name="CREATEUPDATEPERSONRequest">
+		<wsdl:part name="PERS" type="impl:PERSONINFO" />
+		<wsdl:part name="STRPROFILEKEY" type="xsd:string" />
+		<wsdl:part name="STRUSERNAME" type="xsd:string" />
+		<wsdl:part name="STRPASSWORD" type="xsd:string" />
 	</wsdl:message>
 	<wsdl:portType name="Project">
 		<wsdl:operation name="GETPROJECTLIST"
@@ -38,6 +178,41 @@
 				name="FINDCUSTOMERRequest" />
 			<wsdl:output message="impl:FINDCUSTOMERResponse"
 				name="FINDCUSTOMERResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="NEWPROJECT"
+			parameterOrder="CD STRPROFILEKEY STRUSERNAME STRPASSWORD">
+			<wsdl:input message="impl:NEWPROJECTRequest"
+				name="NEWPROJECTRequest" />
+			<wsdl:output message="impl:NEWPROJECTResponse"
+				name="NEWPROJECTResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="CREATEUPDATECOMPANY"
+			parameterOrder="CI STRPROFILEKEY STRUSERNAME STRPASSWORD">
+			<wsdl:input message="impl:CREATEUPDATECOMPANYRequest"
+				name="CREATEUPDATECOMPANYRequest" />
+			<wsdl:output message="impl:CREATEUPDATECOMPANYResponse"
+				name="CREATEUPDATECOMPANYResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="CREATEUPDATEEMPLOYEE"
+			parameterOrder="EI STRPROFILEKEY STRUSERNAME STRPASSWORD">
+			<wsdl:input message="impl:CREATEUPDATEEMPLOYEERequest"
+				name="CREATEUPDATEEMPLOYEERequest" />
+			<wsdl:output message="impl:CREATEUPDATEEMPLOYEEResponse"
+				name="CREATEUPDATEEMPLOYEEResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="CREATEUPDATEPERSON"
+			parameterOrder="PERS STRPROFILEKEY STRUSERNAME STRPASSWORD">
+			<wsdl:input message="impl:CREATEUPDATEPERSONRequest"
+				name="CREATEUPDATEPERSONRequest" />
+			<wsdl:output message="impl:CREATEUPDATEPERSONResponse"
+				name="CREATEUPDATEPERSONResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="GETPROFILEDOCUMENT"
+			parameterOrder="STRPROFILEKEY">
+			<wsdl:input message="impl:GETPROFILEDOCUMENTRequest"
+				name="GETPROFILEDOCUMENTRequest" />
+			<wsdl:output message="impl:GETPROFILEDOCUMENTResponse"
+				name="GETPROFILEDOCUMENTResponse" />
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="DominoSoapBinding" type="impl:Project">
@@ -64,6 +239,71 @@
 					namespace="urn:DefaultNamespace" use="encoded" />
 			</wsdl:input>
 			<wsdl:output name="FINDCUSTOMERResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="NEWPROJECT">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="NEWPROJECTRequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="NEWPROJECTResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CREATEUPDATECOMPANY">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="CREATEUPDATECOMPANYRequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="CREATEUPDATECOMPANYResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CREATEUPDATEEMPLOYEE">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="CREATEUPDATEEMPLOYEERequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="CREATEUPDATEEMPLOYEEResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CREATEUPDATEPERSON">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="CREATEUPDATEPERSONRequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="CREATEUPDATEPERSONResponse">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GETPROFILEDOCUMENT">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="GETPROFILEDOCUMENTRequest">
+				<wsdlsoap:body
+					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="urn:DefaultNamespace" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="GETPROFILEDOCUMENTResponse">
 				<wsdlsoap:body
 					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="urn:DefaultNamespace" use="encoded" />

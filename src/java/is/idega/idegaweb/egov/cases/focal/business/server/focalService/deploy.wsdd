@@ -15,6 +15,7 @@
   <service name="Domino" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="urn:DefaultNamespace"/>
       <parameter name="wsdlServiceElement" value="ProjectService"/>
+      <parameter name="schemaUnqualified" value="urn:DefaultNamespace"/>
       <parameter name="wsdlServicePort" value="Domino"/>
       <parameter name="className" value="is.idega.idegaweb.egov.cases.focal.business.server.focalService.DominoSoapBindingSkeleton"/>
       <parameter name="wsdlPortType" value="Project"/>
@@ -22,5 +23,53 @@
       <parameter name="allowedMethods" value="*"/>
       <parameter name="scope" value="Session"/>
 
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:PERSONINFO"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:RETURNSTATUS"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:CUSTOMERBASE"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMERBASE"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:EMPLOYEEINFO"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.EMPLOYEEINFO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:CASEDATA"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:COMPANYINFO"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.COMPANYINFO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
   </service>
 </deployment>
