@@ -28,10 +28,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/18 12:15:48 $ by $Author: civilis $
+ * Last modified: $Date: 2007/06/18 14:20:32 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -158,6 +158,12 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			CaseArg case_arg = (CaseArg) iter.next();
 			
 			GeneralCase gen_case = case_arg.getGcase();
+			
+			if(gen_case.getExternalId() != null) {
+
+				logger.log(Level.WARNING, "Case was tried to move under a project when already moved. Case id: "+gen_case.getId()+", external id: "+gen_case.getExternalId());
+				continue;
+			}
 			
 			CASEDATA case_data = new CASEDATA(
 					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
