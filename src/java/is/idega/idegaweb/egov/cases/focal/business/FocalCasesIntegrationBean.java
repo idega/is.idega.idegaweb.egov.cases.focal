@@ -1,12 +1,19 @@
 package is.idega.idegaweb.egov.cases.focal.business;
 
+import is.idega.idegaweb.egov.cases.data.GeneralCase;
+import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
 import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.Project;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ProjectServiceLocator;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Customer;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.ProjectInfo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,16 +28,14 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/05/29 11:03:42 $ by $Author: civilis $
+ * Last modified: $Date: 2007/06/18 12:15:48 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
 	private static final long serialVersionUID = -486408791846081399L;
-//	private static final String service_url = "http://127.0.0.1:8080/services/FocalMockup";
-//	private static final String focal_service_url_app_key = "focal.ws.url"; 
 	
 	private static final String const_project_list = "ProjectList";
 	private static final String const_project_info = "ProjectInfo";
@@ -38,6 +43,8 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	private static final String focal_service_login_app_key = "focal.ws.login";
 	private static final String focal_service_pass_app_key = "focal.ws.pass";
 	private static final String ck = "ZIZYFk9nxC41RhCtJBDydBRiUNPvyKlIWmJDJ9p2xYWXvmqIrVyTNXIljGupoFBqi6TyC7bUXWLL2OxdRsWnaph2kQyETYlzHzhv";
+	
+	private ProjectServiceLocator locator;
 	
 	private static final Logger logger = Logger.getLogger(FocalCasesIntegrationBean.class.getName());
 	
@@ -47,8 +54,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 */
 	public List findProjects(String search_txt) throws Exception {
 		
-		ProjectServiceLocator locator = new ProjectServiceLocator();
-		Project service = locator.getDomino();
+		Project service = getFocalService();
 		
 		String[] loging_pass = getLoginAndPassword();
 		
@@ -81,8 +87,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 */
 	public Customer findCustomer(String search_txt) throws Exception {
 		
-		ProjectServiceLocator locator = new ProjectServiceLocator();
-		Project service = locator.getDomino();
+		Project service = getFocalService();
 		
 		String[] loging_pass = getLoginAndPassword();
 		
@@ -110,10 +115,10 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	
 	protected Project getFocalService() throws ServiceException {
 		
-		ProjectServiceLocator locator = new ProjectServiceLocator();
-		Project service = locator.getDomino();
+		if(locator == null)
+			locator = new ProjectServiceLocator();
 		
-		return service;
+		return locator.getDomino();
 	}
 	
 	protected String[] getLoginAndPassword() {
@@ -138,187 +143,118 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		return null;
 	}
 	
-	/* -- */
-//	/**
-//	 * @see FocalCasesIntegration method description
-//	 * 
-//	 */
-//	public List findProjects(String search_txt) throws UnsuccessfulStatusException, Exception {
-//	
-//		FocalMockupService service = getFocalService();
-//		ReturnedProjects projects_ret = service.findProjects(search_txt);
-//		
-//		FPStatus status = projects_ret.getStatus();
-//		
-//		if(!status.isSuccess()) {
-//			
-//			UnsuccessfulStatusException ex = new UnsuccessfulStatusException("Projects could not be found/retrieved due to reason decribed in status (see getStatus())");
-//			
-//			if(status.isNoCustomer())
-//				ex.setStatus(new Status(Status.no_customer));
-//			else if(status.isNoProjects())
-//				ex.setStatus(new Status(Status.no_projects));
-//			else
-//				ex.setStatus(new Status(Status.unknown_fail));
-//			
-//			throw ex;
-//		}
-//		
-//		ProjectMetaData[] projects_data = projects_ret.getProjects();
-//		
-//		if(projects_data == null || projects_data.length == 0) {
-//			
-//			UnsuccessfulStatusException ex = new UnsuccessfulStatusException("Projects were not set, but status set to success");
-//			ex.setStatus(new Status(Status.unknown_fail));
-//			throw ex;
-//		}
-//		
-//		List ret_data = new ArrayList();
-//		
-//		for (int i = 0; i < projects_data.length; i++) {
-//			
-//			ProjectData pd = new ProjectData();
-//			
-//			pd.setProjectId(projects_data[i].getProjectId());
-//			pd.setProjectName(projects_data[i].getName());
-//			
-//			MainParty main_party = projects_data[i].getMainParty();
-//			
-//			if(main_party != null) {
-//				pd.setFirstPartyId(main_party.getId());
-//				pd.setFirstPartyName(main_party.getName());
-//			}
-//			
-//			ret_data.add(pd);
-//		}
-//		
-//		return ret_data;
-//	}
-	
 	/**
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
 	public List createCasesUnderProject(String project_id, List cases) throws Exception {
 
-		return null;
-		/*if(cases == null || cases.isEmpty())
+		if(cases == null || cases.isEmpty())
 			return cases;
 		
-		FocalMockupService service = getFocalService();
+		Project service = getFocalService();
 		
 		for (Iterator iter = cases.iterator(); iter.hasNext();) {
 			CaseArg case_arg = (CaseArg) iter.next();
-			GeneralCase gcase = case_arg.getGcase();
+			
+			GeneralCase gen_case = case_arg.getGcase();
+			
+			CASEDATA case_data = new CASEDATA(
+					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
+					gen_case.getCreator() == null ? null :
+					gen_case.getCreator().getName(), 					//"CUSTOMERNAME"
+					gen_case.getSubject(),								//"SUBJECT"
+					gen_case.getCreated() == null ? null :
+					String.valueOf(gen_case.getCreated().getTime()),	//"DATE"
+		            gen_case.getBody(),									//"BODY"
+			        null,												//"PROJECTNAME"
+			        project_id											//"PROJECTNUMBER"
+			);
+			
+			String[] login_and_pass = getLoginAndPassword();
 
-			CaseData cdata = new CaseData();
-			cdata.setProjectId(project_id);
-			Calendar cal = Calendar.getInstance();
-			cal.setTimeInMillis(gcase.getCreated().getTime());
-			cdata.setDate(cal);
-			cdata.setCaseSubject(gcase.getSubject());
-			cdata.setCaseBody(gcase.getBody());
-			
-			ICFile file = gcase.getAttachment();
-			
-			byte[] serialized_file_value = new byte[file.getFileSize().intValue()];
-			file.getFileValue().read(serialized_file_value);
-			
-			Attachment att = new Attachment();
-			att.setFile(serialized_file_value);
-			att.setFileSize(file.getFileSize().longValue());
-			att.setFName(file.getName());
-			
-			cdata.setAttachments(new Attachment[] {att});
+//			TODO: is this the correct profile key - const_project_list ?
+			RETURNSTATUS ret_status = service.NEWPROJECT(case_data, const_project_list, login_and_pass[0], login_and_pass[1]);
 			
 			try {
-				is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status status = service.createCase(cdata);
+				int status_code = Integer.parseInt(ret_status.getSTATUS());
 				
-				if(status.isSuccess())
+				if(status_code == 0)
 					case_arg.setStatus(new Status(Status.success));
-				else
+				else {
 					case_arg.setStatus(new Status(Status.unknown_fail));
+					logger.log(Level.WARNING, "Error occured while creating project by case. Status message: "+ret_status.getERRORTEXT());
+				}
 				
 			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Exception while creating case under project: "+project_id, e);
+				
 				case_arg.setStatus(new Status(Status.unknown_fail));
+				
+				if(ret_status == null)
+					logger.log(Level.SEVERE, "No status was retrieved", e);
+				else
+					logger.log(Level.SEVERE, "Exception while parsing status code. Status message: "+ret_status.getERRORTEXT(), e);
 			}
 		}
 		
 		return cases;
-		*/
 	}
 	
 	/**
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
-	/*
-	public List findCustomers(String search_txt) throws Exception {
+	public Status createUpdateCustomer(CustomerPersonalInfo customer) throws Exception {
 		
-		return null;
-		FocalMockupService service = getFocalService();
-		CustomerInformation[] informations = service.findCustomer(search_txt);
+		Project service = getFocalService();
+		String[] login_and_pass = getLoginAndPassword();
 		
-		if(informations == null || informations.length == 0)
-			return null;
+		PERSONINFO person_info = new PERSONINFO(
+					customer.getAddress1(),								//ADDRESS2
+					customer.getAddress2(), 							//ADDRESS2
+					customer.getCounty(), 								//COUNTY
+					customer.getCountry(), 								//COUNTRY
+					customer.getEmailaddress(),							//EMAIL
+					customer.getFax(), 									//FAX
+					customer.getHomepage(),								//HOMEPAGE
+					customer.getLanguage(), 							//LANGUAGE
+					customer.getPhonework(),							//PHONEWORK
+					customer.getPostaddress(), 							//POSTADDRESS
+					customer.getSocNr(),		 						//SOCSECNUM
+					customer.getStatus(), 								//STATUS
+					customer.getTargetMail(),				 			//TARGETMAIL
+					customer.getAvarp(), 								//AVARP
+					customer.getBeeper(), 								//BEEPER
+					customer.getCarphone(), 							//CARPHONE
+					customer.getGsm(),	 								//GSM
+					customer.getName(), 								//PERSONNAME
+					customer.getPhonehome(),							//PHONEHOME
+					customer.getPhoneoffice(),							//PHONEOFFICE
+					customer.getContactseperator(),						//SEPERATOR
+					customer.getTitle() 								//TITLE
+		);
 		
-		List customer_information_list = new ArrayList();
+//		TODO: is this the correct profile key - const_project_list ?
+		RETURNSTATUS ret_status = service.CREATEUPDATEPERSON(person_info, const_project_list, login_and_pass[0], login_and_pass[1]);
 		
-		for (int i = 0; i < informations.length; i++) {
-			
-			is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation customer_info = new is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation();
-			customer_info.setCustomerId(informations[i].getCustomerId());
-			customer_info.setName(informations[i].getName());
-			customer_info.setEmail(informations[i].getEmail());
-			customer_info.setPhone(informations[i].getEmail());
-			
-			customer_information_list.add(customer_info);
-		}
-		
-		return customer_information_list;
+		try {
+				int status_code = Integer.parseInt(ret_status.getSTATUS());
+				
+				if(status_code == 0)
+					return new Status(Status.success);
+				else {
+					logger.log(Level.WARNING, "Error occured while doing CREATEUPDATEPERSON. Status message: "+ret_status.getERRORTEXT());
+					return new Status(Status.unknown_fail);
+				}
+				
+			} catch (Exception e) {
+				
+				if(ret_status == null)
+					logger.log(Level.SEVERE, "No status was retrieved", e);
+				else
+					logger.log(Level.SEVERE, "Exception while parsing status code. Status message: "+ret_status.getERRORTEXT(), e);
+				
+				return new Status(Status.unknown_fail);
+			}
 	}
-	*/
-	
-	/**
-	 * @see FocalCasesIntegration method description
-	 * 
-	 */
-	public Status createUpdateCustomer(is.idega.idegaweb.egov.cases.focal.business.beans.CustomerInformation customer_information) throws Exception {
-		
-		return null;
-		/*
-		FocalMockupService service = getFocalService();
-		
-		CustomerInformation ci = new CustomerInformation();
-		ci.setCustomerId(customer_information.getCustomerId());
-		ci.setName(customer_information.getName());
-		ci.setEmail(customer_information.getEmail());
-		ci.setPhone(customer_information.getPhone());
-		
-		is.idega.idegaweb.egov.cases.focal.business.server.focalMockupService.Status stat = service.createUpdateCustomer(ci);
-		
-		if(stat.isSuccess())
-			return new Status(Status.success);
-		
-		return new Status(Status.unknown_fail);
-		*/
-	}
-	
-//	protected String getServiceUrl() {
-//
-//		IWMainApplication iwma = IWMainApplication.getDefaultIWMainApplication();
-//		
-//		if(iwma != null)
-//			return (String)iwma.getSettings().getProperty(focal_service_url_app_key, service_url);
-//		
-//		return service_url;
-//	}
-	
-//	protected FocalMockupService getFocalService() throws MalformedURLException, ServiceException {
-//		
-//		FocalMockupServiceServiceLocator locator = new FocalMockupServiceServiceLocator();
-//		FocalMockupService service = locator.getFocalMockup(new URL(getServiceUrl()));
-//		return service;
-//	}
 }
