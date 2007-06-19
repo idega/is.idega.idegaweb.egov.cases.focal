@@ -20,18 +20,29 @@ import java.util.logging.Logger;
 
 import javax.xml.rpc.ServiceException;
 
+import com.idega.business.IBOLookup;
 import com.idega.business.IBOServiceBean;
+import com.idega.core.contact.data.Email;
+import com.idega.core.contact.data.EmailHome;
+import com.idega.core.contact.data.Phone;
+import com.idega.core.contact.data.PhoneHome;
+import com.idega.core.location.data.Address;
+import com.idega.core.location.data.Commune;
+import com.idega.core.location.data.Country;
 import com.idega.idegaweb.IWMainApplication;
+import com.idega.presentation.IWContext;
+import com.idega.user.business.UserBusiness;
+import com.idega.user.data.User;
 import com.idega.util.CypherText;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/18 14:20:32 $ by $Author: civilis $
+ * Last modified: $Date: 2007/06/19 10:53:13 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -79,6 +90,416 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			logger.log(Level.WARNING, "Exception while parsing xml to bean. This can be either an error in document, or that's how focal returns when nothing is found (plain string with blah blah ;])", e);
 			return null;
 		}
+	}
+	
+	private void setNoOverwriteFaxValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String fax1 = customerFocal.getFax();
+			if(fax1 != null && !fax1.equals("")) {
+				ci.setFax(fax1);
+			} else {
+				ci.setFax("");
+			}
+			String fax2 = customerFocal.getFaxoffice();
+			if(fax2 != null && !fax2.equals("")) {
+				ci.setFaxoffice(fax2);
+			} else {
+				ci.setFaxoffice("");
+			}
+		} else {
+			ci.setFax("");
+			ci.setFaxoffice("");
+		}
+	}
+	
+	private void setNoOverwriteAddress1Value(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address1 = customerFocal.getAddress1();
+			if(address1 != null && !address1.equals("")) {
+				ci.setAddress1(address1);
+			} else {
+				ci.setAddress1("");
+			}
+		} else {
+			ci.setAddress1("");
+		}
+	}
+	
+	private void setNoOverwriteAddress2Value(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getAddress2();
+			if(address2 != null && !address2.equals("")) {
+				ci.setAddress2(address2);
+			} else {
+				ci.setAddress2("");
+			}
+		} else {
+			ci.setAddress2("");
+		}
+	}
+	
+	private void setNoOverwritePostaddressValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getPostaddress();
+			if(address2 != null && !address2.equals("")) {
+				ci.setPostaddress(address2);
+			} else {
+				ci.setPostaddress("");
+			}
+		} else {
+			ci.setPostaddress("");
+		}
+	}
+	
+	private void setNoOverwriteCountryValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getCountry();
+			if(address2 != null && !address2.equals("")) {
+				ci.setCountry(address2);
+			} else {
+				ci.setCountry("");
+			}
+		} else {
+			ci.setCountry("");
+		}
+	}
+	
+	private void setNoOverwriteCountyValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getCounty();
+			if(address2 != null && !address2.equals("")) {
+				ci.setCounty(address2);
+			} else {
+				ci.setCounty("");
+			}
+		} else {
+			ci.setCounty("");
+		}
+	}
+	
+	private void setNoOverwritePhoneworkValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getPhonework();
+			if(address2 != null && !address2.equals("")) {
+				ci.setPhonework(address2);
+			} else {
+				ci.setPhonework("");
+			}
+		} else {
+			ci.setPhonework("");
+		}
+	}
+	
+	private void setNoOverwritePhoneofficeValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getPhoneoffice();
+			if(address2 != null && !address2.equals("")) {
+				ci.setPhoneoffice(address2);
+			} else {
+				ci.setPhoneoffice("");
+			}
+		} else {
+			ci.setPhoneoffice("");
+		}
+	}
+	
+	private void setNoOverwriteGsmValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getGsm();
+			if(address2 != null && !address2.equals("")) {
+				ci.setGsm(address2);
+			} else {
+				ci.setGsm("");
+			}
+		} else {
+			ci.setGsm("");
+		}
+	}
+	
+	private void setNoOverwriteCarphoneValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getCarphone();
+			if(address2 != null && !address2.equals("")) {
+				ci.setCarphone(address2);
+			} else {
+				ci.setCarphone("");
+			}
+		} else {
+			ci.setCarphone("");
+		}
+	}
+	
+	private void setNoOverwriteBeeperValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getBeeper();
+			if(address2 != null && !address2.equals("")) {
+				ci.setBeeper(address2);
+			} else {
+				ci.setBeeper("");
+			}
+		} else {
+			ci.setBeeper("");
+		}
+	}
+	
+	private void setNoOverwritePhonehomeValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getPhonehome();
+			if(address2 != null && !address2.equals("")) {
+				ci.setPhonehome(address2);
+			} else {
+				ci.setPhonehome("");
+			}
+		} else {
+			ci.setPhonehome("");
+		}
+	}
+	
+	private void setNoOverwriteLanguageValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getLanguage();
+			if(address2 != null && !address2.equals("")) {
+				ci.setLanguage(address2);
+			} else {
+				ci.setLanguage("");
+			}
+		} else {
+			ci.setLanguage("");
+		}
+	}
+	
+	private void setNoOverwriteContactseperatorValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getContactseperator();
+			if(address2 != null && !address2.equals("")) {
+				ci.setContactseperator(address2);
+			} else {
+				ci.setContactseperator("");
+			}
+		} else {
+			ci.setContactseperator("");
+		}
+	}
+	
+	private void setNoOverwriteEmailaddressValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getEmailaddress();
+			if(address2 != null && !address2.equals("")) {
+				ci.setEmailaddress(address2);
+			} else {
+				ci.setEmailaddress("");
+			}
+		} else {
+			ci.setEmailaddress("");
+		}
+	}
+	
+	private void setNoOverwriteStatusValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getStatus();
+			if(address2 != null && !address2.equals("")) {
+				ci.setStatus(address2);
+			} else {
+				ci.setStatus("");
+			}
+		} else {
+			ci.setStatus("");
+		}
+	}
+	
+	private void setNoOverwriteAvarpValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getAvarp();
+			if(address2 != null && !address2.equals("")) {
+				ci.setAvarp(address2);
+			} else {
+				ci.setAvarp("");
+			}
+		} else {
+			ci.setAvarp("");
+		}
+	}
+	
+	private void setNoOverwriteDepartmentValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getDepartment();
+			if(address2 != null && !address2.equals("")) {
+				ci.setDepartment(address2);
+			} else {
+				ci.setDepartment("");
+			}
+		} else {
+			ci.setDepartment("");
+		}
+	}
+	
+	private void setNoOverwriteHomepageValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getHomepage();
+			if(address2 != null && !address2.equals("")) {
+				ci.setHomepage(address2);
+			} else {
+				ci.setHomepage("");
+			}
+		} else {
+			ci.setHomepage("");
+		}
+	}
+	
+	private void setNoOverwriteTitleValue(Customer customerFocal, CustomerPersonalInfo ci) {
+		if(customerFocal != null) {
+			String address2 = customerFocal.getTitle();
+			if(address2 != null && !address2.equals("")) {
+				ci.setTitle(address2);
+			} else {
+				ci.setTitle("");
+			}
+		} else {
+			ci.setTitle("");
+		}
+	}
+	
+	public CustomerPersonalInfo createCustomerBean(String personalID, IWContext iwc) throws Exception {
+		CustomerPersonalInfo ci = new CustomerPersonalInfo();
+		if(personalID != null && !personalID.equals("")) {
+			Customer customerFocal = findCustomer(personalID);
+			UserBusiness userBusiness = (UserBusiness) IBOLookup.getServiceInstance(iwc, UserBusiness.class);
+			if(userBusiness != null) {
+				
+				User customer = userBusiness.getUser(personalID);
+				if(customer != null) {
+					int id = ((Integer) customer.getPrimaryKey()).intValue();
+					Address address1 = userBusiness.getUsersMainAddress(id);
+					if(address1 != null) {
+						String address1Value = address1.getStreetAddress();
+						if(address1Value != null && !address1Value.equals("")) {
+							ci.setAddress1(address1Value);
+						} else {
+							setNoOverwriteAddress1Value(customerFocal, ci);
+						}
+						String postalAddress = address1.getPostalAddress();
+						if(postalAddress != null && !postalAddress.equals("")) {
+							ci.setPostaddress(postalAddress);
+						} else {
+							setNoOverwritePostaddressValue(customerFocal, ci);
+						}
+						Country country = address1.getCountry();
+						if(country != null) {
+							ci.setCountry(country.getName());
+						} else {
+							setNoOverwriteCountryValue(customerFocal, ci);
+						}
+						Commune commune = address1.getCommune();
+						if(commune != null) {
+							ci.setCounty(commune.getCommuneName());
+						} else {
+							setNoOverwriteCountyValue(customerFocal, ci);
+						}
+					} else {
+						setNoOverwriteAddress1Value(customerFocal, ci);
+						setNoOverwritePostaddressValue(customerFocal, ci);
+						setNoOverwriteCountryValue(customerFocal, ci);
+						setNoOverwriteCountyValue(customerFocal, ci);
+					}
+					Address address2 = userBusiness.getUsersCoAddress(id);
+					if(address2 != null) {
+						String address2Value = address2.getStreetAddress();
+						if(address2Value != null && !address2Value.equals("")) {
+							ci.setAddress2(address2Value);
+						} else {
+							setNoOverwriteAddress2Value(customerFocal, ci);
+						}
+					} else {
+						setNoOverwriteAddress2Value(customerFocal, ci);
+					}
+					PhoneHome phoneHome = userBusiness.getPhoneHome();
+					if(phoneHome != null) {
+						Phone home = phoneHome.findUsersHomePhone(customer);
+						if(home != null) {
+							ci.setPhonehome(home.getNumber());
+						} else {
+							setNoOverwritePhonehomeValue(customerFocal, ci);
+						}
+						Phone work = phoneHome.findUsersWorkPhone(customer);
+						if(work != null) {
+							ci.setPhoneoffice(work.getNumber());
+							ci.setPhonework(work.getNumber());
+						} else {
+							setNoOverwritePhoneworkValue(customerFocal, ci);
+							setNoOverwritePhoneofficeValue(customerFocal, ci);
+						}
+						Phone mobile = phoneHome.findUsersMobilePhone(customer);
+						if(mobile != null) {
+							ci.setGsm(mobile.getNumber());
+						} else {
+							setNoOverwriteGsmValue(customerFocal, ci);
+						}
+						Phone fax = phoneHome.findUsersFaxPhone(customer);
+						if(fax != null) {
+							ci.setFax(fax.getNumber());
+							ci.setFaxoffice(fax.getNumber());
+						} else {
+							setNoOverwriteFaxValue(customerFocal, ci);
+						}
+						setNoOverwriteCarphoneValue(customerFocal, ci);
+						setNoOverwriteBeeperValue(customerFocal, ci);
+					} else {
+						setNoOverwritePhoneworkValue(customerFocal, ci);
+						setNoOverwritePhoneofficeValue(customerFocal, ci);
+						setNoOverwriteGsmValue(customerFocal, ci);
+						setNoOverwriteFaxValue(customerFocal, ci);
+						setNoOverwriteCarphoneValue(customerFocal, ci);
+						setNoOverwriteBeeperValue(customerFocal, ci);
+						setNoOverwritePhonehomeValue(customerFocal, ci);
+					}
+					ci.setSocNr(customer.getPersonalID());
+					
+					EmailHome emailHome = userBusiness.getEmailHome();
+					if(emailHome != null) {
+						Email email = emailHome.findMainEmailForUser(customer);
+						if(email != null) {
+							ci.setEmailaddress(email.getEmailAddress());
+						} else {
+							setNoOverwriteEmailaddressValue(customerFocal, ci);
+						}
+					} else {
+						setNoOverwriteEmailaddressValue(customerFocal, ci);
+					}
+					
+					String title = userBusiness.getUserJob(customer);
+					if(title != null && !title.equals("")) {
+						ci.setTitle(title);
+					} else {
+						setNoOverwriteTitleValue(customerFocal, ci);
+					}
+					//TODO ??????
+					ci.setTargetMail(false);
+					
+					String firstName = customer.getFirstName();
+					String middleName = customer.getMiddleName();
+					String lastName = customer.getLastName();
+					
+					StringBuffer fullName = new StringBuffer();
+					fullName.append(firstName)
+					.append(" ");
+					if(middleName != null && !middleName.equals("")) {
+						fullName.append(middleName)
+						.append(". ");
+					}
+					
+					fullName.append(lastName);
+					ci.setName(fullName.toString());
+				
+					setNoOverwriteLanguageValue(customerFocal, ci);
+					setNoOverwriteHomepageValue(customerFocal, ci);
+					setNoOverwriteAvarpValue(customerFocal, ci);
+					setNoOverwriteDepartmentValue(customerFocal, ci);
+					setNoOverwriteStatusValue(customerFocal, ci);
+					ci.setContactseperator(" ");
+				}
+			}
+		}
+		return ci;
 	}
 	
 	/**

@@ -7,13 +7,14 @@ import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Cus
 import java.util.List;
 
 import com.idega.business.IBOService;
+import com.idega.presentation.IWContext;
 
 /**
  * 
- * Last modified: $Date: 2007/06/18 12:15:16 $ by $Author: civilis $
+ * Last modified: $Date: 2007/06/19 10:53:14 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public interface FocalCasesIntegration extends IBOService {
 
@@ -26,6 +27,16 @@ public interface FocalCasesIntegration extends IBOService {
 	 * @throws Exception
 	 */
 	public abstract List findProjects(String search_txt) throws UnsuccessfulStatusException, Exception;
+	
+	/**
+	 * Create a CustomerPersonalInfo bean and fills it with data from the User system
+	 * 
+	 * @param personalID - personal number of the person
+	 * @param iwc - current IWContext instance
+	 * @return CustomerPersonalInfo bean containing all the data to be submitted to Focal
+	 * @throws Exception
+	 */
+	public abstract CustomerPersonalInfo createCustomerBean(String personalID, IWContext iwc) throws Exception;
 	
 	/**
 	 * 

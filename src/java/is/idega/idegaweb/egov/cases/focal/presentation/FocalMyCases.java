@@ -148,99 +148,8 @@ public class FocalMyCases extends MyCases {
 		try {
 			String customerId = iwc.getParameter(PARAMETER_CUSTOMER_PK);
 			if(customerId != null && !customerId.equals("")) {
-				UserBusiness userBusiness = getUserBusiness();
-				if(userBusiness != null) {
-					CustomerPersonalInfo ci = new CustomerPersonalInfo();
-					
-					User customer = userBusiness.getUser(customerId);
-					if(customer != null) {
-						int id = ((Integer) customer.getPrimaryKey()).intValue();
-						System.out.println("User ID: " + id);
-						Address address1 = userBusiness.getUsersMainAddress(id);
-						if(address1 != null) {
-							System.out.println("Address 1: " + address1.getStreetAddress());
-							ci.setAddress1(address1.getStreetAddress());
-							System.out.println("Postal address: " + address1.getPostalAddress());
-							ci.setPostaddress(address1.getPostalAddress());
-							Country country = address1.getCountry();
-							if(country != null) {
-								System.out.println("Country: " + country.getName());
-								ci.setCountry(country.getName());
-							}
-							Commune commune = address1.getCommune();
-							if(commune != null) {
-								System.out.println("Commune: " + commune.getCommuneName());
-								ci.setCounty(commune.getCommuneName());
-							} else {
-								System.out.println("EMPTY Commune!!!");
-								ci.setCounty(" ");
-							}
-						}
-						Address address2 = userBusiness.getUsersCoAddress(id);
-						if(address2 != null) {
-							System.out.println("Address 2: " + address2.getStreetAddress());
-							ci.setAddress2(address2.getStreetAddress());
-						}
-						PhoneHome phoneHome = userBusiness.getPhoneHome();
-						if(phoneHome != null) {
-							Phone home = phoneHome.findUsersHomePhone(customer);
-							if(home != null) {
-								System.out.println("Home phone: " + home.getNumber());
-								ci.setPhonehome(home.getNumber());
-							}
-							Phone work = phoneHome.findUsersWorkPhone(customer);
-							if(work != null) {
-								System.out.println("Work phone: " + work.getNumber());
-								ci.setPhoneoffice(work.getNumber());
-								ci.setPhonework(work.getNumber());
-							}
-							Phone mobile = phoneHome.findUsersMobilePhone(customer);
-							if(mobile != null) {
-								System.out.println("Mobile phone: " + mobile.getNumber());
-								ci.setGsm(mobile.getNumber());
-							}
-							Phone fax = phoneHome.findUsersFaxPhone(customer);
-							if(fax != null) {
-								System.out.println("Fax: " + fax.getNumber());
-								ci.setFax(fax.getNumber());
-								ci.setFaxoffice(fax.getNumber());
-							}
-						}
-						System.out.println("Personal ID: " + customer.getPersonalID());
-						ci.setSocNr(customer.getPersonalID());
-						
-						EmailHome emailHome = userBusiness.getEmailHome();
-						if(emailHome != null) {
-							Email email = emailHome.findMainEmailForUser(customer);
-							if(email != null) {
-								System.out.println("Email: " + email.getEmailAddress());
-								ci.setEmailaddress(email.getEmailAddress());
-							}
-						}
-						
-						String title = userBusiness.getUserJob(customer);
-						System.out.println("Title: " + title);
-						ci.setTitle(title);
-						//TODO ??????
-//						ci.setTargetMail(target_mail)
-						
-						String firstName = customer.getFirstName();
-						String middleName = customer.getMiddleName();
-						String lastName = customer.getLastName();
-						
-						StringBuffer fullName = new StringBuffer();
-						fullName.append(firstName)
-						.append(" ")
-						.append(middleName)
-						.append(". ")
-						.append(lastName);
-						System.out.println("Full name: " + fullName.toString());
-						ci.setName(fullName.toString());
-						
-						
-					}
-					
-					
+				CustomerPersonalInfo ci = getFocalCasesIntegration(iwc).createCustomerBean(customerId, iwc);		
+				if(ci != null) {
 					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
 				}
 			}
@@ -532,7 +441,7 @@ public class FocalMyCases extends MyCases {
 					Link createCustomer = null;
 					if(customer != null) {
 						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
-						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));	
+						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
 					} else {
 						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
 						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
