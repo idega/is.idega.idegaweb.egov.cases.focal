@@ -17,6 +17,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.FinderException;
@@ -29,14 +30,7 @@ import com.idega.block.process.data.CaseStatus;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
-import com.idega.core.contact.data.Email;
-import com.idega.core.contact.data.EmailHome;
-import com.idega.core.contact.data.Phone;
-import com.idega.core.contact.data.PhoneHome;
 import com.idega.core.file.data.ICFile;
-import com.idega.core.location.data.Address;
-import com.idega.core.location.data.Commune;
-import com.idega.core.location.data.Country;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
@@ -408,57 +402,71 @@ public class FocalMyCases extends MyCases {
 		cGroup = customerTable.createBodyRowGroup();
 		
 		String casesPKs[] = iwc.getParameterValues(PARAMETER_CASE_PK);
+		List customers = new LinkedList();
 		for(int i = 0; i < casesPKs.length; i++) {
 			GeneralCase theCase = null;
 			try {
 				theCase = getBusiness().getGeneralCase(casesPKs[i]);
 				User owner = theCase.getOwner();
-				
-				cRow = cGroup.createRow();
-				if (i == 1) {
-					cRow.setStyleClass("firstRow");
-				}
-				else if (i == (casesPKs.length - 1)) {
-					cRow.setStyleClass("lastRow");
-				}
-				
-				cCell = cRow.createCell();
-				cCell.setStyleClass("firstColumn");
-				cCell.setStyleClass("caseNumber");
-				cCell.add(new Text(theCase.getCaseNumber()));
-				
-				cCell = cRow.createCell();
-				cCell.setStyleClass("sender");
-				
-				if (owner != null) {
-					cCell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
-				
-					Customer customer = getFocalCasesIntegration(iwc).findCustomer(owner.getPersonalID());
-					
-					cCell = cRow.createCell();
-					cCell.setStyleClass("view");
-					cCell.setStyleClass("lastColumn");
-					Link createCustomer = null;
-					if(customer != null) {
-						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
-						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
-					} else {
-						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
+				if(owner != null) {
+					String id = owner.getPersonalID();
+					if(!customers.contains(id)) {
+						customers.add(id);
+						
+						cRow = cGroup.createRow();
+						if (i == 1) {
+							cRow.setStyleClass("firstRow");
+						}
+						else if (i == (casesPKs.length - 1)) {
+							cRow.setStyleClass("lastRow");
+						}
+						
+						cCell = cRow.createCell();
+						cCell.setStyleClass("firstColumn");
+						cCell.setStyleClass("caseNumber");
+						cCell.add(new Text(theCase.getPrimaryKey().toString()));
+						
+						cCell = cRow.createCell();
+						cCell.setStyleClass("sender");
+						
+						cCell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
+						
+						Customer customer = getFocalCasesIntegration(iwc).findCustomer(owner.getPersonalID());
+						
+						cCell = cRow.createCell();
+						cCell.setStyleClass("view");
+						cCell.setStyleClass("lastColumn");
+						Link createCustomer = null;
+						if(customer != null) {
+							createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
+							createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
+						} else {
+							createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+							createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
+						}
+						createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + owner.getPersonalID() + "');");
+						createCustomer.setStyleClass("homeButton");
+						
+						createCustomer.setToFormSubmit(form);
+						cCell.add(createCustomer);
 					}
-					createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + owner.getPersonalID() + "');");
-					createCustomer.setStyleClass("homeButton");
 					
-					createCustomer.setToFormSubmit(form);
-					cCell.add(createCustomer);
 				}
-				else {
-					cCell.add(new Text("-"));
-					
-					cCell = cRow.createCell();
-					cCell.setStyleClass("view");
-					cCell.setStyleClass("lastColumn");
-				}
+				
+//				
+//				
+//				
+//				
+//				if (owner != null) {
+//					
+//				}
+//				else {
+//					cCell.add(new Text("-"));
+//					
+//					cCell = cRow.createCell();
+//					cCell.setStyleClass("view");
+//					cCell.setStyleClass("lastColumn");
+//				}
 			} catch(Exception e) {
 //				e.printStackTrace();
 				//TODO
