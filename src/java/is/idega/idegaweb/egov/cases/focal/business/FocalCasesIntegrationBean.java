@@ -39,10 +39,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/19 10:53:13 $ by $Author: alexis $
+ * Last modified: $Date: 2007/06/19 11:15:13 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -416,28 +416,49 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					if(phoneHome != null) {
 						Phone home = phoneHome.findUsersHomePhone(customer);
 						if(home != null) {
-							ci.setPhonehome(home.getNumber());
+							String homeValue = home.getNumber();
+							if(homeValue != null && !homeValue.equals("")) {
+								ci.setPhonehome(home.getNumber());
+							} else {
+								setNoOverwritePhonehomeValue(customerFocal, ci);
+							}
 						} else {
 							setNoOverwritePhonehomeValue(customerFocal, ci);
 						}
 						Phone work = phoneHome.findUsersWorkPhone(customer);
 						if(work != null) {
-							ci.setPhoneoffice(work.getNumber());
-							ci.setPhonework(work.getNumber());
+							String workValue = work.getNumber();
+							if(workValue != null && !workValue.equals("")) {
+								ci.setPhoneoffice(work.getNumber());
+								ci.setPhonework(work.getNumber());
+							} else {
+								setNoOverwritePhoneworkValue(customerFocal, ci);
+								setNoOverwritePhoneofficeValue(customerFocal, ci);
+							}
 						} else {
 							setNoOverwritePhoneworkValue(customerFocal, ci);
 							setNoOverwritePhoneofficeValue(customerFocal, ci);
 						}
 						Phone mobile = phoneHome.findUsersMobilePhone(customer);
 						if(mobile != null) {
-							ci.setGsm(mobile.getNumber());
+							String mobileValue = mobile.getNumber();
+							if(mobileValue != null && !mobileValue.equals("")) {
+								ci.setGsm(mobile.getNumber());
+							} else {
+								setNoOverwriteGsmValue(customerFocal, ci);
+							}
 						} else {
 							setNoOverwriteGsmValue(customerFocal, ci);
 						}
 						Phone fax = phoneHome.findUsersFaxPhone(customer);
 						if(fax != null) {
-							ci.setFax(fax.getNumber());
-							ci.setFaxoffice(fax.getNumber());
+							String faxValue = fax.getNumber();
+							if(faxValue != null && !faxValue.equals("")) {
+								ci.setFax(fax.getNumber());
+								ci.setFaxoffice(fax.getNumber());
+							} else {
+								setNoOverwriteFaxValue(customerFocal, ci);
+							}
 						} else {
 							setNoOverwriteFaxValue(customerFocal, ci);
 						}
