@@ -1,30 +1,18 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans;
 
-import com.idega.user.data.User;
 
 /**
  * 
- * Last modified: $Date: 2007/06/18 14:58:23 $ by $Author: alexis $
+ * Last modified: $Date: 2007/06/19 07:16:07 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class CustomerPersonalInfo extends Customer {
 	
 	
 	private String soc_nr;
 	private boolean target_mail;
-	
-	public CustomerPersonalInfo() {
-		super();
-		this.soc_nr = "";
-		this.target_mail = false;
-	}
-	
-	public CustomerPersonalInfo(User customer) {
-//		this.set
-		//TODO fill this bean with User data
-	}
 	
 	public String getSocNr() {
 		return soc_nr;

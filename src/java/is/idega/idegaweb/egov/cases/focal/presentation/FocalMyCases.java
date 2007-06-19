@@ -29,7 +29,12 @@ import com.idega.block.process.data.CaseStatus;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
+import com.idega.core.contact.data.Phone;
+import com.idega.core.contact.data.PhoneHome;
 import com.idega.core.file.data.ICFile;
+import com.idega.core.location.data.Address;
+import com.idega.core.location.data.Commune;
+import com.idega.core.location.data.Country;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
@@ -54,7 +59,9 @@ import com.idega.presentation.ui.Label;
 import com.idega.presentation.ui.TextArea;
 import com.idega.presentation.ui.TextInput;
 import com.idega.presentation.ui.util.SelectorUtility;
+import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
+import com.idega.user.data.UserHome;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 import com.idega.util.text.TextSoap;
@@ -140,22 +147,94 @@ public class FocalMyCases extends MyCases {
 		try {
 			String customerId = iwc.getParameter(PARAMETER_CUSTOMER_PK);
 			if(customerId != null && !customerId.equals("")) {
-				GeneralCase theCase = null;
-				try {
-					theCase = getBusiness().getGeneralCase(customerId);
-					User owner = theCase.getOwner();
-					if(owner != null) {
-						CustomerPersonalInfo ci = new CustomerPersonalInfo(owner);
-						getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
+				UserBusiness userBusiness = getUserBusiness();
+				if(userBusiness != null) {
+					CustomerPersonalInfo ci = new CustomerPersonalInfo();
+					
+					User customer = userBusiness.getUser(customerId);
+					if(customer != null) {
+						int id = ((Integer) customer.getPrimaryKey()).intValue();
+						System.out.println(id);
+						Address address1 = userBusiness.getUsersMainAddress(id);
+						if(address1 != null) {
+							System.out.println(address1.getStreetAddress());
+							ci.setAddress1(address1.getStreetAddress());
+							System.out.println(address1.getPostalAddress());
+							ci.setPostaddress(address1.getPostalAddress());
+							Country country = address1.getCountry();
+							if(country != null) {
+								System.out.println(country.getName());
+								ci.setCountry(country.getName());
+							}
+							Commune commune = address1.getCommune();
+							if(commune != null) {
+								System.out.println(commune.getCommuneName());
+								ci.setCounty(commune.getCommuneName());
+							}
+						}
+						Address address2 = userBusiness.getUsersCoAddress(id);
+						if(address2 != null) {
+							System.out.println(address2.getStreetAddress());
+							ci.setAddress2(address2.getStreetAddress());
+						}
+						PhoneHome phoneHome = userBusiness.getPhoneHome();
+						if(phoneHome != null) {
+							Phone home = phoneHome.findUsersHomePhone(customer);
+							if(home != null) {
+								System.out.println(home.getNumber());
+								ci.setPhonehome(home.getNumber());
+							}
+							Phone work = phoneHome.findUsersWorkPhone(customer);
+							if(work != null) {
+								System.out.println(work.getNumber());
+								ci.setPhoneoffice(work.getNumber());
+								System.out.println(work.getNumber());
+								ci.setPhonework(work.getNumber());
+							}
+							Phone mobile = phoneHome.findUsersMobilePhone(customer);
+							if(mobile != null) {
+								System.out.println(mobile.getNumber());
+								ci.setGsm(mobile.getNumber());
+							}
+							Phone fax = phoneHome.findUsersFaxPhone(customer);
+							if(fax != null) {
+								System.out.println(fax.getNumber());
+								ci.setFax(fax.getNumber());
+								System.out.println(fax.getNumber());
+								ci.setFaxoffice(fax.getNumber());
+							}
+						}
+						System.out.println(customer.getPersonalID());
+						ci.setSocNr(customer.getPersonalID());
+						
+						
+						
 					}
-				}
-				catch (FinderException fe) {
-					fe.printStackTrace();
-					throw new IBORuntimeException(fe);
+					String title = userBusiness.getUserJob(customer);
+					System.out.println(title);
+					ci.setTitle(title);
+					//TODO ??????
+//					ci.setTargetMail(target_mail)
+					
+					String firstName = customer.getFirstName();
+					String middleName = customer.getMiddleName();
+					String lastName = customer.getLastName();
+					
+					StringBuffer fullName = new StringBuffer();
+					fullName.append(firstName)
+					.append(" ")
+					.append(middleName)
+					.append(". ")
+					.append(lastName);
+					System.out.println(fullName.toString());
+					ci.setName(fullName.toString());
+					
+					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
 				}
 			}
 		} catch(Exception e) {
 			//TODO
+			e.printStackTrace();
 		}
 	}
 	
@@ -446,7 +525,7 @@ public class FocalMyCases extends MyCases {
 						createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
 						createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
 					}
-					createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + casesPKs[i] + "');");
+					createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + owner.getPersonalID() + "');");
 					createCustomer.setStyleClass("homeButton");
 					
 					createCustomer.setToFormSubmit(form);
@@ -934,6 +1013,15 @@ public class FocalMyCases extends MyCases {
 	protected FocalCasesIntegration getFocalCasesIntegration(IWApplicationContext iwac) {
 		try {
 			return (FocalCasesIntegration) IBOLookup.getServiceInstance(iwac, FocalCasesIntegration.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
+	}
+	
+	protected UserBusiness getUserBusiness(IWApplicationContext iwac) {
+		try {
+			return (UserBusiness) IBOLookup.getServiceInstance(iwac, UserBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
