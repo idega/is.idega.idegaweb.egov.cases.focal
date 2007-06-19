@@ -170,6 +170,9 @@ public class FocalMyCases extends MyCases {
 							if(commune != null) {
 								System.out.println("Commune: " + commune.getCommuneName());
 								ci.setCounty(commune.getCommuneName());
+							} else {
+								System.out.println("EMPTY Commune!!!");
+								ci.setCounty(" ");
 							}
 						}
 						Address address2 = userBusiness.getUsersCoAddress(id);
