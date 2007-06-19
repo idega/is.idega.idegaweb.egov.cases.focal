@@ -29,6 +29,8 @@ import com.idega.block.process.data.CaseStatus;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
+import com.idega.core.contact.data.Email;
+import com.idega.core.contact.data.EmailHome;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.contact.data.PhoneHome;
 import com.idega.core.file.data.ICFile;
@@ -61,7 +63,6 @@ import com.idega.presentation.ui.TextInput;
 import com.idega.presentation.ui.util.SelectorUtility;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
-import com.idega.user.data.UserHome;
 import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 import com.idega.util.text.TextSoap;
@@ -208,27 +209,37 @@ public class FocalMyCases extends MyCases {
 						System.out.println("Personal ID: " + customer.getPersonalID());
 						ci.setSocNr(customer.getPersonalID());
 						
+						EmailHome emailHome = userBusiness.getEmailHome();
+						if(emailHome != null) {
+							Email email = emailHome.findMainEmailForUser(customer);
+							if(email != null) {
+								System.out.println("Email: " + email.getEmailAddress());
+								ci.setEmailaddress(email.getEmailAddress());
+							}
+						}
+						
+						String title = userBusiness.getUserJob(customer);
+						System.out.println("Title: " + title);
+						ci.setTitle(title);
+						//TODO ??????
+//						ci.setTargetMail(target_mail)
+						
+						String firstName = customer.getFirstName();
+						String middleName = customer.getMiddleName();
+						String lastName = customer.getLastName();
+						
+						StringBuffer fullName = new StringBuffer();
+						fullName.append(firstName)
+						.append(" ")
+						.append(middleName)
+						.append(". ")
+						.append(lastName);
+						System.out.println("Full name: " + fullName.toString());
+						ci.setName(fullName.toString());
 						
 						
 					}
-					String title = userBusiness.getUserJob(customer);
-					System.out.println("Title: " + title);
-					ci.setTitle(title);
-					//TODO ??????
-//					ci.setTargetMail(target_mail)
 					
-					String firstName = customer.getFirstName();
-					String middleName = customer.getMiddleName();
-					String lastName = customer.getLastName();
-					
-					StringBuffer fullName = new StringBuffer();
-					fullName.append(firstName)
-					.append(" ")
-					.append(middleName)
-					.append(". ")
-					.append(lastName);
-					System.out.println("Full name: " + fullName.toString());
-					ci.setName(fullName.toString());
 					
 					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
 				}
