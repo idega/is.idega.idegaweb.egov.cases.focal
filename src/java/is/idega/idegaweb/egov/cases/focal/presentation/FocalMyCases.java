@@ -4,6 +4,7 @@ import is.idega.idegaweb.egov.cases.business.CaseCategoryCollectionHandler;
 import is.idega.idegaweb.egov.cases.data.CaseCategory;
 import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
+import is.idega.idegaweb.egov.cases.focal.FocalConstants;
 import is.idega.idegaweb.egov.cases.focal.IWBundleStarter;
 import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
 import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
@@ -46,6 +47,7 @@ import com.idega.presentation.text.Heading1;
 import com.idega.presentation.text.Link;
 import com.idega.presentation.text.ListItem;
 import com.idega.presentation.text.Lists;
+import com.idega.presentation.text.Paragraph;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.CheckBox;
 import com.idega.presentation.ui.DropdownMenu;
@@ -99,9 +101,11 @@ public class FocalMyCases extends MyCases {
 		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, DWR_FOCAL_JS);
 		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
 		
+		String result = null;
+		
 		switch (parseAction(iwc)) {
 			case ACTION_VIEW:
-				showList(iwc, ACTION_VIEW);
+				showList(iwc, ACTION_VIEW, null);
 				break;
 
 			case ACTION_PROCESS:
@@ -110,31 +114,35 @@ public class FocalMyCases extends MyCases {
 
 			case ACTION_SAVE:
 				save(iwc);
-				showList(iwc, ACTION_VIEW);
+				showList(iwc, ACTION_VIEW, null);
 				break;
 				
 			case ACTION_MOVE_FOCAL:
 				String values[] = iwc.getParameterValues(PARAMETER_CASE_PK);
 				if(values != null && values.length > 0) {
-					showProjectSearch(iwc, ACTION_MOVE_FOCAL);
+					showProjectSearch(iwc, ACTION_MOVE_FOCAL, null);
 				} else {
-					showList(iwc, ACTION_MOVE_FOCAL);
+					showList(iwc, ACTION_MOVE_FOCAL, null);
 				}
 				break;
 				
 			case ACTION_SAVE_FOCAL:
-				saveToFocal(iwc);
-				showList(iwc, ACTION_SAVE_FOCAL);
+				result = saveToFocal(iwc);
+				if(result.equals(FocalConstants.STATUS_SUCCESS_SAVE)) {
+					showList(iwc, ACTION_SAVE_FOCAL, result);
+				} else {
+					showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
+				}
 				break;
 				
 			case ACTION_CREATE_CUSTOMER:
 				createUpdateCustomer(iwc, false);
-				showProjectSearch(iwc, ACTION_CREATE_CUSTOMER);
+				showProjectSearch(iwc, ACTION_CREATE_CUSTOMER, null);
 				break;
 				
 			case ACTION_UPDATE_CUSTOMER:
 				createUpdateCustomer(iwc, true);
-				showProjectSearch(iwc, ACTION_UPDATE_CUSTOMER);
+				showProjectSearch(iwc, ACTION_UPDATE_CUSTOMER, null);
 				break;
 		}
 	}
@@ -154,7 +162,7 @@ public class FocalMyCases extends MyCases {
 		}
 	}
 	
-	protected void saveToFocal(IWContext iwc) {
+	protected String saveToFocal(IWContext iwc) {
 		try {
 			String projectId = iwc.getParameter(PARAMETER_PROJECT_PK);
 			String projectName = iwc.getParameter(PARAMETER_PROJECT_NAME);
@@ -171,40 +179,37 @@ public class FocalMyCases extends MyCases {
 				getFocalCasesIntegration(iwc).createCasesUnderProject(projectId, projectName, cases);
 				getExportCasesManagement(iwc).updateCasesExternalId(projectId, cases);
 			}
+			return FocalConstants.STATUS_SUCCESS_SAVE;
 		} catch(Exception e) {
-			e.printStackTrace();
-//			TODO
+			return FocalConstants.STATUS_ERROR_SAVE;
 		}
 	}
 	
-	protected void showConfirmationPage(IWContext iwc) {
-		Form form = new Form();
-		form.addParameter(PARAMETER_ACTION, "");
-		
-		Layer projectSection = new Layer(Layer.DIV);
-		projectSection.setStyleClass("formSection");
-		form.add(projectSection);
-		
-		Layer bottom = new Layer(Layer.DIV);
-		bottom.setStyleClass("bottom");
-		form.add(bottom);
-
-		Link back = getButtonLink(getResourceBundle().getLocalizedString("back_to_my_cases", "Back to My Cases"));
-		back.setStyleClass("homeButton");
-		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
-		back.setToFormSubmit(form);
-		bottom.add(back);
-		
-		add(form);
-	}
-	
-	protected void showProjectSearch(IWContext iwc, int action) {
+	protected void showProjectSearch(IWContext iwc, int action, String result) {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
 		form.addParameter(PARAMETER_PROJECT_PK, "");
 		form.addParameter(PARAMETER_PROJECT_NAME, "");
 		form.addParameter(PARAMETER_CUSTOMER_PK, "");
 		form.maintainParameter(PARAMETER_CASE_PK);
+		
+		if(result.equals(FocalConstants.STATUS_ERROR_SAVE)) {
+			Layer errorSection = new Layer(Layer.DIV);
+			errorSection.setStyleClass("errorLayer");
+			
+			Layer icon = new Layer(Layer.DIV);
+			icon.setStyleClass("errorImage");
+			errorSection.add(icon);
+			
+			Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString(FocalConstants.STATUS_ERROR_SAVE_TITLE, "Could not save selected cases to Focal"));
+			errorSection.add(heading);
+			
+			Paragraph message = new Paragraph();
+			errorSection.add(message);
+			
+			
+			form.add(errorSection);
+		}
 		
 		Layer projectSection = new Layer(Layer.DIV);
 		projectSection.setStyleClass("formSection");
@@ -521,7 +526,7 @@ public class FocalMyCases extends MyCases {
 		return link;
 	}
 	
-	private void showList(IWContext iwc, int action) throws RemoteException {
+	private void showList(IWContext iwc, int action, String result) throws RemoteException {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
 		
