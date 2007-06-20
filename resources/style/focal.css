@@ -122,9 +122,13 @@ table.adminTable tbody tr.selectedProject {
 	text-align:left;
 }
 #projectTable tbody {
-	height: 200px;
+	height: 100px;
 	max-height: 300px;
 	overflow: auto;
 }
 .focalRow {
+}
+.focalInfoNotice {
+	height: 20px;
+	padding-left: 20px;
 }
