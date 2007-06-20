@@ -49,3 +49,16 @@ case.is_private=The sender wishes that this case be handled as confidential.
 case_viewer.view_case=View case
 reactivate_case=Reactivate case
 review_case=Review case
+
+focal.status.error.save.title=Could not save selected cases to Focal
+focal.status.error.save.message=
+focal.status.success.save.title=Cases successfully saved
+focal.status.success.save.message=
+focal.status.error.create.customer.title=Could not create customer in Focal
+focal.status.error.create.customer.message=
+focal.status.error.update.customer.title=Could not update customer in Focal
+focal.status.error.update.customer.message=
+focal.status.success.create.customer.title=Customer successfully created
+focal.status.success.create.customer.message=
+focal.status.success.update.customer.title=Customer successfully updated
+focal.status.success.update.customer.message=

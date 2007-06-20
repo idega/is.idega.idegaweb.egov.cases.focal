@@ -1,10 +1,5 @@
 var focal_project_row_id = null;
 
-function overrideMouseOut(element) {
-	var old = element.className;
-	element.className = old;
-}
-
 function selectFocalCasesRow(e) {
 	if(e) {
 		var temp = focal_project_row_id;

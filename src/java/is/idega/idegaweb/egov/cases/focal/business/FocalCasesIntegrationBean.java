@@ -41,10 +41,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/20 05:28:54 $ by $Author: alexis $
+ * Last modified: $Date: 2007/06/20 12:38:25 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -612,6 +612,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			CaseType type = gen_case.getCaseType();
 			
 			CASEDATA case_data = new CASEDATA(
+					gen_case.getOwner().getPersonalID() == null ? "4767674" :
 					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
 					gen_case.getOwner() == null ? null :
 					gen_case.getOwner().getName(), 						//"CUSTOMERNAME"

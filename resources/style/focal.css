@@ -117,18 +117,14 @@ a.searchButton span.buttonSpan {
 a.searchButton:hover span.buttonSpan {
 	background-image:url(/content/files/public/style/images/buttons/blueRightBlue.gif);
 }
-div.searchSection {
-
-}
-div.tableSection {
-	
-}
-
 table.adminTable tbody tr.selectedProject {
 	background-color:#f09e00;
 	text-align:left;
 }
-.focalErrorNotice {
+#projectTable tbody {
+	height: 200px;
+	max-height: 300px;
+	overflow: auto;
 }
-.focalInfoNotice {
+.focalRow {
 }
