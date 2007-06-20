@@ -193,7 +193,7 @@ public class FocalMyCases extends MyCases {
 		form.addParameter(PARAMETER_CUSTOMER_PK, "");
 		form.maintainParameter(PARAMETER_CASE_PK);
 		
-		if(result.equals(FocalConstants.STATUS_ERROR_SAVE)) {
+		if(FocalConstants.STATUS_ERROR_SAVE.equals(result)) {
 			Layer errorSection = new Layer(Layer.DIV);
 			errorSection.setStyleClass("errorLayer");
 			
