@@ -41,10 +41,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/19 14:14:56 $ by $Author: alexis $
+ * Last modified: $Date: 2007/06/20 05:28:54 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -591,7 +591,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
-	public List createCasesUnderProject(String project_id, List cases) throws Exception {
+	public List createCasesUnderProject(String project_id, String projectName, List cases) throws Exception {
 
 		if(cases == null || cases.isEmpty())
 			return cases;
@@ -620,7 +620,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					gen_case.getCreated() == null ? null :
 					String.valueOf(gen_case.getCreated().getTime()),	//"DATE"
 		            gen_case.getMessage(),									//"BODY"
-			        null,												//"PROJECTNAME"
+			        projectName,												//"PROJECTNAME"
 			        project_id											//"PROJECTNUMBER"
 			);
 			

@@ -11,10 +11,10 @@ import com.idega.presentation.IWContext;
 
 /**
  * 
- * Last modified: $Date: 2007/06/19 10:53:14 $ by $Author: alexis $
+ * Last modified: $Date: 2007/06/20 05:28:54 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public interface FocalCasesIntegration extends IBOService {
 
@@ -43,10 +43,11 @@ public interface FocalCasesIntegration extends IBOService {
 	 * Creates cases under the same project
 	 * 
 	 * @param project_id - project to create under id
+	 * @param projectName - name of the project to create under
 	 * @param cases - list of is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg - status may be empty as it is used on return only
 	 * @return cases - the same list with status modified to each case move status
 	 */
-	public abstract List createCasesUnderProject(String project_id, List cases) throws Exception;
+	public abstract List createCasesUnderProject(String project_id, String projectName, List cases) throws Exception;
 	
 	/**
 	 * 

@@ -68,6 +68,7 @@ public class FocalMyCases extends MyCases {
 	public static final String PARAMETER_PROJECT_PK = "prm_project_pk";
 	public static final String PARAMETER_PROJECT_SEARCH_KEY = "prm_project_search_key";
 	public static final String PARAMETER_CUSTOMER_PK = "prm_customer_pk";
+	public static final String PARAMETER_PROJECT_NAME = "prm_project_name";
 	
 	private static final String PARAMETER_CASE_CATEGORY_PK = "prm_case_category_pk";
 	private static final String PARAMETER_SUB_CASE_CATEGORY_PK = "prm_sub_case_category_pk";
@@ -156,7 +157,8 @@ public class FocalMyCases extends MyCases {
 	protected void saveToFocal(IWContext iwc) {
 		try {
 			String projectId = iwc.getParameter(PARAMETER_PROJECT_PK);
-			if(projectId != null && !projectId.equals("")) {
+			String projectName = iwc.getParameter(PARAMETER_PROJECT_NAME);
+			if(projectId != null && !projectId.equals("") && projectName != null && !projectName.equals("")) {
 				String[] pks = iwc.getParameterValues(PARAMETER_CASE_PK);
 				
 				List cases = new ArrayList();
@@ -166,7 +168,7 @@ public class FocalMyCases extends MyCases {
 					ca.setGcase(theCase);
 					cases.add(ca);	
 				}
-				getFocalCasesIntegration(iwc).createCasesUnderProject(projectId, cases);
+				getFocalCasesIntegration(iwc).createCasesUnderProject(projectId, projectName, cases);
 				getExportCasesManagement(iwc).updateCasesExternalId(projectId, cases);
 			}
 		} catch(Exception e) {
@@ -200,6 +202,7 @@ public class FocalMyCases extends MyCases {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
 		form.addParameter(PARAMETER_PROJECT_PK, "");
+		form.addParameter(PARAMETER_PROJECT_NAME, "");
 		form.addParameter(PARAMETER_CUSTOMER_PK, "");
 		form.maintainParameter(PARAMETER_CASE_PK);
 		
@@ -328,7 +331,7 @@ public class FocalMyCases extends MyCases {
 								cell = row.createCell();
 								cell.setStyleClass("view");
 								Link select = new Link(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")));
-								select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
+								select.setOnClick("changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), this.id);changeInputValue(findObj('" + PARAMETER_PROJECT_NAME + "'), '" + theProject.getName() + "');selectFocalCasesRow('" + "focalRow" + rowCount + "');return false;");
 								select.setNoURL();
 								String projectId = theProject.getNumber();
 								projectId = projectId.replaceAll("/", "-");
