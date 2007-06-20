@@ -41,10 +41,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/20 12:38:25 $ by $Author: alexis $
+ * Last modified: $Date: 2007/06/20 14:06:58 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -627,15 +627,17 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			
 			String[] login_and_pass = getLoginAndPassword();
 
-//			TODO: is this the correct profile key - const_project_list ?
 			RETURNSTATUS ret_status = service.NEWPROJECT(case_data, const_project_list, login_and_pass[0], login_and_pass[1]);
 			
 			try {
 				int status_code = Integer.parseInt(ret_status.getSTATUS());
 				
-				if(status_code == 0)
+				if(status_code == Status.success)
 					case_arg.setStatus(new Status(Status.success));
-				else {
+				else if(status_code == Status.failed_to_save) {
+					case_arg.setStatus(new Status(Status.failed_to_save));
+					logger.log(Level.WARNING, "Error occured while creating project by case. Status message: "+ret_status.getERRORTEXT());
+				} else {
 					case_arg.setStatus(new Status(Status.unknown_fail));
 					logger.log(Level.WARNING, "Error occured while creating project by case. Status message: "+ret_status.getERRORTEXT());
 				}
@@ -688,15 +690,17 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					customer.getTitle() 								//TITLE
 		);
 		
-//		TODO: is this the correct profile key - const_project_list ?
 		RETURNSTATUS ret_status = service.CREATEUPDATEPERSON(person_info, const_project_list, login_and_pass[0], login_and_pass[1]);
 		
 		try {
 				int status_code = Integer.parseInt(ret_status.getSTATUS());
 				
-				if(status_code == 0)
+				if(status_code == Status.success)
 					return new Status(Status.success);
-				else {
+				else if(status_code == Status.failed_to_save) {
+					logger.log(Level.WARNING, "Error occured while doing CREATEUPDATEPERSON. Status message: "+ret_status.getERRORTEXT());
+					return new Status(Status.failed_to_save);
+				} else {
 					logger.log(Level.WARNING, "Error occured while doing CREATEUPDATEPERSON. Status message: "+ret_status.getERRORTEXT());
 					return new Status(Status.unknown_fail);
 				}
