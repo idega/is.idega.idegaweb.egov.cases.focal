@@ -136,18 +136,18 @@ public class FocalMyCases extends MyCases {
 				break;
 				
 			case ACTION_CREATE_CUSTOMER:
-				createUpdateCustomer(iwc, false);
-				showProjectSearch(iwc, ACTION_CREATE_CUSTOMER, null);
+				result = createUpdateCustomer(iwc, false);
+				showProjectSearch(iwc, ACTION_CREATE_CUSTOMER, result);
 				break;
 				
 			case ACTION_UPDATE_CUSTOMER:
-				createUpdateCustomer(iwc, true);
-				showProjectSearch(iwc, ACTION_UPDATE_CUSTOMER, null);
+				result = createUpdateCustomer(iwc, true);
+				showProjectSearch(iwc, ACTION_UPDATE_CUSTOMER, result);
 				break;
 		}
 	}
 	
-	protected void createUpdateCustomer(IWContext iwc, boolean exist) {
+	protected String createUpdateCustomer(IWContext iwc, boolean exist) {
 		try {
 			String customerId = iwc.getParameter(PARAMETER_CUSTOMER_PK);
 			if(customerId != null && !customerId.equals("")) {
@@ -156,9 +156,17 @@ public class FocalMyCases extends MyCases {
 					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
 				}
 			}
+			if(exist) {
+				return FocalConstants.STATUS_SUCCESS_UPDATE_CUSTOMER;
+			} else {
+				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
+			}
 		} catch(Exception e) {
-			//TODO
-			e.printStackTrace();
+			if(exist) {
+				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+			} else {
+				return FocalConstants.STATUS_ERROR_CREATE_CUSTOMER;
+			}
 		}
 	}
 	
@@ -185,6 +193,42 @@ public class FocalMyCases extends MyCases {
 		}
 	}
 	
+	private Layer getConfirmationBox(IWContext iwc, String result) {
+		Layer errorSection = new Layer(Layer.DIV);
+		errorSection.setStyleClass("receipt");
+		
+		Layer icon = new Layer(Layer.DIV);
+		icon.setStyleClass("receiptImage");
+		errorSection.add(icon);
+		
+		Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString(result + FocalConstants.TITLE_POSTFIX, "Operation successful"));
+		errorSection.add(heading);
+		
+		Paragraph message = new Paragraph();
+		message.addText(getResourceBundle(iwc).getLocalizedString(result + FocalConstants.MESSAGE_POSTFIX, ""));
+		errorSection.add(message);
+		
+		return errorSection;
+	}
+	
+	private Layer getErrorNotificationBox(IWContext iwc, String result) {
+		Layer errorSection = new Layer(Layer.DIV);
+		errorSection.setStyleClass("errorLayer");
+		
+		Layer icon = new Layer(Layer.DIV);
+		icon.setStyleClass("errorImage");
+		errorSection.add(icon);
+		
+		Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString(result + FocalConstants.TITLE_POSTFIX, "Error occured"));
+		errorSection.add(heading);
+		
+		Paragraph message = new Paragraph();
+		message.addText(getResourceBundle(iwc).getLocalizedString(result + FocalConstants.MESSAGE_POSTFIX, ""));
+		errorSection.add(message);
+		
+		return errorSection;
+	} 
+	
 	protected void showProjectSearch(IWContext iwc, int action, String result) {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
@@ -194,21 +238,29 @@ public class FocalMyCases extends MyCases {
 		form.maintainParameter(PARAMETER_CASE_PK);
 		
 		if(FocalConstants.STATUS_ERROR_SAVE.equals(result)) {
-			Layer errorSection = new Layer(Layer.DIV);
-			errorSection.setStyleClass("errorLayer");
+//			Layer errorSection = new Layer(Layer.DIV);
+//			errorSection.setStyleClass("errorLayer");
+//			
+//			Layer icon = new Layer(Layer.DIV);
+//			icon.setStyleClass("errorImage");
+//			errorSection.add(icon);
+//			
+//			Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString(FocalConstants.STATUS_ERROR_SAVE_TITLE, "Could not save selected cases to Focal"));
+//			errorSection.add(heading);
+//			
+//			Paragraph message = new Paragraph();
+//			errorSection.add(message);
 			
-			Layer icon = new Layer(Layer.DIV);
-			icon.setStyleClass("errorImage");
-			errorSection.add(icon);
 			
-			Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString(FocalConstants.STATUS_ERROR_SAVE_TITLE, "Could not save selected cases to Focal"));
-			errorSection.add(heading);
-			
-			Paragraph message = new Paragraph();
-			errorSection.add(message);
-			
-			
-			form.add(errorSection);
+			form.add(getErrorNotificationBox(iwc, result));
+		} else if(FocalConstants.STATUS_SUCCESS_UPDATE_CUSTOMER.equals(result)) {
+			form.add(getConfirmationBox(iwc, result));
+		} else if(FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER.equals(result)) {
+			form.add(getConfirmationBox(iwc, result));
+		} else if(FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER.equals(result)) {
+			form.add(getErrorNotificationBox(iwc, result));
+		} else if(FocalConstants.STATUS_ERROR_CREATE_CUSTOMER.equals(result)) {
+			form.add(getErrorNotificationBox(iwc, result));
 		}
 		
 		Layer projectSection = new Layer(Layer.DIV);
