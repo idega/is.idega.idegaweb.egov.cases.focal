@@ -10,6 +10,7 @@ import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
 import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
 import is.idega.idegaweb.egov.cases.focal.business.UnsuccessfulStatusException;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
+import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Customer;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.ProjectInfo;
@@ -89,6 +90,8 @@ public class FocalMyCases extends MyCases {
 	protected static final int ACTION_CREATE_CUSTOMER = 6;
 	protected static final int ACTION_UPDATE_CUSTOMER = 7;
 	
+	private List projects = new ArrayList();
+	
 	private int parseAction(IWContext iwc) {
 		if (iwc.isParameterSet(PARAMETER_ACTION)) {
 			return Integer.parseInt(iwc.getParameter(PARAMETER_ACTION));
@@ -121,7 +124,8 @@ public class FocalMyCases extends MyCases {
 			case ACTION_MOVE_FOCAL:
 				String values[] = iwc.getParameterValues(PARAMETER_CASE_PK);
 				if(values != null && values.length > 0) {
-					showProjectSearch(iwc, ACTION_MOVE_FOCAL, null);
+					result = findProjects(iwc);
+					showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
 				} else {
 					showList(iwc, ACTION_MOVE_FOCAL, null);
 				}
@@ -148,19 +152,30 @@ public class FocalMyCases extends MyCases {
 		}
 	}
 	
-	protected List findProjects(IWContext iwc) {
-		List projects = null;
+	protected String findProjects(IWContext iwc) {
 		try {
 			String searchKey = iwc.getParameter(PARAMETER_PROJECT_SEARCH_KEY);
-			if(searchKey != null && !searchKey.equals("")) {
-				projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
+			if(searchKey == null) {
+				return FocalConstants.STATUS_SUCCESS_PROJECTS;
+			} else {
+				if(searchKey.equals("")) {
+					return FocalConstants.STATUS_ERROR_EMPTY_SEARCH_STRING;
+				} else if(searchKey.equals("*")) {
+					projects = getFocalCasesIntegration(iwc).findProjects("");
+				} else {
+					projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
+				}
+				if(projects == null) {
+					return FocalConstants.STATUS_ERROR_FIND_NOPROJECTS;
+				}
+				return FocalConstants.STATUS_SUCCESS_PROJECTS;
 			}
 		} catch(UnsuccessfulStatusException use) {
-			//TODO
+			Status status = use.getStatus();
+			return FocalConstants.STATUS_ERROR_FIND_PROJECTS;
 		} catch(Exception e) {
-			//TODO
+			return FocalConstants.STATUS_ERROR_FIND_PROJECTS;
 		}
-		return projects;
 	}
 	
 	protected String createUpdateCustomer(IWContext iwc, boolean exist) {
@@ -264,6 +279,8 @@ public class FocalMyCases extends MyCases {
 				form.add(getErrorNotificationBox(iwc, result));
 			} else if(FocalConstants.STATUS_ERROR_CREATE_CUSTOMER.equals(result)) {
 				form.add(getErrorNotificationBox(iwc, result));
+			} else if(FocalConstants.STATUS_ERROR_FIND_PROJECTS.equals(result)) {
+				form.add(getErrorNotificationBox(iwc, result));
 			}
 		}
 		
@@ -321,47 +338,43 @@ public class FocalMyCases extends MyCases {
 		cell = row.createHeaderCell();
 		cell.setStyleClass("sender");
 		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_id", "Customer")));
-		
-//		cell = row.createHeaderCell();
-//		cell.setStyleClass("sender");
-//		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_select", "Select")));
 
-		group = table.createBodyRowGroup();
-		
-		String searchKey = iwc.getParameter(PARAMETER_PROJECT_SEARCH_KEY);
-		if(searchKey == null) {
-			//Error - handle this
-			row = group.createRow();
-			cell = row.createHeaderCell();
-			cell.setStyleClass("focalErrorNotice");
-			cell.setColumnSpan(2);
-			cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
-		} else {
-			if(searchKey.equals("")) {
-				//User enters nothing
-				row = group.createRow();
-				cell = row.createHeaderCell();
-				cell.setStyleClass("focalInfoNotice");
-				cell.setColumnSpan(2);
-				cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_no_search", "No input")));
-			} else {
-				List projects = null;
-				try {
-					if(searchKey.equals("*")) {
-						//User enters wildcard symbol *
-						projects = getFocalCasesIntegration(iwc).findProjects("*");
-					} else {
-						//User enters something
-						projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
-					}
-					if(projects != null) {
-						if(projects.isEmpty()) {
-							row = group.createRow();
-							cell = row.createHeaderCell();
-							cell.setStyleClass("focalInfoNotice");
-							cell.setColumnSpan(2);
-							cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects match your search")));
-						} else {
+//		group = table.createBodyRowGroup();
+//		
+//		String searchKey = iwc.getParameter(PARAMETER_PROJECT_SEARCH_KEY);
+//		if(searchKey == null) {
+//			//Error - handle this
+//			row = group.createRow();
+//			cell = row.createHeaderCell();
+//			cell.setStyleClass("focalErrorNotice");
+//			cell.setColumnSpan(2);
+//			cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
+//		} else {
+//			if(searchKey.equals("")) {
+//				//User enters nothing
+//				row = group.createRow();
+//				cell = row.createHeaderCell();
+//				cell.setStyleClass("focalInfoNotice");
+//				cell.setColumnSpan(2);
+//				cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_no_search", "No input")));
+//			} else {
+//				List projects = null;
+//				try {
+//					if(searchKey.equals("*")) {
+//						//User enters wildcard symbol *
+//						projects = getFocalCasesIntegration(iwc).findProjects("*");
+//					} else {
+//						//User enters something
+//						projects = getFocalCasesIntegration(iwc).findProjects(searchKey);
+//					}
+//					if(projects != null) {
+//						if(projects.isEmpty()) {
+//							row = group.createRow();
+//							cell = row.createHeaderCell();
+//							cell.setStyleClass("focalInfoNotice");
+//							cell.setColumnSpan(2);
+//							cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_empty_search", "No projects match your search")));
+//						} else {
 							int rowCount = 0;
 							Iterator iter = projects.iterator();
 							while (iter.hasNext()) {
@@ -404,26 +417,26 @@ public class FocalMyCases extends MyCases {
 //								cell.add(select);
 								rowCount++;
 							}
-						}
-					} else {
-//						TODO make this standard eGov error DIV style
-						row = group.createRow();
-						cell = row.createHeaderCell();
-						cell.setStyleClass("focalErrorNotice");
-						cell.setColumnSpan(2);
-						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
-					}
-				} catch(Exception e) {
-					e.printStackTrace();
-					row = group.createRow();
-					cell = row.createHeaderCell();
-					//TODO make this standard eGov error DIV style
-					cell.setStyleClass("focalErrorNotice");
-					cell.setColumnSpan(2);
-					cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
-				}
-			}
-		}
+//						}
+//					} else {
+////						TODO make this standard eGov error DIV style
+//						row = group.createRow();
+//						cell = row.createHeaderCell();
+//						cell.setStyleClass("focalErrorNotice");
+//						cell.setColumnSpan(2);
+//						cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
+//					}
+//				} catch(Exception e) {
+//					e.printStackTrace();
+//					row = group.createRow();
+//					cell = row.createHeaderCell();
+//					//TODO make this standard eGov error DIV style
+//					cell.setStyleClass("focalErrorNotice");
+//					cell.setColumnSpan(2);
+//					cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_error_search", "Could not get project list")));
+//				}
+//			}
+//		}
 		tableSection.add(table);
 		projectSection.add(tableSection);
 		form.add(projectSection);
@@ -499,24 +512,27 @@ public class FocalMyCases extends MyCases {
 						
 						cCell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
 						
-						Customer customer = getFocalCasesIntegration(iwc).findCustomer(owner.getPersonalID());
-						
 						cCell = cRow.createCell();
 						cCell.setStyleClass("view");
 						cCell.setStyleClass("lastColumn");
-						Link createCustomer = null;
-						if(customer != null) {
-							createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
-							createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
-						} else {
-							createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-							createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
-						}
-						createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + owner.getPersonalID() + "');");
-						createCustomer.setStyleClass("homeButton");
 						
-						createCustomer.setToFormSubmit(form);
-						cCell.add(createCustomer);
+						if(id != null) {
+							Customer customer = getFocalCasesIntegration(iwc).findCustomer(id);
+							
+							Link createCustomer = null;
+							if(customer != null) {
+								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
+								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
+							} else {
+								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
+							}
+							createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + id + "');");
+							createCustomer.setStyleClass("homeButton");
+							
+							createCustomer.setToFormSubmit(form);
+							cCell.add(createCustomer);
+						}
 					}
 					
 				}

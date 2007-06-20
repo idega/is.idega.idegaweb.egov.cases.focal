@@ -33,7 +33,12 @@ public class FocalConstants {
 	public static final String STATUS_SUCCESS_UPDATE_CUSTOMER_TITLE = "focal.status.success.update.customer.title";
 	public static final String STATUS_SUCCESS_UPDATE_CUSTOMER_MESSAGE = "focal.status.success.update.customer.message";
 	
-	public static final String STATUS_ERROR_FIND_PROJECTS = "";
-//	public static final String STATUS;
+	public static final String STATUS_ERROR_FIND_PROJECTS = "focal.status.error.findprojects";
+	public static final String STATUS_ERROR_FIND_PROJECTS_TITLE = "focal.status.error.findprojects.title";
+	public static final String STATUS_ERROR_FIND_PROJECTS_MESSAGE = "focal.status.error.findprojects.message";
+	
+	public static final String STATUS_ERROR_FIND_NOPROJECTS = "focal.status.error.noprojects";
+	public static final String STATUS_ERROR_EMPTY_SEARCH_STRING = "focal.status.error.nosearch";
+	public static final String STATUS_SUCCESS_PROJECTS = "focal.status.success.projects";
 
 }

@@ -126,9 +126,3 @@ table.adminTable tbody tr.selectedProject {
 	max-height: 300px;
 	overflow: auto;
 }
-.focalRow {
-}
-.focalInfoNotice {
-	height: 20px;
-	padding-left: 20px;
-}
