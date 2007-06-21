@@ -21,6 +21,10 @@ function selectFocalCasesRow(e) {
 	}
 }
 
+function isProjectSelected() {
+	
+}
+
 function searchProjects(event) {
 	if(isEnterEvent(event)) {
 		changeInputValue(findObj('cp_prm_action'), '4');

@@ -135,11 +135,13 @@ form#focalProjectSearchForm div.errorLayer {
 	border-bottom: 1px #ccc solid					!important;
 	padding: 10px									!important;
 	height: 68px									!important;
+	width: auto										!important;
 }
 
 html>body form#focalProjectSearchForm div.errorLayer {
 	height: auto     								!important;
 	min-height: 68px								!important;
+	width: auto										!important;
 }
 
 form#focalProjectSearchForm div.errorLayer div.errorImage {
@@ -147,25 +149,27 @@ form#focalProjectSearchForm div.errorLayer div.errorImage {
 	height: 68px									!important;
 	float: left										!important;
 	margin-right: 20px								!important;
+	margin-bottom: 0px								!important;
 }
 
 form#focalProjectSearchForm div.errorLayer h1 {
 	margin: 0										!important;
-	padding: 0										!important;
+	padding: 0 0 9px 0								!important;
 	font-family: Arial, Helvetica, sans-serif		!important;
-	font-size: 18px									!important;
 	color: #3F3F3E									!important;
 	background:transparent none repeat scroll 0%	!important;
+	font-weight: normal								!important;
 }
 form#focalProjectSearchForm div.receipt {
-	margin: 26px 38px								!important;
+	padding: 10px									!important;
 	color: #222222									!important;
-	font-size: 12px									!important;
 	height: 68px									!important;
+	width: auto										!important;
 }
 html>body form#focalProjectSearchForm div.receipt {
 	height: auto									!important;
 	min-height: 68px								!important;
+	width: auto										!important;
 }
 form#focalProjectSearchForm div.receiptImage {
 	width: 68px										!important;
