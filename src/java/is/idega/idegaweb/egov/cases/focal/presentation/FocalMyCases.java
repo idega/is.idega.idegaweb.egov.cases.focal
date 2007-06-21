@@ -504,29 +504,6 @@ public class FocalMyCases extends MyCases {
 		add(form);
 	}
 	
-//	protected Link getButtonLink(String text) {
-//		Layer all = new Layer(Layer.SPAN);
-//		all.setStyleClass("buttonSpan");
-//
-//		Layer left = new Layer(Layer.SPAN);
-//		left.setStyleClass("left");
-//		all.add(left);
-//
-//		Layer middle = new Layer(Layer.SPAN);
-//		middle.setStyleClass("middle");
-//		middle.add(new Text(text));
-//		all.add(middle);
-//
-//		Layer right = new Layer(Layer.SPAN);
-//		right.setStyleClass("right");
-//		all.add(right);
-//
-//		Link link = new Link(all);
-//		link.setStyleClass("button");
-//
-//		return link;
-//	}
-	
 	private void showList(IWContext iwc, int action, String result) throws RemoteException {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");

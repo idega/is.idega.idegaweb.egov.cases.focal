@@ -127,7 +127,55 @@ table.adminTable tbody tr.selectedProject {
 	overflow: auto;
 }
 form#focalProjectSearchForm div.searchSection {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	padding-left: 150px;
+	padding-top: 15px								!important;
+	padding-bottom: 15px							!important;
+	padding-left: 150px								!important;
+}
+form#focalProjectSearchForm div.errorLayer {
+	border-bottom: 1px #ccc solid					!important;
+	padding: 10px									!important;
+	height: 68px									!important;
+}
+
+html>body form#focalProjectSearchForm div.errorLayer {
+	height: auto     								!important;
+	min-height: 68px								!important;
+}
+
+form#focalProjectSearchForm div.errorLayer div.errorImage {
+	width: 48px										!important;
+	height: 68px									!important;
+	float: left										!important;
+	margin-right: 20px								!important;
+}
+
+form#focalProjectSearchForm div.errorLayer h1 {
+	margin: 0										!important;
+	padding: 0										!important;
+	font-family: Arial, Helvetica, sans-serif		!important;
+	font-size: 18px									!important;
+	color: #3F3F3E									!important;
+}
+form#focalProjectSearchForm div.receipt {
+	margin: 26px 38px								!important;
+	color: #222222									!important;
+	font-size: 12px									!important;
+	height: 68px									!important;
+}
+html>body form#focalProjectSearchForm div.receipt {
+	height: auto									!important;
+	min-height: 68px								!important;
+}
+form#focalProjectSearchForm div.receiptImage {
+	width: 48px										!important;
+	height: 68px									!important;
+	float: left										!important;
+	margin-right: 20px								!important;
+}
+form#focalProjectSearchForm div.receipt h1 {
+	font-weight: normal								!important;
+	color: #8D8D8D									!important;
+	font-family: Arial, Helvetica, sans-serif		!important;
+	margin: 0										!important;
+	padding: 0 0 9px 0								!important;
 }
