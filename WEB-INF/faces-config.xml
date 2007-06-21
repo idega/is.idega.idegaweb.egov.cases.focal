@@ -5,11 +5,11 @@
   "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
 <faces-config>
-	<!--
+	
 	<managed-bean>
-		<managed-bean-name>selectedCases</managed-bean-name>
-		<managed-bean-class>is.idega.idegaweb.egov.cases.focal.presentation.beans.SelectedCases</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-name>focalProjectList</managed-bean-name>
+		<managed-bean-class>is.idega.idegaweb.egov.cases.focal.beans.FocalProjectList</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	-->
+	
 </faces-config>

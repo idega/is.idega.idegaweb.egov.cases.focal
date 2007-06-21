@@ -21,6 +21,13 @@ function selectFocalCasesRow(e) {
 	}
 }
 
+function searchProjects(event) {
+	if(isEnterEvent(event)) {
+		changeInputValue(findObj('cp_prm_action'), '4');
+		document.forms['focalProjectSearchForm'].submit();
+	}
+}
+
 function doProjectSearch(searchString) {
 	if(searchString != null && searchString != '') {
 		FocalCasesIntegration.findProjects(searchString, updateProjectTable);

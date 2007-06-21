@@ -41,10 +41,10 @@ import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/20 14:06:58 $ by $Author: civilis $
+ * Last modified: $Date: 2007/06/21 12:23:02 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -372,7 +372,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 				if(customer != null) {
 					int id = ((Integer) customer.getPrimaryKey()).intValue();
 					Address address1 = userBusiness.getUsersMainAddress(id);
-					if(address1 != null) {
+					try {
 						String address1Value = address1.getStreetAddress();
 						if(address1Value != null && !address1Value.equals("")) {
 							ci.setAddress1(address1Value);
@@ -397,38 +397,40 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						} else {
 							setNoOverwriteCountyValue(customerFocal, ci);
 						}
-					} else {
+					} catch(Exception e) {
 						setNoOverwriteAddress1Value(customerFocal, ci);
 						setNoOverwritePostaddressValue(customerFocal, ci);
 						setNoOverwriteCountryValue(customerFocal, ci);
 						setNoOverwriteCountyValue(customerFocal, ci);
 					}
-					Address address2 = userBusiness.getUsersCoAddress(id);
-					if(address2 != null) {
+					try {
+						Address address2 = userBusiness.getUsersCoAddress(id);
 						String address2Value = address2.getStreetAddress();
 						if(address2Value != null && !address2Value.equals("")) {
 							ci.setAddress2(address2Value);
 						} else {
 							setNoOverwriteAddress2Value(customerFocal, ci);
 						}
-					} else {
+					} catch(Exception e) {
 						setNoOverwriteAddress2Value(customerFocal, ci);
 					}
 					PhoneHome phoneHome = userBusiness.getPhoneHome();
 					if(phoneHome != null) {
-						Phone home = phoneHome.findUsersHomePhone(customer);
-						if(home != null) {
+						try {
+							Phone home = phoneHome.findUsersHomePhone(customer);
+						
 							String homeValue = home.getNumber();
 							if(homeValue != null && !homeValue.equals("")) {
 								ci.setPhonehome(home.getNumber());
 							} else {
 								setNoOverwritePhonehomeValue(customerFocal, ci);
 							}
-						} else {
+						} catch(Exception e) {
 							setNoOverwritePhonehomeValue(customerFocal, ci);
 						}
-						Phone work = phoneHome.findUsersWorkPhone(customer);
-						if(work != null) {
+						try {
+							Phone work = phoneHome.findUsersWorkPhone(customer);
+						
 							String workValue = work.getNumber();
 							if(workValue != null && !workValue.equals("")) {
 								ci.setPhoneoffice(work.getNumber());
@@ -437,23 +439,25 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 								setNoOverwritePhoneworkValue(customerFocal, ci);
 								setNoOverwritePhoneofficeValue(customerFocal, ci);
 							}
-						} else {
+						} catch(Exception e) {
 							setNoOverwritePhoneworkValue(customerFocal, ci);
 							setNoOverwritePhoneofficeValue(customerFocal, ci);
 						}
-						Phone mobile = phoneHome.findUsersMobilePhone(customer);
-						if(mobile != null) {
+						try {
+							Phone mobile = phoneHome.findUsersMobilePhone(customer);
+						
 							String mobileValue = mobile.getNumber();
 							if(mobileValue != null && !mobileValue.equals("")) {
 								ci.setGsm(mobile.getNumber());
 							} else {
 								setNoOverwriteGsmValue(customerFocal, ci);
 							}
-						} else {
+						} catch(Exception e) {
 							setNoOverwriteGsmValue(customerFocal, ci);
 						}
-						Phone fax = phoneHome.findUsersFaxPhone(customer);
-						if(fax != null) {
+						try {
+							Phone fax = phoneHome.findUsersFaxPhone(customer);
+						
 							String faxValue = fax.getNumber();
 							if(faxValue != null && !faxValue.equals("")) {
 								ci.setFax(fax.getNumber());
@@ -461,7 +465,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							} else {
 								setNoOverwriteFaxValue(customerFocal, ci);
 							}
-						} else {
+						} catch(Exception e) {
 							setNoOverwriteFaxValue(customerFocal, ci);
 						}
 						setNoOverwriteCarphoneValue(customerFocal, ci);
@@ -478,14 +482,14 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					ci.setSocNr(customer.getPersonalID());
 					
 					EmailHome emailHome = userBusiness.getEmailHome();
-					if(emailHome != null) {
+					try {
 						Email email = emailHome.findMainEmailForUser(customer);
 						if(email != null) {
 							ci.setEmailaddress(email.getEmailAddress());
 						} else {
 							setNoOverwriteEmailaddressValue(customerFocal, ci);
 						}
-					} else {
+					} catch(Exception e) {
 						setNoOverwriteEmailaddressValue(customerFocal, ci);
 					}
 					
@@ -612,7 +616,6 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			CaseType type = gen_case.getCaseType();
 			
 			CASEDATA case_data = new CASEDATA(
-					gen_case.getOwner().getPersonalID() == null ? "4767674" :
 					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
 					gen_case.getOwner() == null ? null :
 					gen_case.getOwner().getName(), 						//"CUSTOMERNAME"

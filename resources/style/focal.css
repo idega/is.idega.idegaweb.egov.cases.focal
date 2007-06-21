@@ -122,7 +122,12 @@ table.adminTable tbody tr.selectedProject {
 	text-align:left;
 }
 #projectTable tbody {
-	height: 100px;
-	max-height: 300px;
+	height: 250px;
+	min-height: 100px;
 	overflow: auto;
+}
+form#focalProjectSearchForm div.searchSection {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 150px;
 }

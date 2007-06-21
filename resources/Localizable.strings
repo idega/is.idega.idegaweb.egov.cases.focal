@@ -56,5 +56,6 @@ sender=Sender
 status=Status
 sub_case_category=Sub case category
 timestamp=Timestamp
+update=Update
 view=View
 view_case=View case
