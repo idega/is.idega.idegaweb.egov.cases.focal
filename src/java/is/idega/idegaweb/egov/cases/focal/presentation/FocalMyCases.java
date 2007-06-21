@@ -306,9 +306,12 @@ public class FocalMyCases extends MyCases {
 		searchField.setOnKeyPress("searchProjects(event);");
 		searchSection.add(searchField);
 		
+		String noProjectAlert = getResourceBundle(iwc).getLocalizedString("focal.alert.noproject", "Please select a project");
+		
 		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
 		next.setStyleClass("searchButton");
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
+		
 		next.setToFormSubmit(form);
 		searchSection.add(next);
 		
@@ -491,7 +494,8 @@ public class FocalMyCases extends MyCases {
 		
 		Link save = getButtonLink(getResourceBundle().getLocalizedString("save", "Save to Focal"));
 		save.setStyleClass("homeButton");
-		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+//		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+		save.setOnClick("if(isProjectSelected()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SAVE_FOCAL + "');} else {alert('" + noProjectAlert + "');return false;}");
 		save.setToFormSubmit(form);
 		bottom.add(save);
 

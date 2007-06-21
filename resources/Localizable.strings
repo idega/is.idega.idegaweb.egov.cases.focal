@@ -12,6 +12,7 @@ created_date=Created date
 find=Find
 find_project_focal=Find projects
 find_project_focal_label=Find project in Focal
+focal.alert.noproject=Please select a project
 focal.status.error.create.customer.message=
 focal.status.error.create.customer.title=Could not create customer in Focal
 focal.status.error.findprojects.message=

@@ -22,7 +22,17 @@ function selectFocalCasesRow(e) {
 }
 
 function isProjectSelected() {
-	
+	var field = findObj('prm_project_pk');
+	if(field != null) {
+		if(field.value) {
+			if(field.value.length) {
+				if(field.value.length > 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 function searchProjects(event) {
