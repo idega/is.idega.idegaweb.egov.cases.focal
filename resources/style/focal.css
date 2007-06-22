@@ -160,6 +160,9 @@ html > body div.tableSection thead th.firstColumn {
 html > body div.tableSection tbody td.firstColumn {
 	width:200px;
 }
+html > body div.tableSection thead th {
+	border-width: 0px;
+}
 
 
 form#focalProjectSearchForm div.searchSection {
