@@ -121,11 +121,47 @@ table.adminTable tbody tr.selectedProject {
 	background-color:#f09e00;
 	text-align:left;
 }
-#projectTable tbody {
-	height: 250px;
-	min-height: 100px;
-	overflow: auto;
+
+
+
+
+div.tableSection {
+	clear:both;
+	height:285px;
+	overflow:auto;
+	width: 756px;
 }
+html > body div.tableSection {
+	overflow:hidden;
+	width: 756px;
+}
+div.tableSection table {
+	float: left;
+	width: 740px;
+}
+html > body div.tableSection table {
+	width:756px;
+}
+div.tableSection thead tr {
+	position:relative;
+}
+html > body div.tableSection thead tr {
+	display:block;
+}
+html > body div.tableSection tbody {
+	display:block;
+	height:262px;
+	overflow:auto;
+	width: 100%;
+}
+html > body thead th.firstColumn {
+	width:200px;
+}
+html > body tbody td.firstColumn {
+	width:200px;
+}
+
+
 form#focalProjectSearchForm div.searchSection {
 	padding-top: 15px								!important;
 	padding-bottom: 15px							!important;
