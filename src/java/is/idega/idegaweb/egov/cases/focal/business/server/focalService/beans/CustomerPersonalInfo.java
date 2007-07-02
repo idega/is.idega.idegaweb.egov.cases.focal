@@ -1,16 +1,17 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans;
 
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
 
 /**
  * 
- * Last modified: $Date: 2007/06/19 07:16:07 $ by $Author: alexis $
+ * Last modified: $Date: 2007/07/02 10:31:11 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-public class CustomerPersonalInfo extends Customer {
+public class CustomerPersonalInfo extends CUSTOMER {
 	
-	
+	private static final long serialVersionUID = 644025245021476293L;
 	private String soc_nr;
 	private boolean target_mail;
 	

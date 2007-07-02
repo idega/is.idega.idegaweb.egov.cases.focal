@@ -11,9 +11,9 @@ import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
 import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
 import is.idega.idegaweb.egov.cases.focal.business.UnsuccessfulStatusException;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Customer;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.ProjectInfo;
 import is.idega.idegaweb.egov.cases.presentation.MyCases;
 
 import java.rmi.RemoteException;
@@ -353,13 +353,13 @@ public class FocalMyCases extends MyCases {
 		if(projects != null) {
 			Iterator iter = projects.iterator();
 			while (iter.hasNext()) {
-				ProjectInfo theProject = (ProjectInfo) iter.next();
+				NOTESPROJECT theProject = (NOTESPROJECT) iter.next();
 				int iRow = 1;
 				row = group.createRow();
-				String projectId = theProject.getNumber();
+				String projectId = theProject.getPROJECTNUMBER();
 				String projectIdFixed = projectId.replaceAll("/", "-");
 				row.setId(projectIdFixed);
-				row.setMarkupAttribute("onclick", "changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), '" + projectId + "');changeInputValue(findObj('" + PARAMETER_PROJECT_NAME + "'), '" + theProject.getName() + "');selectFocalCasesRow(this.id);");
+				row.setMarkupAttribute("onclick", "changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), '" + projectId + "');changeInputValue(findObj('" + PARAMETER_PROJECT_NAME + "'), '" + theProject.getPROJECTNAME() + "');selectFocalCasesRow(this.id);");
 				if (iRow == 1) {
 					row.setStyleClass("firstRow");
 				}
@@ -371,12 +371,12 @@ public class FocalMyCases extends MyCases {
 				cell = row.createCell();
 				cell.setStyleClass("firstColumn");
 				cell.setStyleClass("caseNumber");
-				cell.add(new Text(theProject.getName()));
+				cell.add(new Text(theProject.getPROJECTNAME()));
 				
 				cell = row.createCell();
 				cell.setStyleClass("lastColumn");
 				cell.setStyleClass("caseNumber");
-				cell.add(new Text(theProject.getCustomer()));
+				cell.add(new Text(theProject.getPROJECTCUSTOMER()));
 			}
 		}
 							
@@ -460,7 +460,7 @@ public class FocalMyCases extends MyCases {
 						cCell.setStyleClass("lastColumn");
 						
 						if(id != null) {
-							Customer customer = getFocalCasesIntegration(iwc).findCustomer(id);
+							CUSTOMER customer = getFocalCasesIntegration(iwc).findCustomer(id);
 							
 							Link createCustomer = null;
 							if(customer != null) {

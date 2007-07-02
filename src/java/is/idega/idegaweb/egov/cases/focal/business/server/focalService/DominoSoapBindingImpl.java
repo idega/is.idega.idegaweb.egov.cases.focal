@@ -8,15 +8,19 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService;
 
 public class DominoSoapBindingImpl implements is.idega.idegaweb.egov.cases.focal.business.server.focalService.Project{
-    public java.lang.String GETPROJECTLIST(java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY GETPROJECTLIST(java.lang.String STRSEARCHSTRING, java.lang.String STRSEARCHTYPE, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         return null;
     }
 
-    public java.lang.String FINDCUSTOMER(java.lang.String STRSOCSECNUM, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER FINDCUSTOMER(java.lang.String STRSOCSECNUM, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         return null;
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS NEWPROJECT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA CD, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS ADDATTACHMENT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT ATTACH, java.lang.String STRUNID, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+        return null;
+    }
+
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS NEWPROJECT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA CD, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         return null;
     }
 
@@ -29,10 +33,6 @@ public class DominoSoapBindingImpl implements is.idega.idegaweb.egov.cases.focal
     }
 
     public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS CREATEUPDATEPERSON(is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO PERS, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
-        return null;
-    }
-
-    public java.lang.String GETPROFILEDOCUMENT(java.lang.String STRPROFILEKEY) throws java.rmi.RemoteException {
         return null;
     }
 

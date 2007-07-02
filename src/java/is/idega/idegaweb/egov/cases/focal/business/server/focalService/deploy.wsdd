@@ -33,18 +33,33 @@
       />
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
-        qname="ns:RETURNSTATUS"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS"
+        qname="ns:CUSTOMER"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
-        qname="ns:CUSTOMERBASE"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMERBASE"
+        qname="ns:ATTACHMENT"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:NOTESPROJECTARRAY"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:ArrayOfNOTESPROJECT"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[]"
+        innerType="cmp-ns:NOTESPROJECT" xmlns:cmp-ns="urn:DefaultNamespace"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
@@ -59,6 +74,38 @@
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:CASEDATA"
         type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:RETURNSTATUS"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:PROJECTRETURNSTATUS"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:CUSTOMERBASE"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMERBASE"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="urn:DefaultNamespace"
+        qname="ns:NOTESPROJECT"
+        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

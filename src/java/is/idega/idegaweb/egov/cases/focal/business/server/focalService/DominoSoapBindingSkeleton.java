@@ -31,12 +31,14 @@ public class DominoSoapBindingSkeleton implements is.idega.idegaweb.egov.cases.f
         org.apache.axis.description.FaultDesc _fault;
         org.apache.axis.description.ParameterDesc [] _params;
         _params = new org.apache.axis.description.ParameterDesc [] {
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRSEARCHSTRING"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRSEARCHTYPE"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUSERNAME"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
         };
         _oper = new org.apache.axis.description.OperationDesc("GETPROJECTLIST", _params, new javax.xml.namespace.QName("", "GETPROJECTLISTReturn"));
-        _oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        _oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECTARRAY"));
         _oper.setElementQName(new javax.xml.namespace.QName("urn:DefaultNamespace", "GETPROJECTLIST"));
         _oper.setSoapAction("");
         _myOperationsList.add(_oper);
@@ -51,7 +53,7 @@ public class DominoSoapBindingSkeleton implements is.idega.idegaweb.egov.cases.f
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
         };
         _oper = new org.apache.axis.description.OperationDesc("FINDCUSTOMER", _params, new javax.xml.namespace.QName("", "FINDCUSTOMERReturn"));
-        _oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        _oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "CUSTOMER"));
         _oper.setElementQName(new javax.xml.namespace.QName("urn:DefaultNamespace", "FINDCUSTOMER"));
         _oper.setSoapAction("");
         _myOperationsList.add(_oper);
@@ -60,13 +62,29 @@ public class DominoSoapBindingSkeleton implements is.idega.idegaweb.egov.cases.f
         }
         ((java.util.List)_myOperations.get("FINDCUSTOMER")).add(_oper);
         _params = new org.apache.axis.description.ParameterDesc [] {
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "ATTACH"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DefaultNamespace", "ATTACHMENT"), is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUNID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUSERNAME"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
+        };
+        _oper = new org.apache.axis.description.OperationDesc("ADDATTACHMENT", _params, new javax.xml.namespace.QName("", "ADDATTACHMENTReturn"));
+        _oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "RETURNSTATUS"));
+        _oper.setElementQName(new javax.xml.namespace.QName("urn:DefaultNamespace", "ADDATTACHMENT"));
+        _oper.setSoapAction("");
+        _myOperationsList.add(_oper);
+        if (_myOperations.get("ADDATTACHMENT") == null) {
+            _myOperations.put("ADDATTACHMENT", new java.util.ArrayList());
+        }
+        ((java.util.List)_myOperations.get("ADDATTACHMENT")).add(_oper);
+        _params = new org.apache.axis.description.ParameterDesc [] {
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "CD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DefaultNamespace", "CASEDATA"), is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUSERNAME"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
         };
         _oper = new org.apache.axis.description.OperationDesc("NEWPROJECT", _params, new javax.xml.namespace.QName("", "NEWPROJECTReturn"));
-        _oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "RETURNSTATUS"));
+        _oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "PROJECTRETURNSTATUS"));
         _oper.setElementQName(new javax.xml.namespace.QName("urn:DefaultNamespace", "NEWPROJECT"));
         _oper.setSoapAction("");
         _myOperationsList.add(_oper);
@@ -119,18 +137,6 @@ public class DominoSoapBindingSkeleton implements is.idega.idegaweb.egov.cases.f
             _myOperations.put("CREATEUPDATEPERSON", new java.util.ArrayList());
         }
         ((java.util.List)_myOperations.get("CREATEUPDATEPERSON")).add(_oper);
-        _params = new org.apache.axis.description.ParameterDesc [] {
-            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false), 
-        };
-        _oper = new org.apache.axis.description.OperationDesc("GETPROFILEDOCUMENT", _params, new javax.xml.namespace.QName("", "GETPROFILEDOCUMENTReturn"));
-        _oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        _oper.setElementQName(new javax.xml.namespace.QName("urn:DefaultNamespace", "GETPROFILEDOCUMENT"));
-        _oper.setSoapAction("");
-        _myOperationsList.add(_oper);
-        if (_myOperations.get("GETPROFILEDOCUMENT") == null) {
-            _myOperations.put("GETPROFILEDOCUMENT", new java.util.ArrayList());
-        }
-        ((java.util.List)_myOperations.get("GETPROFILEDOCUMENT")).add(_oper);
     }
 
     public DominoSoapBindingSkeleton() {
@@ -140,21 +146,27 @@ public class DominoSoapBindingSkeleton implements is.idega.idegaweb.egov.cases.f
     public DominoSoapBindingSkeleton(is.idega.idegaweb.egov.cases.focal.business.server.focalService.Project impl) {
         this.impl = impl;
     }
-    public java.lang.String GETPROJECTLIST(java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY GETPROJECTLIST(java.lang.String STRSEARCHSTRING, java.lang.String STRSEARCHTYPE, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
     {
-        java.lang.String ret = impl.GETPROJECTLIST(STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
+        is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY ret = impl.GETPROJECTLIST(STRSEARCHSTRING, STRSEARCHTYPE, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
         return ret;
     }
 
-    public java.lang.String FINDCUSTOMER(java.lang.String STRSOCSECNUM, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER FINDCUSTOMER(java.lang.String STRSOCSECNUM, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
     {
-        java.lang.String ret = impl.FINDCUSTOMER(STRSOCSECNUM, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
+        is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER ret = impl.FINDCUSTOMER(STRSOCSECNUM, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
         return ret;
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS NEWPROJECT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA CD, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS ADDATTACHMENT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT ATTACH, java.lang.String STRUNID, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
     {
-        is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS ret = impl.NEWPROJECT(CD, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
+        is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS ret = impl.ADDATTACHMENT(ATTACH, STRUNID, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
+        return ret;
+    }
+
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS NEWPROJECT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA CD, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
+    {
+        is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS ret = impl.NEWPROJECT(CD, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
         return ret;
     }
 
@@ -173,12 +185,6 @@ public class DominoSoapBindingSkeleton implements is.idega.idegaweb.egov.cases.f
     public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS CREATEUPDATEPERSON(is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO PERS, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException
     {
         is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS ret = impl.CREATEUPDATEPERSON(PERS, STRPROFILEKEY, STRUSERNAME, STRPASSWORD);
-        return ret;
-    }
-
-    public java.lang.String GETPROFILEDOCUMENT(java.lang.String STRPROFILEKEY) throws java.rmi.RemoteException
-    {
-        java.lang.String ret = impl.GETPROFILEDOCUMENT(STRPROFILEKEY);
         return ret;
     }
 

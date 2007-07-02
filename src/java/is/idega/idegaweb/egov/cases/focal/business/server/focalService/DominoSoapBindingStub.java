@@ -25,14 +25,18 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("GETPROJECTLIST");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRSEARCHSTRING"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRSEARCHTYPE"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUSERNAME"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        oper.setReturnClass(java.lang.String.class);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECTARRAY"));
+        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "GETPROJECTLISTReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -48,12 +52,31 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        oper.setReturnClass(java.lang.String.class);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "CUSTOMER"));
+        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "FINDCUSTOMERReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[1] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("ADDATTACHMENT");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "ATTACH"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn:DefaultNamespace", "ATTACHMENT"), is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUNID"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRUSERNAME"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "RETURNSTATUS"));
+        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("", "ADDATTACHMENTReturn"));
+        oper.setStyle(org.apache.axis.constants.Style.RPC);
+        oper.setUse(org.apache.axis.constants.Use.ENCODED);
+        _operations[2] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("NEWPROJECT");
@@ -65,12 +88,12 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPASSWORD"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "RETURNSTATUS"));
-        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS.class);
+        oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "PROJECTRETURNSTATUS"));
+        oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "NEWPROJECTReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[2] = oper;
+        _operations[3] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("CREATEUPDATECOMPANY");
@@ -87,7 +110,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         oper.setReturnQName(new javax.xml.namespace.QName("", "CREATEUPDATECOMPANYReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[3] = oper;
+        _operations[4] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("CREATEUPDATEEMPLOYEE");
@@ -104,7 +127,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         oper.setReturnQName(new javax.xml.namespace.QName("", "CREATEUPDATEEMPLOYEEReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[4] = oper;
+        _operations[5] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("CREATEUPDATEPERSON");
@@ -119,17 +142,6 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         oper.setReturnType(new javax.xml.namespace.QName("urn:DefaultNamespace", "RETURNSTATUS"));
         oper.setReturnClass(is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS.class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "CREATEUPDATEPERSONReturn"));
-        oper.setStyle(org.apache.axis.constants.Style.RPC);
-        oper.setUse(org.apache.axis.constants.Use.ENCODED);
-        _operations[5] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("GETPROFILEDOCUMENT");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "STRPROFILEKEY"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        oper.setReturnClass(java.lang.String.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("", "GETPROFILEDOCUMENTReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
         _operations[6] = oper;
@@ -165,6 +177,22 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "ArrayOfNOTESPROJECT");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECT");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "ATTACHMENT");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "CASEDATA");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA.class;
@@ -175,6 +203,13 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
             qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "COMPANYINFO");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.COMPANYINFO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "CUSTOMER");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -193,9 +228,30 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECT");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECTARRAY");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "PERSONINFO");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "PROJECTRETURNSTATUS");
+            cachedSerQNames.add(qName);
+            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -274,7 +330,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         }
     }
 
-    public java.lang.String GETPROJECTLIST(java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY GETPROJECTLIST(java.lang.String STRSEARCHSTRING, java.lang.String STRSEARCHTYPE, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -287,7 +343,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {STRPROFILEKEY, STRUSERNAME, STRPASSWORD});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {STRSEARCHSTRING, STRSEARCHTYPE, STRPROFILEKEY, STRUSERNAME, STRPASSWORD});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -295,9 +351,9 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.String) _resp;
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -305,7 +361,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
 }
     }
 
-    public java.lang.String FINDCUSTOMER(java.lang.String STRSOCSECNUM, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER FINDCUSTOMER(java.lang.String STRSOCSECNUM, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -326,9 +382,9 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.String) _resp;
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -336,7 +392,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
 }
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS NEWPROJECT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA CD, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS ADDATTACHMENT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT ATTACH, java.lang.String STRUNID, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -345,11 +401,11 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("urn:DefaultNamespace", "NEWPROJECT"));
+        _call.setOperationName(new javax.xml.namespace.QName("urn:DefaultNamespace", "ADDATTACHMENT"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {CD, STRPROFILEKEY, STRUSERNAME, STRPASSWORD});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {ATTACH, STRUNID, STRPROFILEKEY, STRUSERNAME, STRPASSWORD});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -367,12 +423,43 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
 }
     }
 
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS CREATEUPDATECOMPANY(is.idega.idegaweb.egov.cases.focal.business.server.focalService.COMPANYINFO CI, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS NEWPROJECT(is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA CD, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[3]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("urn:DefaultNamespace", "NEWPROJECT"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {CD, STRPROFILEKEY, STRUSERNAME, STRPASSWORD});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS CREATEUPDATECOMPANY(is.idega.idegaweb.egov.cases.focal.business.server.focalService.COMPANYINFO CI, java.lang.String STRPROFILEKEY, java.lang.String STRUSERNAME, java.lang.String STRPASSWORD) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[4]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
@@ -403,7 +490,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[4]);
+        _call.setOperation(_operations[5]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
@@ -434,7 +521,7 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[5]);
+        _call.setOperation(_operations[6]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
@@ -453,37 +540,6 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
                 return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS) _resp;
             } catch (java.lang.Exception _exception) {
                 return (is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS) org.apache.axis.utils.JavaUtils.convert(_resp, is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS.class);
-            }
-        }
-  } catch (org.apache.axis.AxisFault axisFaultException) {
-  throw axisFaultException;
-}
-    }
-
-    public java.lang.String GETPROFILEDOCUMENT(java.lang.String STRPROFILEKEY) throws java.rmi.RemoteException {
-        if (super.cachedEndpoint == null) {
-            throw new org.apache.axis.NoEndPointException();
-        }
-        org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[6]);
-        _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("");
-        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("urn:DefaultNamespace", "GETPROFILEDOCUMENT"));
-
-        setRequestHeaders(_call);
-        setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {STRPROFILEKEY});
-
-        if (_resp instanceof java.rmi.RemoteException) {
-            throw (java.rmi.RemoteException)_resp;
-        }
-        else {
-            extractAttachments(_call);
-            try {
-                return (java.lang.String) _resp;
-            } catch (java.lang.Exception _exception) {
-                return (java.lang.String) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

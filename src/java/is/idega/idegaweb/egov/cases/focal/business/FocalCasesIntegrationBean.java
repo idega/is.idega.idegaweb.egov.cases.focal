@@ -6,15 +6,15 @@ import is.idega.idegaweb.egov.cases.data.GeneralCase;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
 import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.Project;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ProjectServiceLocator;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Customer;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.ProjectInfo;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,23 +36,19 @@ import com.idega.presentation.IWContext;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
 import com.idega.util.CypherText;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.StreamException;
 
 /**
  * 
- * Last modified: $Date: 2007/06/21 12:23:02 $ by $Author: alexis $
+ * Last modified: $Date: 2007/07/02 10:31:11 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
 	private static final long serialVersionUID = -486408791846081399L;
 	
 	private static final String const_project_list = "ProjectList";
-	private static final String const_project_info = "ProjectInfo";
-	private static final String const_customer = "Customer";
 	private static final String focal_service_login_app_key = "focal.ws.login";
 	private static final String focal_service_pass_app_key = "focal.ws.pass";
 	private static final String ck = "ZIZYFk9nxC41RhCtJBDydBRiUNPvyKlIWmJDJ9p2xYWXvmqIrVyTNXIljGupoFBqi6TyC7bUXWLL2OxdRsWnaph2kQyETYlzHzhv";
@@ -74,297 +70,287 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		if(loging_pass == null)
 			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
 		
-		String xml_str = service.GETPROJECTLIST(const_project_list, loging_pass[0], loging_pass[1]);
+		NOTESPROJECTARRAY project_list = service.GETPROJECTLIST(search_txt, const_project_list, const_project_list, loging_pass[0], loging_pass[1]);
 		
-		if(xml_str == null)
-			return null;
-		
-		XStream xstream = new XStream();
-		
-		xstream.alias(const_project_list, ArrayList.class);
-		xstream.alias(const_project_info, ProjectInfo.class);
-		
-		try {
-			return (List)xstream.fromXML(xml_str);
-			
-		} catch (StreamException e) {
-			
-			logger.log(Level.WARNING, "Exception while parsing xml to bean. This can be either an error in document, or that's how focal returns when nothing is found (plain string with blah blah ;])", e);
+		if(project_list == null) {
+			logger.log(Level.SEVERE, "Project list retrieved by search text: \""+search_txt+"\" was null");
 			return null;
 		}
+		
+		return project_list.getPROJECTARRAY() == null ? null : Arrays.asList(project_list.getPROJECTARRAY());
 	}
 	
-	private void setNoOverwriteFaxValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteFaxValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String fax1 = customerFocal.getFax();
+			String fax1 = customerFocal.getFAX();
 			if(fax1 != null && !fax1.equals("")) {
-				ci.setFax(fax1);
+				ci.setFAX(fax1);
 			} else {
-				ci.setFax("");
+				ci.setFAX("");
 			}
-			String fax2 = customerFocal.getFaxoffice();
+			String fax2 = customerFocal.getFAXOFFICE();
 			if(fax2 != null && !fax2.equals("")) {
-				ci.setFaxoffice(fax2);
+				ci.setFAXOFFICE(fax2);
 			} else {
-				ci.setFaxoffice("");
+				ci.setFAXOFFICE("");
 			}
 		} else {
-			ci.setFax("");
-			ci.setFaxoffice("");
+			ci.setFAX("");
+			ci.setFAXOFFICE("");
 		}
 	}
 	
-	private void setNoOverwriteAddress1Value(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteAddress1Value(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address1 = customerFocal.getAddress1();
+			String address1 = customerFocal.getADDRESS1();
 			if(address1 != null && !address1.equals("")) {
-				ci.setAddress1(address1);
+				ci.setADDRESS1(address1);
 			} else {
-				ci.setAddress1("");
+				ci.setADDRESS1("");
 			}
 		} else {
-			ci.setAddress1("");
+			ci.setADDRESS1("");
 		}
 	}
 	
-	private void setNoOverwriteAddress2Value(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteAddress2Value(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getAddress2();
+			String address2 = customerFocal.getADDRESS2();
 			if(address2 != null && !address2.equals("")) {
-				ci.setAddress2(address2);
+				ci.setADDRESS2(address2);
 			} else {
-				ci.setAddress2("");
+				ci.setADDRESS2("");
 			}
 		} else {
-			ci.setAddress2("");
+			ci.setADDRESS2("");
 		}
 	}
 	
-	private void setNoOverwritePostaddressValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwritePostaddressValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getPostaddress();
+			String address2 = customerFocal.getPOSTADDRESS();
 			if(address2 != null && !address2.equals("")) {
-				ci.setPostaddress(address2);
+				ci.setPOSTADDRESS(address2);
 			} else {
-				ci.setPostaddress("");
+				ci.setPOSTADDRESS("");
 			}
 		} else {
-			ci.setPostaddress("");
+			ci.setPOSTADDRESS("");
 		}
 	}
 	
-	private void setNoOverwriteCountryValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteCountryValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getCountry();
+			String address2 = customerFocal.getCOUNTRY();
 			if(address2 != null && !address2.equals("")) {
-				ci.setCountry(address2);
+				ci.setCOUNTRY(address2);
 			} else {
-				ci.setCountry("");
+				ci.setCOUNTRY("");
 			}
 		} else {
-			ci.setCountry("");
+			ci.setCOUNTRY("");
 		}
 	}
 	
-	private void setNoOverwriteCountyValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteCountyValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getCounty();
+			String address2 = customerFocal.getCOUNTY();
 			if(address2 != null && !address2.equals("")) {
-				ci.setCounty(address2);
+				ci.setCOUNTY(address2);
 			} else {
-				ci.setCounty("");
+				ci.setCOUNTY("");
 			}
 		} else {
-			ci.setCounty("");
+			ci.setCOUNTY("");
 		}
 	}
 	
-	private void setNoOverwritePhoneworkValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwritePhoneworkValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getPhonework();
+			String address2 = customerFocal.getPHONEWORK();
 			if(address2 != null && !address2.equals("")) {
-				ci.setPhonework(address2);
+				ci.setPHONEWORK(address2);
 			} else {
-				ci.setPhonework("");
+				ci.setPHONEWORK("");
 			}
 		} else {
-			ci.setPhonework("");
+			ci.setPHONEWORK("");
 		}
 	}
 	
-	private void setNoOverwritePhoneofficeValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwritePhoneofficeValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getPhoneoffice();
+			String address2 = customerFocal.getPHONEOFFICE();
 			if(address2 != null && !address2.equals("")) {
-				ci.setPhoneoffice(address2);
+				ci.setPHONEOFFICE(address2);
 			} else {
-				ci.setPhoneoffice("");
+				ci.setPHONEOFFICE("");
 			}
 		} else {
-			ci.setPhoneoffice("");
+			ci.setPHONEOFFICE("");
 		}
 	}
 	
-	private void setNoOverwriteGsmValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteGsmValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getGsm();
+			String address2 = customerFocal.getGSM();
 			if(address2 != null && !address2.equals("")) {
-				ci.setGsm(address2);
+				ci.setGSM(address2);
 			} else {
-				ci.setGsm("");
+				ci.setGSM("");
 			}
 		} else {
-			ci.setGsm("");
+			ci.setGSM("");
 		}
 	}
 	
-	private void setNoOverwriteCarphoneValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteCarphoneValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getCarphone();
+			String address2 = customerFocal.getCARPHONE();
 			if(address2 != null && !address2.equals("")) {
-				ci.setCarphone(address2);
+				ci.setCARPHONE(address2);
 			} else {
-				ci.setCarphone("");
+				ci.setCARPHONE("");
 			}
 		} else {
-			ci.setCarphone("");
+			ci.setCARPHONE("");
 		}
 	}
 	
-	private void setNoOverwriteBeeperValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteBeeperValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getBeeper();
+			String address2 = customerFocal.getBEEPER();
 			if(address2 != null && !address2.equals("")) {
-				ci.setBeeper(address2);
+				ci.setBEEPER(address2);
 			} else {
-				ci.setBeeper("");
+				ci.setBEEPER("");
 			}
 		} else {
-			ci.setBeeper("");
+			ci.setBEEPER("");
 		}
 	}
 	
-	private void setNoOverwritePhonehomeValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwritePhonehomeValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getPhonehome();
+			String address2 = customerFocal.getPHONEHOME();
 			if(address2 != null && !address2.equals("")) {
-				ci.setPhonehome(address2);
+				ci.setPHONEHOME(address2);
 			} else {
-				ci.setPhonehome("");
+				ci.setPHONEHOME("");
 			}
 		} else {
-			ci.setPhonehome("");
+			ci.setPHONEHOME("");
 		}
 	}
 	
-	private void setNoOverwriteLanguageValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteLanguageValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getLanguage();
+			String address2 = customerFocal.getLANGUAGE();
 			if(address2 != null && !address2.equals("")) {
-				ci.setLanguage(address2);
+				ci.setLANGUAGE(address2);
 			} else {
-				ci.setLanguage("");
+				ci.setLANGUAGE("");
 			}
 		} else {
-			ci.setLanguage("");
+			ci.setLANGUAGE("");
 		}
 	}
 	
-	private void setNoOverwriteContactseperatorValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteContactseperatorValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getContactseperator();
+			String address2 = customerFocal.getCONTACTSEPERATOR();
 			if(address2 != null && !address2.equals("")) {
-				ci.setContactseperator(address2);
+				ci.setCONTACTSEPERATOR(address2);
 			} else {
-				ci.setContactseperator("");
+				ci.setCONTACTSEPERATOR("");
 			}
 		} else {
-			ci.setContactseperator("");
+			ci.setCONTACTSEPERATOR("");
 		}
 	}
 	
-	private void setNoOverwriteEmailaddressValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteEmailaddressValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getEmailaddress();
+			String address2 = customerFocal.getEMAILADDRESS();
 			if(address2 != null && !address2.equals("")) {
-				ci.setEmailaddress(address2);
+				ci.setEMAILADDRESS(address2);
 			} else {
-				ci.setEmailaddress("");
+				ci.setEMAILADDRESS("");
 			}
 		} else {
-			ci.setEmailaddress("");
+			ci.setEMAILADDRESS("");
 		}
 	}
 	
-	private void setNoOverwriteStatusValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteStatusValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getStatus();
+			String address2 = customerFocal.getSTATUS();
 			if(address2 != null && !address2.equals("")) {
-				ci.setStatus(address2);
+				ci.setJOBSTATUS(address2);
 			} else {
-				ci.setStatus("");
+				ci.setJOBSTATUS("");
 			}
 		} else {
-			ci.setStatus("");
+			ci.setJOBSTATUS("");
 		}
 	}
 	
-	private void setNoOverwriteAvarpValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteAvarpValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getAvarp();
+			String address2 = customerFocal.getAVARP();
 			if(address2 != null && !address2.equals("")) {
-				ci.setAvarp(address2);
+				ci.setAVARP(address2);
 			} else {
-				ci.setAvarp("");
+				ci.setAVARP("");
 			}
 		} else {
-			ci.setAvarp("");
+			ci.setAVARP("");
 		}
 	}
 	
-	private void setNoOverwriteDepartmentValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteDepartmentValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getDepartment();
+			String address2 = customerFocal.getDEPARTMENT();
 			if(address2 != null && !address2.equals("")) {
-				ci.setDepartment(address2);
+				ci.setDEPARTMENT(address2);
 			} else {
-				ci.setDepartment("");
+				ci.setDEPARTMENT("");
 			}
 		} else {
-			ci.setDepartment("");
+			ci.setDEPARTMENT("");
 		}
 	}
 	
-	private void setNoOverwriteHomepageValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteHomepageValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getHomepage();
+			String address2 = customerFocal.getHOMEPAGE();
 			if(address2 != null && !address2.equals("")) {
-				ci.setHomepage(address2);
+				ci.setHOMEPAGE(address2);
 			} else {
-				ci.setHomepage("");
+				ci.setHOMEPAGE("");
 			}
 		} else {
-			ci.setHomepage("");
+			ci.setHOMEPAGE("");
 		}
 	}
 	
-	private void setNoOverwriteTitleValue(Customer customerFocal, CustomerPersonalInfo ci) {
+	private void setNoOverwriteTitleValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
 		if(customerFocal != null) {
-			String address2 = customerFocal.getTitle();
+			String address2 = customerFocal.getTITLE();
 			if(address2 != null && !address2.equals("")) {
-				ci.setTitle(address2);
+				ci.setTITLE(address2);
 			} else {
-				ci.setTitle("");
+				ci.setTITLE("");
 			}
 		} else {
-			ci.setTitle("");
+			ci.setTITLE("");
 		}
 	}
 	
 	public CustomerPersonalInfo createCustomerBean(String personalID, IWContext iwc) throws Exception {
 		CustomerPersonalInfo ci = new CustomerPersonalInfo();
 		if(personalID != null && !personalID.equals("")) {
-			Customer customerFocal = findCustomer(personalID);
+			CUSTOMER customerFocal = findCustomer(personalID);
 			UserBusiness userBusiness = (UserBusiness) IBOLookup.getServiceInstance(iwc, UserBusiness.class);
 			if(userBusiness != null) {
 				
@@ -375,25 +361,25 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					try {
 						String address1Value = address1.getStreetAddress();
 						if(address1Value != null && !address1Value.equals("")) {
-							ci.setAddress1(address1Value);
+							ci.setADDRESS1(address1Value);
 						} else {
 							setNoOverwriteAddress1Value(customerFocal, ci);
 						}
 						String postalAddress = address1.getPostalAddress();
 						if(postalAddress != null && !postalAddress.equals("")) {
-							ci.setPostaddress(postalAddress);
+							ci.setPOSTADDRESS(postalAddress);
 						} else {
 							setNoOverwritePostaddressValue(customerFocal, ci);
 						}
 						Country country = address1.getCountry();
 						if(country != null) {
-							ci.setCountry(country.getName());
+							ci.setCOUNTRY(country.getName());
 						} else {
 							setNoOverwriteCountryValue(customerFocal, ci);
 						}
 						Commune commune = address1.getCommune();
 						if(commune != null) {
-							ci.setCounty(commune.getCommuneName());
+							ci.setCOUNTY(commune.getCommuneName());
 						} else {
 							setNoOverwriteCountyValue(customerFocal, ci);
 						}
@@ -407,7 +393,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						Address address2 = userBusiness.getUsersCoAddress(id);
 						String address2Value = address2.getStreetAddress();
 						if(address2Value != null && !address2Value.equals("")) {
-							ci.setAddress2(address2Value);
+							ci.setADDRESS2(address2Value);
 						} else {
 							setNoOverwriteAddress2Value(customerFocal, ci);
 						}
@@ -421,7 +407,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						
 							String homeValue = home.getNumber();
 							if(homeValue != null && !homeValue.equals("")) {
-								ci.setPhonehome(home.getNumber());
+								ci.setPHONEHOME(home.getNumber());
 							} else {
 								setNoOverwritePhonehomeValue(customerFocal, ci);
 							}
@@ -433,8 +419,8 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						
 							String workValue = work.getNumber();
 							if(workValue != null && !workValue.equals("")) {
-								ci.setPhoneoffice(work.getNumber());
-								ci.setPhonework(work.getNumber());
+								ci.setPHONEOFFICE(work.getNumber());
+								ci.setPHONEWORK(work.getNumber());
 							} else {
 								setNoOverwritePhoneworkValue(customerFocal, ci);
 								setNoOverwritePhoneofficeValue(customerFocal, ci);
@@ -448,7 +434,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						
 							String mobileValue = mobile.getNumber();
 							if(mobileValue != null && !mobileValue.equals("")) {
-								ci.setGsm(mobile.getNumber());
+								ci.setGSM(mobile.getNumber());
 							} else {
 								setNoOverwriteGsmValue(customerFocal, ci);
 							}
@@ -460,8 +446,8 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						
 							String faxValue = fax.getNumber();
 							if(faxValue != null && !faxValue.equals("")) {
-								ci.setFax(fax.getNumber());
-								ci.setFaxoffice(fax.getNumber());
+								ci.setFAX(fax.getNumber());
+								ci.setFAXOFFICE(fax.getNumber());
 							} else {
 								setNoOverwriteFaxValue(customerFocal, ci);
 							}
@@ -485,7 +471,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					try {
 						Email email = emailHome.findMainEmailForUser(customer);
 						if(email != null) {
-							ci.setEmailaddress(email.getEmailAddress());
+							ci.setEMAILADDRESS(email.getEmailAddress());
 						} else {
 							setNoOverwriteEmailaddressValue(customerFocal, ci);
 						}
@@ -495,7 +481,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					
 					String title = userBusiness.getUserJob(customer);
 					if(title != null && !title.equals("")) {
-						ci.setTitle(title);
+						ci.setTITLE(title);
 					} else {
 						setNoOverwriteTitleValue(customerFocal, ci);
 					}
@@ -515,14 +501,14 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					}
 					
 					fullName.append(lastName);
-					ci.setName(fullName.toString());
+					ci.setCUSTOMERNAME(fullName.toString());
 				
 					setNoOverwriteLanguageValue(customerFocal, ci);
 					setNoOverwriteHomepageValue(customerFocal, ci);
 					setNoOverwriteAvarpValue(customerFocal, ci);
 					setNoOverwriteDepartmentValue(customerFocal, ci);
 					setNoOverwriteStatusValue(customerFocal, ci);
-					ci.setContactseperator(" ");
+					ci.setCONTACTSEPERATOR(" ");
 				}
 			}
 		}
@@ -533,7 +519,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
-	public Customer findCustomer(String search_txt) throws Exception {
+	public CUSTOMER findCustomer(String search_txt) throws Exception {
 		
 		Project service = getFocalService();
 		
@@ -542,23 +528,25 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		if(loging_pass == null)
 			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
 		
-		String xml_str = service.FINDCUSTOMER(search_txt, const_project_list, loging_pass[0], loging_pass[1]);
+		return service.FINDCUSTOMER(search_txt, const_project_list, loging_pass[0], loging_pass[1]);
 		
-		if(xml_str == null)
-			return null;
-		
-		XStream xstream = new XStream();
-		
-		xstream.alias(const_customer, Customer.class);
-		
-		try {
-			return (Customer)xstream.fromXML(xml_str);
-			
-		} catch (StreamException e) {
-			
-			logger.log(Level.WARNING, "Exception while parsing xml to bean. This can be either an error in document, or that's how focal returns when nothing is found (plain string with blah blah ;])", e);
-			return null;
-		}
+//		String xml_str = service.FINDCUSTOMER(search_txt, const_project_list, loging_pass[0], loging_pass[1]);
+//		
+//		if(xml_str == null)
+//			return null;
+//		
+//		XStream xstream = new XStream();
+//		
+//		xstream.alias(const_customer, Customer.class);
+//		
+//		try {
+//			return (Customer)xstream.fromXML(xml_str);
+//			
+//		} catch (StreamException e) {
+//			
+//			logger.log(Level.WARNING, "Exception while parsing xml to bean. This can be either an error in document, or that's how focal returns when nothing is found (plain string with blah blah ;])", e);
+//			return null;
+//		}
 	}
 	
 	protected Project getFocalService() throws ServiceException {
@@ -669,28 +657,28 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		String[] login_and_pass = getLoginAndPassword();
 		
 		PERSONINFO person_info = new PERSONINFO(
-					customer.getAddress1(),								//ADDRESS2
-					customer.getAddress2(), 							//ADDRESS2
-					customer.getCounty(), 								//COUNTY
-					customer.getCountry(), 								//COUNTRY
-					customer.getEmailaddress(),							//EMAIL
-					customer.getFax(), 									//FAX
-					customer.getHomepage(),								//HOMEPAGE
-					customer.getLanguage(), 							//LANGUAGE
-					customer.getPhonework(),							//PHONEWORK
-					customer.getPostaddress(), 							//POSTADDRESS
+					customer.getADDRESS1(),								//ADDRESS2
+					customer.getADDRESS2(), 							//ADDRESS2
+					customer.getCOUNTY(), 								//COUNTY
+					customer.getCOUNTRY(), 								//COUNTRY
+					customer.getEMAILADDRESS(),							//EMAIL
+					customer.getFAX(), 									//FAX
+					customer.getHOMEPAGE(),								//HOMEPAGE
+					customer.getLANGUAGE(), 							//LANGUAGE
+					customer.getPHONEWORK(),							//PHONEWORK
+					customer.getPOSTADDRESS(), 							//POSTADDRESS
 					customer.getSocNr(),		 						//SOCSECNUM
-					customer.getStatus(), 								//STATUS
+					customer.getJOBSTATUS(), 							//STATUS
 					customer.getTargetMail(),				 			//TARGETMAIL
-					customer.getAvarp(), 								//AVARP
-					customer.getBeeper(), 								//BEEPER
-					customer.getCarphone(), 							//CARPHONE
-					customer.getGsm(),	 								//GSM
-					customer.getName(), 								//PERSONNAME
-					customer.getPhonehome(),							//PHONEHOME
-					customer.getPhoneoffice(),							//PHONEOFFICE
-					customer.getContactseperator(),						//SEPERATOR
-					customer.getTitle() 								//TITLE
+					customer.getAVARP(), 								//AVARP
+					customer.getBEEPER(), 								//BEEPER
+					customer.getCARPHONE(), 							//CARPHONE
+					customer.getGSM(),	 								//GSM
+					customer.getCUSTOMERNAME(), 						//PERSONNAME
+					customer.getPHONEHOME(),							//PHONEHOME
+					customer.getPHONEOFFICE(),							//PHONEOFFICE
+					customer.getCONTACTSEPERATOR(),						//SEPERATOR
+					customer.getTITLE() 								//TITLE
 		);
 		
 		RETURNSTATUS ret_status = service.CREATEUPDATEPERSON(person_info, const_project_list, login_and_pass[0], login_and_pass[1]);

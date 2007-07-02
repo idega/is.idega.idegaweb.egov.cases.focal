@@ -1,7 +1,7 @@
 package is.idega.idegaweb.egov.cases.focal.business;
 
 import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Customer;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import com.idega.presentation.IWContext;
 
 /**
  * 
- * Last modified: $Date: 2007/06/20 05:28:54 $ by $Author: alexis $
+ * Last modified: $Date: 2007/07/02 10:31:11 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public interface FocalCasesIntegration extends IBOService {
 
@@ -57,7 +57,7 @@ public interface FocalCasesIntegration extends IBOService {
 	 * @return bean of customer information
 	 * @throws Exception
 	 */
-	public abstract Customer findCustomer(String search_txt) throws Exception;
+	public abstract CUSTOMER findCustomer(String search_txt) throws Exception;
 	
 	/**
 	 * possibly creates (if non-existent) or updates customer information on focal system
