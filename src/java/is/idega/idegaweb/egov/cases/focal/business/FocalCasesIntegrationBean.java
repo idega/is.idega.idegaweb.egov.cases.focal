@@ -39,16 +39,18 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/07/02 10:31:11 $ by $Author: civilis $
+ * Last modified: $Date: 2007/07/02 16:47:22 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
 	private static final long serialVersionUID = -486408791846081399L;
 	
 	private static final String const_project_list = "ProjectList";
+	private static final String const_project_type_BY_NAME = "nafn";
+	private static final String const_project_type_BY_SOCIAL_NUMBER = "kt";
 	private static final String focal_service_login_app_key = "focal.ws.login";
 	private static final String focal_service_pass_app_key = "focal.ws.pass";
 	private static final String ck = "ZIZYFk9nxC41RhCtJBDydBRiUNPvyKlIWmJDJ9p2xYWXvmqIrVyTNXIljGupoFBqi6TyC7bUXWLL2OxdRsWnaph2kQyETYlzHzhv";
@@ -70,14 +72,18 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		if(loging_pass == null)
 			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
 		
-		NOTESPROJECTARRAY project_list = service.GETPROJECTLIST(search_txt, const_project_list, const_project_list, loging_pass[0], loging_pass[1]);
+		NOTESPROJECTARRAY project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_NAME, const_project_list, loging_pass[0], loging_pass[1]);
 		
-		if(project_list == null) {
-			logger.log(Level.SEVERE, "Project list retrieved by search text: \""+search_txt+"\" was null");
-			return null;
-		}
+		List result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
 		
-		return project_list.getPROJECTARRAY() == null ? null : Arrays.asList(project_list.getPROJECTARRAY());
+		project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_SOCIAL_NUMBER, const_project_list, loging_pass[0], loging_pass[1]);
+		
+		if(result_project_list == null)
+			result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
+		else if(project_list != null && project_list.getPROJECTARRAY() != null)
+			result_project_list.addAll(Arrays.asList(project_list.getPROJECTARRAY()));
+		
+		return result_project_list;
 	}
 	
 	private void setNoOverwriteFaxValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
