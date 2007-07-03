@@ -16,6 +16,7 @@ import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ProjectSe
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -42,10 +43,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/07/03 09:17:42 $ by $Author: civilis $
+ * Last modified: $Date: 2007/07/03 12:24:51 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -76,7 +77,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
 		
 		NOTESPROJECTARRAY project_list = null;
-		List result_project_list = null;
+		List result_project_list = new ArrayList();
 		
 		try {
 			project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_NAME, const_project_list, loging_pass[0], loging_pass[1]);
@@ -84,7 +85,8 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			logger.log(Level.SEVERE, "Exceptioon while trying to get project list by search type: "+const_project_type_BY_NAME+" and search query: "+search_txt, e);
 		}
 		
-		result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
+		if(project_list != null && project_list.getPROJECTARRAY() != null)
+			result_project_list.addAll(Arrays.asList(project_list.getPROJECTARRAY()));
 		
 		try {
 			project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_SOCIAL_NUMBER, const_project_list, loging_pass[0], loging_pass[1]);
@@ -92,9 +94,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			logger.log(Level.SEVERE, "Exceptioon while trying to get project list by search type: "+const_project_type_BY_SOCIAL_NUMBER+" and search query: "+search_txt, e);
 		}
 		
-		if(result_project_list == null)
-			result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
-		else if(project_list != null && project_list.getPROJECTARRAY() != null)
+		if(project_list != null && project_list.getPROJECTARRAY() != null)
 			result_project_list.addAll(Arrays.asList(project_list.getPROJECTARRAY()));
 		
 		return result_project_list;
