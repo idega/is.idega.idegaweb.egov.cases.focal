@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.FinderException;
 
@@ -90,6 +92,8 @@ public class FocalMyCases extends MyCases {
 	protected static final int ACTION_SAVE_FOCAL = 5;
 	protected static final int ACTION_CREATE_CUSTOMER = 6;
 	protected static final int ACTION_UPDATE_CUSTOMER = 7;
+	
+	private Logger logger = Logger.getLogger(FocalMyCases.class.getName());
 	
 	private int parseAction(IWContext iwc) {
 		if (iwc.isParameterSet(PARAMETER_ACTION)) {
@@ -175,8 +179,10 @@ public class FocalMyCases extends MyCases {
 			}
 			return FocalConstants.STATUS_SUCCESS_PROJECTS;
 		} catch(UnsuccessfulStatusException use) {
+			logger.log(Level.SEVERE, "Exception while finding projects", use);
 			return FocalConstants.STATUS_ERROR_FIND_PROJECTS;
 		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while finding projects", e);
 			return FocalConstants.STATUS_ERROR_FIND_PROJECTS;
 		}
 	}
@@ -196,6 +202,7 @@ public class FocalMyCases extends MyCases {
 				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
 			}
 		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while creating customer", e);
 			if(exist) {
 				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
 			} else {
@@ -223,6 +230,7 @@ public class FocalMyCases extends MyCases {
 			}
 			return FocalConstants.STATUS_SUCCESS_SAVE;
 		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while saving to focal", e);
 			return FocalConstants.STATUS_ERROR_SAVE;
 		}
 	}
@@ -310,7 +318,9 @@ public class FocalMyCases extends MyCases {
 		
 		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
 		next.setStyleClass("searchButton");
-		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
+		next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');");
+//		next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');changeInputValue(findObj('" + PARAMETER_PROJECT_SEARCH_KEY + "'), document.getElementById('projectSearchField').value);");
+//		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 		
 		next.setToFormSubmit(form);
 		searchSection.add(next);
@@ -354,29 +364,32 @@ public class FocalMyCases extends MyCases {
 			Iterator iter = projects.iterator();
 			while (iter.hasNext()) {
 				NOTESPROJECT theProject = (NOTESPROJECT) iter.next();
-				int iRow = 1;
-				row = group.createRow();
 				String projectId = theProject.getPROJECTNUMBER();
-				String projectIdFixed = projectId.replaceAll("/", "-");
-				row.setId(projectIdFixed);
-				row.setMarkupAttribute("onclick", "changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), '" + projectId + "');changeInputValue(findObj('" + PARAMETER_PROJECT_NAME + "'), '" + theProject.getPROJECTNAME() + "');selectFocalCasesRow(this.id);");
-				if (iRow == 1) {
-					row.setStyleClass("firstRow");
-				}
-				else if (!iter.hasNext()) {
-					row.setStyleClass("lastRow");
-				} else {
-					row.setStyleClass("focalRow");
-				}
-				cell = row.createCell();
-				cell.setStyleClass("firstColumn");
-				cell.setStyleClass("caseNumber");
-				cell.add(new Text(theProject.getPROJECTNAME()));
+				int iRow = 1;
+				if(projectId != null) {
+					row = group.createRow();
 				
-				cell = row.createCell();
-				cell.setStyleClass("lastColumn");
-				cell.setStyleClass("caseNumber");
-				cell.add(new Text(theProject.getPROJECTCUSTOMER()));
+					String projectIdFixed = projectId.replaceAll("/", "-");
+					row.setId(projectIdFixed);
+					row.setMarkupAttribute("onclick", "changeInputValue(findObj('" + PARAMETER_PROJECT_PK + "'), '" + projectId + "');changeInputValue(findObj('" + PARAMETER_PROJECT_NAME + "'), '" + theProject.getPROJECTNAME() + "');selectFocalCasesRow(this.id);");
+					if (iRow == 1) {
+						row.setStyleClass("firstRow");
+					}
+					else if (!iter.hasNext()) {
+						row.setStyleClass("lastRow");
+					} else {
+						row.setStyleClass("focalRow");
+					}
+					cell = row.createCell();
+					cell.setStyleClass("firstColumn");
+					cell.setStyleClass("caseNumber");
+					cell.add(new Text(theProject.getPROJECTNAME()));
+					
+					cell = row.createCell();
+					cell.setStyleClass("lastColumn");
+					cell.setStyleClass("caseNumber");
+					cell.add(new Text(theProject.getPROJECTCUSTOMER()));
+				}
 			}
 		}
 							
@@ -461,9 +474,8 @@ public class FocalMyCases extends MyCases {
 						
 						if(id != null) {
 							CUSTOMER customer = getFocalCasesIntegration(iwc).findCustomer(id);
-							
 							Link createCustomer = null;
-							if(customer != null) {
+							if(customer.getCUSTOMERNAME() != null && !customer.getCUSTOMERNAME().equals("")) {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
 								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
 							} else {

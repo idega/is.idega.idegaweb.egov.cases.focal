@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ejb.FinderException;
 import javax.xml.rpc.ServiceException;
 
 import com.idega.business.IBOLookup;
@@ -43,10 +44,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/07/03 12:24:51 $ by $Author: civilis $
+ * Last modified: $Date: 2007/07/03 14:45:09 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -378,7 +379,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 				if(customer != null) {
 					int id = ((Integer) customer.getPrimaryKey()).intValue();
 					Address address1 = userBusiness.getUsersMainAddress(id);
-					try {
+					if(address1 != null) {
 						String address1Value = address1.getStreetAddress();
 						if(address1Value != null && !address1Value.equals("")) {
 							ci.setADDRESS1(address1Value);
@@ -403,76 +404,93 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						} else {
 							setNoOverwriteCountyValue(customerFocal, ci);
 						}
-					} catch(Exception e) {
+					} else {
 						setNoOverwriteAddress1Value(customerFocal, ci);
 						setNoOverwritePostaddressValue(customerFocal, ci);
 						setNoOverwriteCountryValue(customerFocal, ci);
 						setNoOverwriteCountyValue(customerFocal, ci);
 					}
-					try {
-						Address address2 = userBusiness.getUsersCoAddress(id);
+					Address address2 = userBusiness.getUsersCoAddress(id);
+					if(address2 != null) {
 						String address2Value = address2.getStreetAddress();
 						if(address2Value != null && !address2Value.equals("")) {
 							ci.setADDRESS2(address2Value);
 						} else {
 							setNoOverwriteAddress2Value(customerFocal, ci);
 						}
-					} catch(Exception e) {
+					} else {
 						setNoOverwriteAddress2Value(customerFocal, ci);
 					}
 					PhoneHome phoneHome = userBusiness.getPhoneHome();
 					if(phoneHome != null) {
 						try {
 							Phone home = phoneHome.findUsersHomePhone(customer);
-						
-							String homeValue = home.getNumber();
-							if(homeValue != null && !homeValue.equals("")) {
-								ci.setPHONEHOME(home.getNumber());
+							if(home != null) {
+								String homeValue = home.getNumber();
+								if(homeValue != null && !homeValue.equals("")) {
+									ci.setPHONEHOME(home.getNumber());
+								} else {
+									setNoOverwritePhonehomeValue(customerFocal, ci);
+								}
 							} else {
 								setNoOverwritePhonehomeValue(customerFocal, ci);
 							}
-						} catch(Exception e) {
+						} catch(FinderException fe) {
 							setNoOverwritePhonehomeValue(customerFocal, ci);
+							logger.log(Level.SEVERE, "Could not get user home phone: ", fe);
 						}
 						try {
 							Phone work = phoneHome.findUsersWorkPhone(customer);
-						
-							String workValue = work.getNumber();
-							if(workValue != null && !workValue.equals("")) {
-								ci.setPHONEOFFICE(work.getNumber());
-								ci.setPHONEWORK(work.getNumber());
+							if(work != null) {
+								String workValue = work.getNumber();
+								if(workValue != null && !workValue.equals("")) {
+									ci.setPHONEOFFICE(work.getNumber());
+									ci.setPHONEWORK(work.getNumber());
+								} else {
+									setNoOverwritePhoneworkValue(customerFocal, ci);
+									setNoOverwritePhoneofficeValue(customerFocal, ci);
+								}
 							} else {
 								setNoOverwritePhoneworkValue(customerFocal, ci);
 								setNoOverwritePhoneofficeValue(customerFocal, ci);
 							}
-						} catch(Exception e) {
+						} catch(FinderException fe) {
 							setNoOverwritePhoneworkValue(customerFocal, ci);
 							setNoOverwritePhoneofficeValue(customerFocal, ci);
+							logger.log(Level.SEVERE, "Could not get user work phone: ", fe);
 						}
 						try {
 							Phone mobile = phoneHome.findUsersMobilePhone(customer);
-						
-							String mobileValue = mobile.getNumber();
-							if(mobileValue != null && !mobileValue.equals("")) {
-								ci.setGSM(mobile.getNumber());
+							if(mobile != null) {
+								String mobileValue = mobile.getNumber();
+								if(mobileValue != null && !mobileValue.equals("")) {
+									ci.setGSM(mobile.getNumber());
+								} else {
+									setNoOverwriteGsmValue(customerFocal, ci);
+								}
 							} else {
 								setNoOverwriteGsmValue(customerFocal, ci);
 							}
-						} catch(Exception e) {
+						} catch(FinderException fe) {
 							setNoOverwriteGsmValue(customerFocal, ci);
+							logger.log(Level.SEVERE, "Could not get user mobile phone: ", fe);
 						}
 						try {
 							Phone fax = phoneHome.findUsersFaxPhone(customer);
-						
-							String faxValue = fax.getNumber();
-							if(faxValue != null && !faxValue.equals("")) {
-								ci.setFAX(fax.getNumber());
-								ci.setFAXOFFICE(fax.getNumber());
+							if(fax != null) {
+								String faxValue = fax.getNumber();
+								if(faxValue != null && !faxValue.equals("")) {
+									ci.setFAX(fax.getNumber());
+									ci.setFAXOFFICE(fax.getNumber());
+								} else {
+									setNoOverwriteFaxValue(customerFocal, ci);
+								}
 							} else {
 								setNoOverwriteFaxValue(customerFocal, ci);
 							}
-						} catch(Exception e) {
+						} catch(FinderException fe) {
 							setNoOverwriteFaxValue(customerFocal, ci);
+							logger.log(Level.SEVERE, "Could not get user fax number: ", fe);
 						}
 						setNoOverwriteCarphoneValue(customerFocal, ci);
 						setNoOverwriteBeeperValue(customerFocal, ci);
@@ -488,24 +506,27 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					ci.setSocNr(customer.getPersonalID());
 					
 					EmailHome emailHome = userBusiness.getEmailHome();
-					try {
-						Email email = emailHome.findMainEmailForUser(customer);
-						if(email != null) {
-							ci.setEMAILADDRESS(email.getEmailAddress());
-						} else {
+					if(emailHome != null) {
+						try {
+							Email email = emailHome.findMainEmailForUser(customer);
+							if(email != null) {
+								ci.setEMAILADDRESS(email.getEmailAddress());
+							} else {
+								setNoOverwriteEmailaddressValue(customerFocal, ci);
+							}
+						} catch(FinderException fe) {
 							setNoOverwriteEmailaddressValue(customerFocal, ci);
+							logger.log(Level.SEVERE, "Could not get user email address: ", fe);
 						}
-					} catch(Exception e) {
+					} else {
 						setNoOverwriteEmailaddressValue(customerFocal, ci);
 					}
-					
 					String title = userBusiness.getUserJob(customer);
 					if(title != null && !title.equals("")) {
 						ci.setTITLE(title);
 					} else {
 						setNoOverwriteTitleValue(customerFocal, ci);
 					}
-					//TODO ??????
 					ci.setTargetMail(false);
 					
 					String firstName = customer.getFirstName();
