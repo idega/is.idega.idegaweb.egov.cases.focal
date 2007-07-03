@@ -5,10 +5,12 @@ import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
 import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.Project;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ProjectServiceLocator;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS;
@@ -28,6 +30,7 @@ import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.EmailHome;
 import com.idega.core.contact.data.Phone;
 import com.idega.core.contact.data.PhoneHome;
+import com.idega.core.file.data.ICFile;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.Commune;
 import com.idega.core.location.data.Country;
@@ -39,10 +42,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/07/02 16:47:22 $ by $Author: civilis $
+ * Last modified: $Date: 2007/07/03 09:17:42 $ by $Author: civilis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -72,11 +75,22 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		if(loging_pass == null)
 			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
 		
-		NOTESPROJECTARRAY project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_NAME, const_project_list, loging_pass[0], loging_pass[1]);
+		NOTESPROJECTARRAY project_list = null;
+		List result_project_list = null;
 		
-		List result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
+		try {
+			project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_NAME, const_project_list, loging_pass[0], loging_pass[1]);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exceptioon while trying to get project list by search type: "+const_project_type_BY_NAME+" and search query: "+search_txt, e);
+		}
 		
-		project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_SOCIAL_NUMBER, const_project_list, loging_pass[0], loging_pass[1]);
+		result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
+		
+		try {
+			project_list = service.GETPROJECTLIST(search_txt, const_project_type_BY_SOCIAL_NUMBER, const_project_list, loging_pass[0], loging_pass[1]);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exceptioon while trying to get project list by search type: "+const_project_type_BY_SOCIAL_NUMBER+" and search query: "+search_txt, e);
+		}
 		
 		if(result_project_list == null)
 			result_project_list = (project_list == null || project_list.getPROJECTARRAY() == null) ? null : Arrays.asList(project_list.getPROJECTARRAY());
@@ -617,20 +631,21 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					category.getName() + " - " + type.getName(),		//"SUBJECT"
 					gen_case.getCreated() == null ? null :
 					String.valueOf(gen_case.getCreated().getTime()),	//"DATE"
-		            gen_case.getMessage(),									//"BODY"
-			        projectName,												//"PROJECTNAME"
+		            gen_case.getMessage(),								//"BODY"
+			        projectName,									 	//"PROJECTNAME"
 			        project_id											//"PROJECTNUMBER"
 			);
 			
 			String[] login_and_pass = getLoginAndPassword();
 
-			RETURNSTATUS ret_status = service.NEWPROJECT(case_data, const_project_list, login_and_pass[0], login_and_pass[1]);
+			PROJECTRETURNSTATUS ret_status = service.NEWPROJECT(case_data, const_project_list, login_and_pass[0], login_and_pass[1]);
 			
 			try {
 				int status_code = Integer.parseInt(ret_status.getSTATUS());
 				
 				if(status_code == Status.success)
-					case_arg.setStatus(new Status(Status.success));
+					addAttachment(case_arg, ret_status.getUNID(), service);
+					
 				else if(status_code == Status.failed_to_save) {
 					case_arg.setStatus(new Status(Status.failed_to_save));
 					logger.log(Level.WARNING, "Error occured while creating project by case. Status message: "+ret_status.getERRORTEXT());
@@ -651,6 +666,58 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		}
 		
 		return cases;
+	}
+	
+	private void addAttachment(CaseArg case_arg, String UNID, Project service) {
+		ICFile att_file = case_arg.getGcase().getAttachment();
+		
+		if(att_file == null) {
+			case_arg.setStatus(new Status(Status.success));
+			return;
+		}
+		
+		RETURNSTATUS status = null;
+		
+		try {
+			byte[] serialized_file = new byte[att_file.getFileSize().intValue()];
+			int bytes_read = att_file.getFileValue().read(serialized_file);
+			
+			ATTACHMENT att = new ATTACHMENT();
+			att.setBASE64(serialized_file);
+			att.setFILENAME(att_file.getName());
+			att.setFILESIZE(bytes_read != -1 ? bytes_read : att_file.getFileSize().intValue());
+			
+			String[] login_and_pass = getLoginAndPassword();
+			status = service.ADDATTACHMENT(att, UNID, const_project_list, login_and_pass[0], login_and_pass[1]);
+			
+			int status_code = Integer.parseInt(status.getSTATUS());
+			
+			if(status_code == Status.success)
+				case_arg.setStatus(new Status(Status.success));
+			else if(status_code == Status.failed_to_save) {
+				case_arg.setStatus(new Status(Status.failed_to_save));
+				logger.log(Level.WARNING, "Error occured while adding attachment. Status message: "+status.getERRORTEXT());
+			} else {
+				case_arg.setStatus(new Status(Status.unknown_fail));
+				logger.log(Level.WARNING, "Error occured while adding attachment. Status message: "+status.getERRORTEXT());
+			}
+			
+		} catch (Exception e) {
+			
+			if(status != null)
+				logger.log(Level.SEVERE, "Exception while adding attachment. Status message: "+status.getERRORTEXT(), e);
+			else
+				logger.log(Level.SEVERE, "Exception while adding attachment.", e);
+			
+			case_arg.setStatus(new Status(Status.unknown_fail));
+			
+		} finally {
+			try {
+				att_file.getFileValue().close();
+			} catch (Exception e) {
+				logger.log(Level.WARNING, "Failed to close ICFile value input stream", e);
+			}
+		}
 	}
 	
 	/**
