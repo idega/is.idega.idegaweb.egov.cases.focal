@@ -44,10 +44,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/07/03 14:45:09 $ by $Author: alexis $
+ * Last modified: $Date: 2007/07/05 07:13:02 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -437,7 +437,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwritePhonehomeValue(customerFocal, ci);
-							logger.log(Level.SEVERE, "Could not get user home phone: ", fe);
+//							logger.log(Level.SEVERE, "Could not get user home phone: ", fe);
 						}
 						try {
 							Phone work = phoneHome.findUsersWorkPhone(customer);
@@ -457,7 +457,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						} catch(FinderException fe) {
 							setNoOverwritePhoneworkValue(customerFocal, ci);
 							setNoOverwritePhoneofficeValue(customerFocal, ci);
-							logger.log(Level.SEVERE, "Could not get user work phone: ", fe);
+//							logger.log(Level.SEVERE, "Could not get user work phone: ", fe);
 						}
 						try {
 							Phone mobile = phoneHome.findUsersMobilePhone(customer);
@@ -473,7 +473,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwriteGsmValue(customerFocal, ci);
-							logger.log(Level.SEVERE, "Could not get user mobile phone: ", fe);
+//							logger.log(Level.SEVERE, "Could not get user mobile phone: ", fe);
 						}
 						try {
 							Phone fax = phoneHome.findUsersFaxPhone(customer);
@@ -490,7 +490,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwriteFaxValue(customerFocal, ci);
-							logger.log(Level.SEVERE, "Could not get user fax number: ", fe);
+//							logger.log(Level.SEVERE, "Could not get user fax number: ", fe);
 						}
 						setNoOverwriteCarphoneValue(customerFocal, ci);
 						setNoOverwriteBeeperValue(customerFocal, ci);
@@ -516,7 +516,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwriteEmailaddressValue(customerFocal, ci);
-							logger.log(Level.SEVERE, "Could not get user email address: ", fe);
+//							logger.log(Level.SEVERE, "Could not get user email address: ", fe);
 						}
 					} else {
 						setNoOverwriteEmailaddressValue(customerFocal, ci);
