@@ -1,10 +1,10 @@
-back=Back
-case_category=Case category
-case_nr=Case nr.
-case_overview=Case overview
-case_type=Case type
+back=Til baka
+case_category=M\u00E1laflokkur
+case_nr=Erindi nr.
+case_overview=Yfirlit erindis
+case_type=Tegund
 create=Create
-created_date=Created date
+created_date=Sent dags.
 
 find_project_focal=Find projects
 find_project_focal_label=Find project in Focal
@@ -20,35 +20,35 @@ focal_project_name=Project name
 focal_project_select=Select
 focal_project_error_search=Could not get project list
 
-handler=Handler
-handler_overview=Handler overview
+handler=Umsj\u00F3narma\u00F0ur
+handler_overview=Yfirlit me\u00F0h\u00F6ndlunar
 iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalCaseMover.name=FocalCaseMover
 iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalCaseViewer.name=FocalCaseViewer
 iw.component.is.idega.idegaweb.egov.cases.focal.presentation.FocalMyCases.name=FocalMyCases
 legend.is_inFocal=Is In Focal
-legend.is_review=Is review
-message=Message
+legend.is_review=\u00CDtrekun
+message=Erindi
 move_focal=Move to Focal
-process=Process
-reply=Reply
+process=Afgrei\u00F0a
+reply=Svar
 save=Save to Focal
-sender=Sender
-status=Status
-view=View
-view_case=View case
+sender=Sendandi
+status=Sta\u00F0a
+view=Sko\u00F0a
+view_case=Sko\u00F0a erindi
 
-case_creator.no_sub_category=No sub category
-sub_case_category=Sub case category
+case_creator.no_sub_category=Enginn undirflokkur
+sub_case_category=Undirflokkur
 
-attachment=Attachment
-my_page=My page
-timestamp=Timestamp
+attachment=Vi\u00F0hengi
+my_page=S\u00ED\u00F0an m\u00EDn
+timestamp=Dags
 find=Find
 
-case.is_private=The sender wishes that this case be handled as confidential.
-case_viewer.view_case=View case
-reactivate_case=Reactivate case
-review_case=Review case
+case.is_private=Sendandi erindisins \u00F3skar eftir a\u00F0 \u00FEa\u00F0 s\u00E9 me\u00F0h\u00F6ndla\u00F0 sem tr\u00FAna\u00F0arm\u00E1l.
+case_viewer.view_case=Sko\u00F0a erindi
+reactivate_case=Endurvekja erindi
+review_case=\u00CDtreka erindi
 
 focal.status.error.save.title=Could not save selected cases to Focal
 focal.status.error.save.message=
