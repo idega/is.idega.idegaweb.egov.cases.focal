@@ -335,6 +335,7 @@ public class FocalMyCases extends MyCases {
 		table.setCellpadding(0);
 		table.setCellspacing(0);
 		table.setStyleClass("adminTable");
+		table.setStyleClass("projectSearchTable");
 		table.setStyleClass("ruler");
 		table.setID("projectTable");
 
@@ -354,7 +355,7 @@ public class FocalMyCases extends MyCases {
 		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_name", "Project name")));
 
 		cell = row.createHeaderCell();
-		cell.setStyleClass("sender");
+		cell.setStyleClass("lastColumn");
 		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_id", "Customer")));
 
 		group = table.createBodyRowGroup();
@@ -475,13 +476,20 @@ public class FocalMyCases extends MyCases {
 						if(id != null) {
 							CUSTOMER customer = getFocalCasesIntegration(iwc).findCustomer(id);
 							Link createCustomer = null;
-							if(customer.getCUSTOMERNAME() != null && !customer.getCUSTOMERNAME().equals("")) {
+							if(customer != null) {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
 								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
 							} else {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
 								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
 							}
+//							if(customer.getCUSTOMERNAME() != null && !customer.getCUSTOMERNAME().equals("")) {
+//								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
+//								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
+//							} else {
+//								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+//								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
+//							}
 							createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + id + "');");
 							createCustomer.setStyleClass("homeButton");
 							
@@ -503,19 +511,19 @@ public class FocalMyCases extends MyCases {
 		Layer bottom = new Layer(Layer.DIV);
 		bottom.setStyleClass("bottom");
 		form.add(bottom);
-		
-		Link save = getButtonLink(getResourceBundle().getLocalizedString("save", "Save to Focal"));
-		save.setStyleClass("homeButton");
-//		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
-		save.setOnClick("if(isProjectSelected()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SAVE_FOCAL + "');} else {alert('" + noProjectAlert + "');return false;}");
-		save.setToFormSubmit(form);
-		bottom.add(save);
 
 		Link back = getButtonLink(getResourceBundle().getLocalizedString("back", "Back"));
 		back.setStyleClass("homeButton");
 		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
 		back.setToFormSubmit(form);
 		bottom.add(back);
+		
+		Link save = getButtonLink(getResourceBundle().getLocalizedString("save", "Save to Focal"));
+//		save.setStyleClass("homeButton");
+//		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE_FOCAL));
+		save.setOnClick("if(isProjectSelected()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SAVE_FOCAL + "');} else {alert('" + noProjectAlert + "');return false;}");
+		save.setToFormSubmit(form);
+		bottom.add(save);
 		
 		add(form);
 	}
@@ -688,7 +696,7 @@ public class FocalMyCases extends MyCases {
 		form.add(bottom);
 
 		Link back = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
-		back.setStyleClass("homeButton");
+//		back.setStyleClass("homeButton");
 		back.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
 		back.setToFormSubmit(form);
 		bottom.add(back);

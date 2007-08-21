@@ -50,7 +50,20 @@
 table.adminTable tbody tr {
 	background-color: #E6E6E6;
 	text-align: left;
+	width: 100%;
 }
+
+table.projectSearchTable tbody .firstColumn, table.projectSearchTable tbody .lastColumn {
+	width: 320px;
+}
+
+/*table.projectSearchTable {
+	position: relative;
+}
+
+table.projectSearchTable tbody tr {
+	
+}*/
 
 table.adminTable tbody tr.isPrivate {
 	background-color: #fff0cc;
@@ -127,7 +140,7 @@ table.adminTable tbody tr.selectedProject {
 
 div.tableSection {
 	clear:both;
-	height:285px;
+	height:225px;
 	overflow:auto;
 	/*width: 756px;*/
 }
@@ -150,9 +163,9 @@ html > body div.tableSection thead tr {
 }
 html > body div.tableSection tbody {
 	display:block;
-	height:262px;
+	height:200px;
 	overflow:auto;
-	/*width: 100%;*/
+	width: 100%;
 }
 html > body div.tableSection thead th.firstColumn {
 	width:200px;
