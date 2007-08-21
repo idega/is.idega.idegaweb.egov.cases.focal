@@ -299,7 +299,7 @@ public class FocalMyCases extends MyCases {
 		Layer projectSection = new Layer(Layer.DIV);
 		projectSection.setStyleClass("formSection");
 		
-		Heading1 heading = new Heading1(getResourceBundle(iwc).getLocalizedString("find_project_focal_label", "Find project in Focal"));
+		Heading1 heading = new Heading1(getResourceBundle().getLocalizedString("find_project_focal_label", "Find project in Focal"));
 		heading.setStyleClass("subHeader");
 		heading.setStyleClass("topSubHeader");
 		projectSection.add(heading);
@@ -314,9 +314,9 @@ public class FocalMyCases extends MyCases {
 		searchField.setOnKeyPress("searchProjects(event);");
 		searchSection.add(searchField);
 		
-		String noProjectAlert = getResourceBundle(iwc).getLocalizedString("focal.alert.noproject", "Please select a project");
+		String noProjectAlert = getResourceBundle().getLocalizedString("focal.alert.noproject", "Please select a project");
 		
-		Link next = getButtonLink(getResourceBundle(iwc).getLocalizedString("find_project_focal", "Find projects"));
+		Link next = getButtonLink(getResourceBundle().getLocalizedString("find_project_focal", "Find projects"));
 		next.setStyleClass("searchButton");
 		next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');");
 //		next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');changeInputValue(findObj('" + PARAMETER_PROJECT_SEARCH_KEY + "'), document.getElementById('projectSearchField').value);");
@@ -352,11 +352,11 @@ public class FocalMyCases extends MyCases {
 		TableCell2 cell = row.createHeaderCell();
 		cell.setStyleClass("firstColumn");
 		cell.setStyleClass("caseNumber");
-		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_project_name", "Project name")));
+		cell.add(new Text(getResourceBundle().getLocalizedString("focal_project_name", "Project name")));
 
 		cell = row.createHeaderCell();
 		cell.setStyleClass("lastColumn");
-		cell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_id", "Customer")));
+		cell.add(new Text(getResourceBundle().getLocalizedString("focal_customer_id", "Customer")));
 
 		group = table.createBodyRowGroup();
 		
@@ -401,7 +401,7 @@ public class FocalMyCases extends MyCases {
 		Layer customerSection = new Layer(Layer.DIV);
 		customerSection.setStyleClass("formSection");
 		
-		heading = new Heading1(getResourceBundle(iwc).getLocalizedString("focal_cases_tobemoved", "Cases to be moved"));
+		heading = new Heading1(getResourceBundle().getLocalizedString("focal_cases_tobemoved", "Cases to be moved"));
 		heading.setStyleClass("subHeader");
 		heading.setStyleClass("topSubHeader");
 		customerSection.add(heading);
@@ -427,15 +427,15 @@ public class FocalMyCases extends MyCases {
 		TableCell2 cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("firstColumn");
 		cCell.setStyleClass("caseNumber");
-		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_case_nr", "Case Nr")));
+		cCell.add(new Text(getResourceBundle().getLocalizedString("focal_case_nr", "Case Nr")));
 
 		cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("sender");
-		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_name", "Customer")));
+		cCell.add(new Text(getResourceBundle().getLocalizedString("focal_customer_name", "Customer")));
 		
 		cCell = cRow.createHeaderCell();
 		cCell.setStyleClass("action");
-		cCell.add(new Text(getResourceBundle(iwc).getLocalizedString("focal_customer_action", "Create/Update")));
+		cCell.add(new Text(getResourceBundle().getLocalizedString("focal_customer_action", "Create/Update")));
 		
 		cGroup = customerTable.createBodyRowGroup();
 		
