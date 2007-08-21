@@ -74,7 +74,7 @@ table.adminTable tbody tr.isReview {
 }
 
 table.adminTable tbody tr.isInFocal {
-	background-color: #fff0cc;
+	background-color: #AF4345;
 }
 
 table.adminTable thead tr {
@@ -94,7 +94,7 @@ ul.legend li.isReview {
 }
 
 ul.legend li.isInFocal {
-	color: #75206E;
+	color: #AF4345;
 }
 
 div.info div#phone, div.info div#email {
