@@ -8,26 +8,46 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService;
 
 public class NOTESPROJECT  implements java.io.Serializable {
+    private java.lang.String PROJECTCUSTOMER;
+
     private java.lang.String PROJECTNAME;
 
     private java.lang.String PROJECTNUMBER;
 
     private java.lang.String PROJECTSTATUS;
 
-    private java.lang.String PROJECTCUSTOMER;
-
     public NOTESPROJECT() {
     }
 
     public NOTESPROJECT(
+           java.lang.String PROJECTCUSTOMER,
            java.lang.String PROJECTNAME,
            java.lang.String PROJECTNUMBER,
-           java.lang.String PROJECTSTATUS,
-           java.lang.String PROJECTCUSTOMER) {
+           java.lang.String PROJECTSTATUS) {
+           this.PROJECTCUSTOMER = PROJECTCUSTOMER;
            this.PROJECTNAME = PROJECTNAME;
            this.PROJECTNUMBER = PROJECTNUMBER;
            this.PROJECTSTATUS = PROJECTSTATUS;
-           this.PROJECTCUSTOMER = PROJECTCUSTOMER;
+    }
+
+
+    /**
+     * Gets the PROJECTCUSTOMER value for this NOTESPROJECT.
+     * 
+     * @return PROJECTCUSTOMER
+     */
+    public java.lang.String getPROJECTCUSTOMER() {
+        return PROJECTCUSTOMER;
+    }
+
+
+    /**
+     * Sets the PROJECTCUSTOMER value for this NOTESPROJECT.
+     * 
+     * @param PROJECTCUSTOMER
+     */
+    public void setPROJECTCUSTOMER(java.lang.String PROJECTCUSTOMER) {
+        this.PROJECTCUSTOMER = PROJECTCUSTOMER;
     }
 
 
@@ -90,26 +110,6 @@ public class NOTESPROJECT  implements java.io.Serializable {
         this.PROJECTSTATUS = PROJECTSTATUS;
     }
 
-
-    /**
-     * Gets the PROJECTCUSTOMER value for this NOTESPROJECT.
-     * 
-     * @return PROJECTCUSTOMER
-     */
-    public java.lang.String getPROJECTCUSTOMER() {
-        return PROJECTCUSTOMER;
-    }
-
-
-    /**
-     * Sets the PROJECTCUSTOMER value for this NOTESPROJECT.
-     * 
-     * @param PROJECTCUSTOMER
-     */
-    public void setPROJECTCUSTOMER(java.lang.String PROJECTCUSTOMER) {
-        this.PROJECTCUSTOMER = PROJECTCUSTOMER;
-    }
-
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof NOTESPROJECT)) return false;
@@ -122,6 +122,9 @@ public class NOTESPROJECT  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.PROJECTCUSTOMER==null && other.getPROJECTCUSTOMER()==null) || 
+             (this.PROJECTCUSTOMER!=null &&
+              this.PROJECTCUSTOMER.equals(other.getPROJECTCUSTOMER()))) &&
             ((this.PROJECTNAME==null && other.getPROJECTNAME()==null) || 
              (this.PROJECTNAME!=null &&
               this.PROJECTNAME.equals(other.getPROJECTNAME()))) &&
@@ -130,10 +133,7 @@ public class NOTESPROJECT  implements java.io.Serializable {
               this.PROJECTNUMBER.equals(other.getPROJECTNUMBER()))) &&
             ((this.PROJECTSTATUS==null && other.getPROJECTSTATUS()==null) || 
              (this.PROJECTSTATUS!=null &&
-              this.PROJECTSTATUS.equals(other.getPROJECTSTATUS()))) &&
-            ((this.PROJECTCUSTOMER==null && other.getPROJECTCUSTOMER()==null) || 
-             (this.PROJECTCUSTOMER!=null &&
-              this.PROJECTCUSTOMER.equals(other.getPROJECTCUSTOMER())));
+              this.PROJECTSTATUS.equals(other.getPROJECTSTATUS())));
         __equalsCalc = null;
         return _equals;
     }
@@ -145,6 +145,9 @@ public class NOTESPROJECT  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getPROJECTCUSTOMER() != null) {
+            _hashCode += getPROJECTCUSTOMER().hashCode();
+        }
         if (getPROJECTNAME() != null) {
             _hashCode += getPROJECTNAME().hashCode();
         }
@@ -153,9 +156,6 @@ public class NOTESPROJECT  implements java.io.Serializable {
         }
         if (getPROJECTSTATUS() != null) {
             _hashCode += getPROJECTSTATUS().hashCode();
-        }
-        if (getPROJECTCUSTOMER() != null) {
-            _hashCode += getPROJECTCUSTOMER().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -168,6 +168,12 @@ public class NOTESPROJECT  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECT"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("PROJECTCUSTOMER");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "PROJECTCUSTOMER"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("PROJECTNAME");
         elemField.setXmlName(new javax.xml.namespace.QName("", "PROJECTNAME"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -182,12 +188,6 @@ public class NOTESPROJECT  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("PROJECTSTATUS");
         elemField.setXmlName(new javax.xml.namespace.QName("", "PROJECTSTATUS"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("PROJECTCUSTOMER");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "PROJECTCUSTOMER"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

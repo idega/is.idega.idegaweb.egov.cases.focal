@@ -8,42 +8,22 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService;
 
 public class NOTESPROJECTARRAY  extends is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS  implements java.io.Serializable {
-    private is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] PROJECTARRAY;
-
     private short COUNT;
+
+    private is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] PROJECTARRAY;
 
     public NOTESPROJECTARRAY() {
     }
 
     public NOTESPROJECTARRAY(
-           java.lang.String STATUS,
            java.lang.String ERRORTEXT,
-           is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] PROJECTARRAY,
-           short COUNT) {
+           java.lang.String STATUS,
+           short COUNT,
+           is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] PROJECTARRAY) {
         super(
-            STATUS,
-            ERRORTEXT);
-        this.PROJECTARRAY = PROJECTARRAY;
+            ERRORTEXT,
+            STATUS);
         this.COUNT = COUNT;
-    }
-
-
-    /**
-     * Gets the PROJECTARRAY value for this NOTESPROJECTARRAY.
-     * 
-     * @return PROJECTARRAY
-     */
-    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] getPROJECTARRAY() {
-        return PROJECTARRAY;
-    }
-
-
-    /**
-     * Sets the PROJECTARRAY value for this NOTESPROJECTARRAY.
-     * 
-     * @param PROJECTARRAY
-     */
-    public void setPROJECTARRAY(is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] PROJECTARRAY) {
         this.PROJECTARRAY = PROJECTARRAY;
     }
 
@@ -67,6 +47,26 @@ public class NOTESPROJECTARRAY  extends is.idega.idegaweb.egov.cases.focal.busin
         this.COUNT = COUNT;
     }
 
+
+    /**
+     * Gets the PROJECTARRAY value for this NOTESPROJECTARRAY.
+     * 
+     * @return PROJECTARRAY
+     */
+    public is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] getPROJECTARRAY() {
+        return PROJECTARRAY;
+    }
+
+
+    /**
+     * Sets the PROJECTARRAY value for this NOTESPROJECTARRAY.
+     * 
+     * @param PROJECTARRAY
+     */
+    public void setPROJECTARRAY(is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[] PROJECTARRAY) {
+        this.PROJECTARRAY = PROJECTARRAY;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof NOTESPROJECTARRAY)) return false;
@@ -79,10 +79,10 @@ public class NOTESPROJECTARRAY  extends is.idega.idegaweb.egov.cases.focal.busin
         __equalsCalc = obj;
         boolean _equals;
         _equals = super.equals(obj) && 
+            this.COUNT == other.getCOUNT() &&
             ((this.PROJECTARRAY==null && other.getPROJECTARRAY()==null) || 
              (this.PROJECTARRAY!=null &&
-              java.util.Arrays.equals(this.PROJECTARRAY, other.getPROJECTARRAY()))) &&
-            this.COUNT == other.getCOUNT();
+              java.util.Arrays.equals(this.PROJECTARRAY, other.getPROJECTARRAY())));
         __equalsCalc = null;
         return _equals;
     }
@@ -94,6 +94,7 @@ public class NOTESPROJECTARRAY  extends is.idega.idegaweb.egov.cases.focal.busin
         }
         __hashCodeCalc = true;
         int _hashCode = super.hashCode();
+        _hashCode += getCOUNT();
         if (getPROJECTARRAY() != null) {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getPROJECTARRAY());
@@ -105,7 +106,6 @@ public class NOTESPROJECTARRAY  extends is.idega.idegaweb.egov.cases.focal.busin
                 }
             }
         }
-        _hashCode += getCOUNT();
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -117,16 +117,16 @@ public class NOTESPROJECTARRAY  extends is.idega.idegaweb.egov.cases.focal.busin
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECTARRAY"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("PROJECTARRAY");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "PROJECTARRAY"));
-        elemField.setXmlType(new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECT"));
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("COUNT");
         elemField.setXmlName(new javax.xml.namespace.QName("", "COUNT"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "short"));
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("PROJECTARRAY");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "PROJECTARRAY"));
+        elemField.setXmlType(new javax.xml.namespace.QName("urn:DefaultNamespace", "NOTESPROJECT"));
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 

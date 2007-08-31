@@ -7,20 +7,63 @@
 
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService;
 
-public class PROJECTRETURNSTATUS  extends is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS  implements java.io.Serializable {
+public class PROJECTRETURNSTATUS  implements java.io.Serializable {
+    private java.lang.String ERRORTEXT;
+
+    private java.lang.String STATUS;
+
     private java.lang.String UNID;
 
     public PROJECTRETURNSTATUS() {
     }
 
     public PROJECTRETURNSTATUS(
-           java.lang.String STATUS,
            java.lang.String ERRORTEXT,
+           java.lang.String STATUS,
            java.lang.String UNID) {
-        super(
-            STATUS,
-            ERRORTEXT);
-        this.UNID = UNID;
+           this.ERRORTEXT = ERRORTEXT;
+           this.STATUS = STATUS;
+           this.UNID = UNID;
+    }
+
+
+    /**
+     * Gets the ERRORTEXT value for this PROJECTRETURNSTATUS.
+     * 
+     * @return ERRORTEXT
+     */
+    public java.lang.String getERRORTEXT() {
+        return ERRORTEXT;
+    }
+
+
+    /**
+     * Sets the ERRORTEXT value for this PROJECTRETURNSTATUS.
+     * 
+     * @param ERRORTEXT
+     */
+    public void setERRORTEXT(java.lang.String ERRORTEXT) {
+        this.ERRORTEXT = ERRORTEXT;
+    }
+
+
+    /**
+     * Gets the STATUS value for this PROJECTRETURNSTATUS.
+     * 
+     * @return STATUS
+     */
+    public java.lang.String getSTATUS() {
+        return STATUS;
+    }
+
+
+    /**
+     * Sets the STATUS value for this PROJECTRETURNSTATUS.
+     * 
+     * @param STATUS
+     */
+    public void setSTATUS(java.lang.String STATUS) {
+        this.STATUS = STATUS;
     }
 
 
@@ -54,7 +97,13 @@ public class PROJECTRETURNSTATUS  extends is.idega.idegaweb.egov.cases.focal.bus
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = super.equals(obj) && 
+        _equals = true && 
+            ((this.ERRORTEXT==null && other.getERRORTEXT()==null) || 
+             (this.ERRORTEXT!=null &&
+              this.ERRORTEXT.equals(other.getERRORTEXT()))) &&
+            ((this.STATUS==null && other.getSTATUS()==null) || 
+             (this.STATUS!=null &&
+              this.STATUS.equals(other.getSTATUS()))) &&
             ((this.UNID==null && other.getUNID()==null) || 
              (this.UNID!=null &&
               this.UNID.equals(other.getUNID())));
@@ -68,7 +117,13 @@ public class PROJECTRETURNSTATUS  extends is.idega.idegaweb.egov.cases.focal.bus
             return 0;
         }
         __hashCodeCalc = true;
-        int _hashCode = super.hashCode();
+        int _hashCode = 1;
+        if (getERRORTEXT() != null) {
+            _hashCode += getERRORTEXT().hashCode();
+        }
+        if (getSTATUS() != null) {
+            _hashCode += getSTATUS().hashCode();
+        }
         if (getUNID() != null) {
             _hashCode += getUNID().hashCode();
         }
@@ -83,6 +138,18 @@ public class PROJECTRETURNSTATUS  extends is.idega.idegaweb.egov.cases.focal.bus
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DefaultNamespace", "PROJECTRETURNSTATUS"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ERRORTEXT");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ERRORTEXT"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("STATUS");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "STATUS"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("UNID");
         elemField.setXmlName(new javax.xml.namespace.QName("", "UNID"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));

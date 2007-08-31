@@ -38,6 +38,8 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
 
     private java.lang.String HOMEPAGE;
 
+    private java.lang.String JOBSTATUS;
+
     private java.lang.String LANGUAGE;
 
     private java.lang.String PHONEHOME;
@@ -48,16 +50,14 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
 
     private java.lang.String POSTADDRESS;
 
-    private java.lang.String JOBSTATUS;
-
     private java.lang.String TITLE;
 
     public CUSTOMER() {
     }
 
     public CUSTOMER(
-           java.lang.String STATUS,
            java.lang.String ERRORTEXT,
+           java.lang.String STATUS,
            java.lang.String ADDRESS1,
            java.lang.String ADDRESS2,
            java.lang.String AVARP,
@@ -73,16 +73,16 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
            java.lang.String FAXOFFICE,
            java.lang.String GSM,
            java.lang.String HOMEPAGE,
+           java.lang.String JOBSTATUS,
            java.lang.String LANGUAGE,
            java.lang.String PHONEHOME,
            java.lang.String PHONEOFFICE,
            java.lang.String PHONEWORK,
            java.lang.String POSTADDRESS,
-           java.lang.String JOBSTATUS,
            java.lang.String TITLE) {
         super(
-            STATUS,
-            ERRORTEXT);
+            ERRORTEXT,
+            STATUS);
         this.ADDRESS1 = ADDRESS1;
         this.ADDRESS2 = ADDRESS2;
         this.AVARP = AVARP;
@@ -98,12 +98,12 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
         this.FAXOFFICE = FAXOFFICE;
         this.GSM = GSM;
         this.HOMEPAGE = HOMEPAGE;
+        this.JOBSTATUS = JOBSTATUS;
         this.LANGUAGE = LANGUAGE;
         this.PHONEHOME = PHONEHOME;
         this.PHONEOFFICE = PHONEOFFICE;
         this.PHONEWORK = PHONEWORK;
         this.POSTADDRESS = POSTADDRESS;
-        this.JOBSTATUS = JOBSTATUS;
         this.TITLE = TITLE;
     }
 
@@ -409,6 +409,26 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
 
 
     /**
+     * Gets the JOBSTATUS value for this CUSTOMER.
+     * 
+     * @return JOBSTATUS
+     */
+    public java.lang.String getJOBSTATUS() {
+        return JOBSTATUS;
+    }
+
+
+    /**
+     * Sets the JOBSTATUS value for this CUSTOMER.
+     * 
+     * @param JOBSTATUS
+     */
+    public void setJOBSTATUS(java.lang.String JOBSTATUS) {
+        this.JOBSTATUS = JOBSTATUS;
+    }
+
+
+    /**
      * Gets the LANGUAGE value for this CUSTOMER.
      * 
      * @return LANGUAGE
@@ -509,26 +529,6 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
 
 
     /**
-     * Gets the JOBSTATUS value for this CUSTOMER.
-     * 
-     * @return JOBSTATUS
-     */
-    public java.lang.String getJOBSTATUS() {
-        return JOBSTATUS;
-    }
-
-
-    /**
-     * Sets the JOBSTATUS value for this CUSTOMER.
-     * 
-     * @param JOBSTATUS
-     */
-    public void setJOBSTATUS(java.lang.String JOBSTATUS) {
-        this.JOBSTATUS = JOBSTATUS;
-    }
-
-
-    /**
      * Gets the TITLE value for this CUSTOMER.
      * 
      * @return TITLE
@@ -604,6 +604,9 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
             ((this.HOMEPAGE==null && other.getHOMEPAGE()==null) || 
              (this.HOMEPAGE!=null &&
               this.HOMEPAGE.equals(other.getHOMEPAGE()))) &&
+            ((this.JOBSTATUS==null && other.getJOBSTATUS()==null) || 
+             (this.JOBSTATUS!=null &&
+              this.JOBSTATUS.equals(other.getJOBSTATUS()))) &&
             ((this.LANGUAGE==null && other.getLANGUAGE()==null) || 
              (this.LANGUAGE!=null &&
               this.LANGUAGE.equals(other.getLANGUAGE()))) &&
@@ -619,9 +622,6 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
             ((this.POSTADDRESS==null && other.getPOSTADDRESS()==null) || 
              (this.POSTADDRESS!=null &&
               this.POSTADDRESS.equals(other.getPOSTADDRESS()))) &&
-            ((this.JOBSTATUS==null && other.getJOBSTATUS()==null) || 
-             (this.JOBSTATUS!=null &&
-              this.JOBSTATUS.equals(other.getJOBSTATUS()))) &&
             ((this.TITLE==null && other.getTITLE()==null) || 
              (this.TITLE!=null &&
               this.TITLE.equals(other.getTITLE())));
@@ -681,6 +681,9 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
         if (getHOMEPAGE() != null) {
             _hashCode += getHOMEPAGE().hashCode();
         }
+        if (getJOBSTATUS() != null) {
+            _hashCode += getJOBSTATUS().hashCode();
+        }
         if (getLANGUAGE() != null) {
             _hashCode += getLANGUAGE().hashCode();
         }
@@ -695,9 +698,6 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
         }
         if (getPOSTADDRESS() != null) {
             _hashCode += getPOSTADDRESS().hashCode();
-        }
-        if (getJOBSTATUS() != null) {
-            _hashCode += getJOBSTATUS().hashCode();
         }
         if (getTITLE() != null) {
             _hashCode += getTITLE().hashCode();
@@ -803,6 +803,12 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("JOBSTATUS");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "JOBSTATUS"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("LANGUAGE");
         elemField.setXmlName(new javax.xml.namespace.QName("", "LANGUAGE"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -829,12 +835,6 @@ public class CUSTOMER  extends is.idega.idegaweb.egov.cases.focal.business.serve
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("POSTADDRESS");
         elemField.setXmlName(new javax.xml.namespace.QName("", "POSTADDRESS"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("JOBSTATUS");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "JOBSTATUS"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

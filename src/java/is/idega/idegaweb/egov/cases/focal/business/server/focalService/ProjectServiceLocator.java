@@ -22,7 +22,7 @@ public class ProjectServiceLocator extends org.apache.axis.client.Service implem
     }
 
     // Use to get a proxy class for Domino
-    private java.lang.String Domino_address = "http://vefur02.hopvinnukerfi.is:80/DEMO/Idega/IdegaWeb.nsf/IdegaProject?OpenWebService";
+    private java.lang.String Domino_address = "http://217.28.176.153:80/Demo/idega/idegaweb.nsf/idegaproject?OpenWebService";
 
     public java.lang.String getDominoAddress() {
         return Domino_address;

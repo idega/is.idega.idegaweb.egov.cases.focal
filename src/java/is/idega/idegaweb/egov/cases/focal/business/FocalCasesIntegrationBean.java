@@ -44,10 +44,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/07/05 07:13:02 $ by $Author: alexis $
+ * Last modified: $Date: 2007/08/31 07:33:29 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -604,8 +604,11 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		
 		if(iwma != null) {
 			
-			String login = (String)iwma.getSettings().getProperty(focal_service_login_app_key);
-			String pass = (String)iwma.getSettings().getProperty(focal_service_pass_app_key);
+//			String login = (String)iwma.getSettings().getProperty(focal_service_login_app_key);
+//			String pass = (String)iwma.getSettings().getProperty(focal_service_pass_app_key);
+			
+			String login = "epmN3";
+			String pass = "PyZ0OYu";
 			
 			if(login == null || pass == null)
 				return null;
@@ -645,16 +648,20 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			CaseType type = gen_case.getCaseType();
 			
 			CASEDATA case_data = new CASEDATA(
-					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
+					gen_case.getMessage(),								//"BODY"
+					
 					gen_case.getOwner() == null ? null :
 					gen_case.getOwner().getName(), 						//"CUSTOMERNAME"
-//					gen_case.getSubject(),								//"SUBJECT"
-					category.getName() + " - " + type.getName(),		//"SUBJECT"
-					gen_case.getCreated() == null ? null :
-					String.valueOf(gen_case.getCreated().getTime()),	//"DATE"
-		            gen_case.getMessage(),								//"BODY"
-			        projectName,									 	//"PROJECTNAME"
-			        project_id											//"PROJECTNUMBER"
+					
+					gen_case.getCreated() == null ? null : gen_case.getCreated().toString(),
+					
+					projectName,									 	//"PROJECTNAME"
+				    project_id,											//"PROJECTNUMBER"
+					
+					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
+					
+					category.getName() + " - " + type.getName()			//"SUBJECT"
+					
 			);
 			
 			String[] login_and_pass = getLoginAndPassword();
@@ -753,25 +760,25 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		PERSONINFO person_info = new PERSONINFO(
 					customer.getADDRESS1(),								//ADDRESS2
 					customer.getADDRESS2(), 							//ADDRESS2
+					customer.getAVARP(), 								//AVARP
+					customer.getBEEPER(), 								//BEEPER
+					customer.getCARPHONE(), 							//CARPHONE
 					customer.getCOUNTY(), 								//COUNTY
 					customer.getCOUNTRY(), 								//COUNTRY
 					customer.getEMAILADDRESS(),							//EMAIL
 					customer.getFAX(), 									//FAX
+					customer.getGSM(),	 								//GSM
 					customer.getHOMEPAGE(),								//HOMEPAGE
 					customer.getLANGUAGE(), 							//LANGUAGE
-					customer.getPHONEWORK(),							//PHONEWORK
-					customer.getPOSTADDRESS(), 							//POSTADDRESS
-					customer.getSocNr(),		 						//SOCSECNUM
-					customer.getJOBSTATUS(), 							//STATUS
-					customer.getTargetMail(),				 			//TARGETMAIL
-					customer.getAVARP(), 								//AVARP
-					customer.getBEEPER(), 								//BEEPER
-					customer.getCARPHONE(), 							//CARPHONE
-					customer.getGSM(),	 								//GSM
 					customer.getCUSTOMERNAME(), 						//PERSONNAME
 					customer.getPHONEHOME(),							//PHONEHOME
 					customer.getPHONEOFFICE(),							//PHONEOFFICE
+					customer.getPHONEWORK(),							//PHONEWORK
+					customer.getPOSTADDRESS(), 							//POSTADDRESS
 					customer.getCONTACTSEPERATOR(),						//SEPERATOR
+					customer.getSocNr(),		 						//SOCSECNUM
+					customer.getJOBSTATUS(), 							//STATUS
+					customer.getTargetMail(),				 			//TARGETMAIL
 					customer.getTITLE() 								//TITLE
 		);
 		

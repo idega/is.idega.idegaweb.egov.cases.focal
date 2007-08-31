@@ -8,38 +8,18 @@
 package is.idega.idegaweb.egov.cases.focal.business.server.focalService;
 
 public class RETURNSTATUS  implements java.io.Serializable {
-    private java.lang.String STATUS;
-
     private java.lang.String ERRORTEXT;
+
+    private java.lang.String STATUS;
 
     public RETURNSTATUS() {
     }
 
     public RETURNSTATUS(
-           java.lang.String STATUS,
-           java.lang.String ERRORTEXT) {
-           this.STATUS = STATUS;
+           java.lang.String ERRORTEXT,
+           java.lang.String STATUS) {
            this.ERRORTEXT = ERRORTEXT;
-    }
-
-
-    /**
-     * Gets the STATUS value for this RETURNSTATUS.
-     * 
-     * @return STATUS
-     */
-    public java.lang.String getSTATUS() {
-        return STATUS;
-    }
-
-
-    /**
-     * Sets the STATUS value for this RETURNSTATUS.
-     * 
-     * @param STATUS
-     */
-    public void setSTATUS(java.lang.String STATUS) {
-        this.STATUS = STATUS;
+           this.STATUS = STATUS;
     }
 
 
@@ -62,6 +42,26 @@ public class RETURNSTATUS  implements java.io.Serializable {
         this.ERRORTEXT = ERRORTEXT;
     }
 
+
+    /**
+     * Gets the STATUS value for this RETURNSTATUS.
+     * 
+     * @return STATUS
+     */
+    public java.lang.String getSTATUS() {
+        return STATUS;
+    }
+
+
+    /**
+     * Sets the STATUS value for this RETURNSTATUS.
+     * 
+     * @param STATUS
+     */
+    public void setSTATUS(java.lang.String STATUS) {
+        this.STATUS = STATUS;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof RETURNSTATUS)) return false;
@@ -74,12 +74,12 @@ public class RETURNSTATUS  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.STATUS==null && other.getSTATUS()==null) || 
-             (this.STATUS!=null &&
-              this.STATUS.equals(other.getSTATUS()))) &&
             ((this.ERRORTEXT==null && other.getERRORTEXT()==null) || 
              (this.ERRORTEXT!=null &&
-              this.ERRORTEXT.equals(other.getERRORTEXT())));
+              this.ERRORTEXT.equals(other.getERRORTEXT()))) &&
+            ((this.STATUS==null && other.getSTATUS()==null) || 
+             (this.STATUS!=null &&
+              this.STATUS.equals(other.getSTATUS())));
         __equalsCalc = null;
         return _equals;
     }
@@ -91,11 +91,11 @@ public class RETURNSTATUS  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getSTATUS() != null) {
-            _hashCode += getSTATUS().hashCode();
-        }
         if (getERRORTEXT() != null) {
             _hashCode += getERRORTEXT().hashCode();
+        }
+        if (getSTATUS() != null) {
+            _hashCode += getSTATUS().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -108,14 +108,14 @@ public class RETURNSTATUS  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("urn:DefaultNamespace", "RETURNSTATUS"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("STATUS");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "STATUS"));
+        elemField.setFieldName("ERRORTEXT");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ERRORTEXT"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("ERRORTEXT");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "ERRORTEXT"));
+        elemField.setFieldName("STATUS");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "STATUS"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

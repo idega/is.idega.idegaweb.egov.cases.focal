@@ -214,13 +214,6 @@ public class DominoSoapBindingStub extends org.apache.axis.client.Stub implement
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "CUSTOMERBASE");
-            cachedSerQNames.add(qName);
-            cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMERBASE.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
             qName = new javax.xml.namespace.QName("urn:DefaultNamespace", "EMPLOYEEINFO");
             cachedSerQNames.add(qName);
             cls = is.idega.idegaweb.egov.cases.focal.business.server.focalService.EMPLOYEEINFO.class;

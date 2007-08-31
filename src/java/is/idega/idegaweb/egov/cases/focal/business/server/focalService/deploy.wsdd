@@ -17,7 +17,7 @@
       <parameter name="wsdlServiceElement" value="ProjectService"/>
       <parameter name="schemaUnqualified" value="urn:DefaultNamespace"/>
       <parameter name="wsdlServicePort" value="Domino"/>
-      <parameter name="className" value="is.idega.idegaweb.egov.cases.focal.business.server.focalService.DominoSoapBindingSkeleton"/>
+      <parameter name="className" value="is.illuminati.focal.client.DominoSoapBindingSkeleton"/>
       <parameter name="wsdlPortType" value="Project"/>
       <parameter name="typeMappingVersion" value="1.2"/>
       <parameter name="allowedMethods" value="*"/>
@@ -26,7 +26,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:PERSONINFO"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO"
+        type="java:is.illuminati.focal.client.PERSONINFO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -34,7 +34,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:CUSTOMER"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER"
+        type="java:is.illuminati.focal.client.CUSTOMER"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -42,7 +42,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:ATTACHMENT"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT"
+        type="java:is.illuminati.focal.client.ATTACHMENT"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -50,7 +50,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:NOTESPROJECTARRAY"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY"
+        type="java:is.illuminati.focal.client.NOTESPROJECTARRAY"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -58,14 +58,14 @@
       <arrayMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:ArrayOfNOTESPROJECT"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT[]"
+        type="java:is.illuminati.focal.client.NOTESPROJECT[]"
         innerType="cmp-ns:NOTESPROJECT" xmlns:cmp-ns="urn:DefaultNamespace"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:EMPLOYEEINFO"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.EMPLOYEEINFO"
+        type="java:is.illuminati.focal.client.EMPLOYEEINFO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -73,7 +73,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:CASEDATA"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA"
+        type="java:is.illuminati.focal.client.CASEDATA"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -81,7 +81,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:RETURNSTATUS"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS"
+        type="java:is.illuminati.focal.client.RETURNSTATUS"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -89,15 +89,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:PROJECTRETURNSTATUS"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.PROJECTRETURNSTATUS"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="urn:DefaultNamespace"
-        qname="ns:CUSTOMERBASE"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMERBASE"
+        type="java:is.illuminati.focal.client.PROJECTRETURNSTATUS"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -105,7 +97,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:NOTESPROJECT"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT"
+        type="java:is.illuminati.focal.client.NOTESPROJECT"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -113,7 +105,7 @@
       <typeMapping
         xmlns:ns="urn:DefaultNamespace"
         qname="ns:COMPANYINFO"
-        type="java:is.idega.idegaweb.egov.cases.focal.business.server.focalService.COMPANYINFO"
+        type="java:is.illuminati.focal.client.COMPANYINFO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
