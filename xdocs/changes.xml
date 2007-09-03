@@ -1,0 +1,21 @@
+<document>
+	<properties>
+		<title>NEST Focal integration changes</title>
+		<author email="alexis@idega.com">
+			Aleksandras Skrynikovas
+		</author>
+	</properties>
+
+	<body>
+		<release version="1.0.1" date="2007-08-31">
+			<action dev="alexis" type="update">
+				Updating several maven dependencies to newer versions
+			</action>
+		</release>
+		<release version="1.0.0" date="2007-08-30">
+			<action dev="alexis" type="update">
+				Initial release
+			</action>
+		</release>
+	</body>
+</document>
