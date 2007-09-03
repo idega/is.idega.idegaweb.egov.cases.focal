@@ -14,10 +14,15 @@
       <name>1.0.0</name>
       <tag>EGOV_CASES_FOCAL_1_0_0</tag>
     </version>
+    <version>
+      <id>1.0.1</id>
+      <name>1.0.1</name>
+      <tag>EGOV_CASES_FOCAL_1_0_1</tag>
+    </version>
   </versions>
   <branches/>
   <developers>
-  	<developer>
+    <developer>
       <name>Vytautas Čivilis</name>
       <id>civilis</id>
       <email>civilis@idega.com</email>
@@ -33,7 +38,7 @@
     </developer>
   </developers>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>bundles</groupId>
       <artifactId>is.idega.idegaweb.egov.application</artifactId>
       <version>1.0.14</version>
