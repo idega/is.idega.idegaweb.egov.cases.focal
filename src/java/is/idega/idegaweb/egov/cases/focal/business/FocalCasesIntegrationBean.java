@@ -44,10 +44,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/09/06 10:18:58 $ by $Author: alexis $
+ * Last modified: $Date: 2007/09/06 10:46:42 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -639,19 +639,26 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			
 			GeneralCase gen_case = case_arg.getGcase();
 			
+			if(gen_case == null) {
+				logger.log(Level.WARNING, "Case data is empty");
+				continue;
+			}
+			
 			if(gen_case.getExternalId() != null) {
 
 				logger.log(Level.WARNING, "Case was tried to move under a project when already moved. Case id: "+gen_case.getId()+", external id: "+gen_case.getExternalId());
 				continue;
 			}
+			
+			
 			CaseCategory category = gen_case.getCaseCategory();
 			CaseType type = gen_case.getCaseType();
 			
-			logger.info("Case data: " + gen_case);
-			logger.info("Case owner: " + gen_case.getOwner());
-			logger.info("Case created: " + gen_case.getCreated());
-			logger.info("Case type: " + type.getName());
-			logger.info("Case category: " + category.getName());
+//			logger.info("Case data: " + gen_case);
+//			logger.info("Case owner: " + gen_case.getOwner());
+//			logger.info("Case created: " + gen_case.getCreated());
+//			logger.info("Case type: " + type.getName());
+//			logger.info("Case category: " + category.getName());
 			
 			CASEDATA case_data = new CASEDATA(
 					gen_case.getMessage(),								//"BODY"
@@ -664,6 +671,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					projectName,									 	//"PROJECTNAME"
 				    project_id,											//"PROJECTNUMBER"
 					
+				    gen_case.getOwner() == null ? null :
 					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
 					
 					category.getName() + " - " + type.getName()			//"SUBJECT"
