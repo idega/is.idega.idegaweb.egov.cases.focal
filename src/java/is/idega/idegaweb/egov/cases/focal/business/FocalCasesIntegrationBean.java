@@ -44,10 +44,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/09/06 10:46:42 $ by $Author: alexis $
+ * Last modified: $Date: 2007/09/07 11:38:00 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -604,11 +604,11 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		
 		if(iwma != null) {
 			
-//			String login = (String)iwma.getSettings().getProperty(focal_service_login_app_key);
-//			String pass = (String)iwma.getSettings().getProperty(focal_service_pass_app_key);
+			String login = (String)iwma.getSettings().getProperty(focal_service_login_app_key);
+			String pass = (String)iwma.getSettings().getProperty(focal_service_pass_app_key);
 			
-			String login = "epmN3";
-			String pass = "PyZ0OYu";
+//			String login = "epmN3";
+//			String pass = "PyZ0OYu";
 			
 			if(login == null || pass == null)
 				return null;
