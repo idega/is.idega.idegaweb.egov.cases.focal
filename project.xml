@@ -5,7 +5,7 @@
   <pomVersion>3</pomVersion>
   <name>idega eGov Cases and Focal dms integration</name>
   <artifactId>is.idega.idegaweb.egov.cases.focal</artifactId>
-  <currentVersion>1.0.1</currentVersion>
+  <currentVersion>1.0.2</currentVersion>
   <inceptionYear>2007</inceptionYear>
   <shortDescription>idega eGov Cases and Focal dms integration</shortDescription>
   <versions>

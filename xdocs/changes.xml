@@ -7,6 +7,11 @@
 	</properties>
 
 	<body>
+		<release version="1.0.2" date="2007-09-07">
+			<action dev="alexis" type="update">
+				Adding similar functionality to the FocalClosedCases block like in FocalMyCases
+			</action>
+		</release>
 		<release version="1.0.1" date="2007-09-06">
 			<action dev="alexis" type="update">
 				Updating several maven dependencies to newer versions
