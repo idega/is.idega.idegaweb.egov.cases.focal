@@ -190,12 +190,12 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 				
 			case ACTION_SEARCH_COMPANY:
 				Company company = searchCompany(iwc);
-				showCreateCustomer(iwc, ACTION_CREATE_COMPANY, getCompanyHome().create(), null, false);
+				showCreateCustomer(iwc, ACTION_CREATE_COMPANY, company, null, false);
 				break;
 				
 			case ACTION_SEARCH_PERSON:
 				NationalRegister natReg = searchPerson(iwc);
-				showCreateCustomer(iwc, ACTION_SEARCH_PERSON, null, getNationalRegisterHome().create(), false);
+				showCreateCustomer(iwc, ACTION_SEARCH_PERSON, null, natReg, false);
 				break;
 				
 		}
