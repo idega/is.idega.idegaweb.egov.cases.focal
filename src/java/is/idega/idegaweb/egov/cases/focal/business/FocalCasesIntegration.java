@@ -1,70 +1,49 @@
 package is.idega.idegaweb.egov.cases.focal.business;
 
-import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
 
-import java.util.List;
-
-import com.idega.business.IBOService;
 import com.idega.presentation.IWContext;
+import is.idega.idegaweb.egov.cases.focal.business.beans.CompanyInfo;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
+import com.idega.business.IBOService;
+import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
+import java.util.List;
+import java.rmi.RemoteException;
 
-/**
- * 
- * Last modified: $Date: 2007/07/02 10:31:11 $ by $Author: civilis $
- * 
- * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.7 $
- */
 public interface FocalCasesIntegration extends IBOService {
+	/**
+	 * @see is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegrationBean#findProjects
+	 */
+	public List findProjects(String search_txt) throws Exception,
+			RemoteException;
 
 	/**
-	 * Finds projects by main party (customer) id or name(probably)
-	 * 
-	 * @param search_txt - id or name(?)
-	 * @return list of is.idega.idegaweb.egov.cases.focal.business.beans.ProjectData objects
-	 * @throws UnsuccessfulStatusException - contains the cause (use getStatus()) of projects missing, if there was an objective reason for that - e.g. no customer exists, or customer has no projects
-	 * @throws Exception
+	 * @see is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegrationBean#createCompany
 	 */
-	public abstract List findProjects(String search_txt) throws UnsuccessfulStatusException, Exception;
-	
+	public Status createCompany(CompanyInfo companyInfo) throws Exception,
+			RemoteException;
+
 	/**
-	 * Create a CustomerPersonalInfo bean and fills it with data from the User system
-	 * 
-	 * @param personalID - personal number of the person
-	 * @param iwc - current IWContext instance
-	 * @return CustomerPersonalInfo bean containing all the data to be submitted to Focal
-	 * @throws Exception
+	 * @see is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegrationBean#createCustomerBean
 	 */
-	public abstract CustomerPersonalInfo createCustomerBean(String personalID, IWContext iwc) throws Exception;
-	
+	public CustomerPersonalInfo createCustomerBean(String personalID,
+			IWContext iwc) throws Exception, RemoteException;
+
 	/**
-	 * 
-	 * Creates cases under the same project
-	 * 
-	 * @param project_id - project to create under id
-	 * @param projectName - name of the project to create under
-	 * @param cases - list of is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg - status may be empty as it is used on return only
-	 * @return cases - the same list with status modified to each case move status
+	 * @see is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegrationBean#findCustomer
 	 */
-	public abstract List createCasesUnderProject(String project_id, String projectName, List cases) throws Exception;
-	
+	public CUSTOMER findCustomer(String search_txt) throws Exception,
+			RemoteException;
+
 	/**
-	 * 
-	 * Searches for customer info by customer social number or smth
-	 * 
-	 * @param search_txt - possibly could be customer id (social number) on focal system
-	 * @return bean of customer information
-	 * @throws Exception
+	 * @see is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegrationBean#createCasesUnderProject
 	 */
-	public abstract CUSTOMER findCustomer(String search_txt) throws Exception;
-	
+	public List createCasesUnderProject(String project_id, String projectName,
+			List cases) throws Exception, RemoteException;
+
 	/**
-	 * possibly creates (if non-existent) or updates customer information on focal system
-	 * 
-	 * @param customer_information - information to be updated with
-	 * @return - if update was successful or not (e.g. customer not found or smth dunno ;]) 
-	 * @throws Exception
+	 * @see is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegrationBean#createUpdateCustomer
 	 */
-	public abstract Status createUpdateCustomer(CustomerPersonalInfo customer_information) throws Exception;
+	public Status createUpdateCustomer(CustomerPersonalInfo customer)
+			throws Exception, RemoteException;
 }

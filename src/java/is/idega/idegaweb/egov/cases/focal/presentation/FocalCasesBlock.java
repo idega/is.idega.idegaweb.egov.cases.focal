@@ -1,5 +1,24 @@
 package is.idega.idegaweb.egov.cases.focal.presentation;
 
+import is.idega.block.nationalregister.business.NationalRegisterBusiness;
+import is.idega.block.nationalregister.data.NationalRegister;
+import is.idega.block.nationalregister.data.NationalRegisterHome;
+import is.idega.idegaweb.egov.cases.data.CaseType;
+import is.idega.idegaweb.egov.cases.data.GeneralCase;
+import is.idega.idegaweb.egov.cases.focal.FocalConstants;
+import is.idega.idegaweb.egov.cases.focal.IWBundleStarter;
+import is.idega.idegaweb.egov.cases.focal.beans.FocalProjectList;
+import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
+import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
+import is.idega.idegaweb.egov.cases.focal.business.UnsuccessfulStatusException;
+import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
+import is.idega.idegaweb.egov.cases.focal.business.beans.CompanyInfo;
+import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
+import is.idega.idegaweb.egov.cases.presentation.CasesProcessor;
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,24 +31,16 @@ import java.util.logging.Logger;
 import org.apache.myfaces.renderkit.html.util.AddResource;
 import org.apache.myfaces.renderkit.html.util.AddResourceFactory;
 
-import is.idega.idegaweb.egov.cases.data.CaseType;
-import is.idega.idegaweb.egov.cases.data.GeneralCase;
-import is.idega.idegaweb.egov.cases.focal.FocalConstants;
-import is.idega.idegaweb.egov.cases.focal.IWBundleStarter;
-import is.idega.idegaweb.egov.cases.focal.beans.FocalProjectList;
-import is.idega.idegaweb.egov.cases.focal.business.ExportCasesManagement;
-import is.idega.idegaweb.egov.cases.focal.business.FocalCasesIntegration;
-import is.idega.idegaweb.egov.cases.focal.business.UnsuccessfulStatusException;
-import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECT;
-import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
-import is.idega.idegaweb.egov.cases.presentation.CasesProcessor;
-
 import com.idega.block.process.data.CaseStatus;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
+import com.idega.company.companyregister.business.CompanyRegisterBusiness;
+import com.idega.company.data.Company;
+import com.idega.company.data.CompanyHome;
+import com.idega.core.location.business.CommuneBusiness;
+import com.idega.core.location.data.Commune;
+import com.idega.data.IDOLookup;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
@@ -47,7 +58,11 @@ import com.idega.presentation.text.Lists;
 import com.idega.presentation.text.Paragraph;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.CheckBox;
+import com.idega.presentation.ui.DropdownMenu;
 import com.idega.presentation.ui.Form;
+import com.idega.presentation.ui.Label;
+import com.idega.presentation.ui.RadioButton;
+import com.idega.presentation.ui.TextArea;
 import com.idega.presentation.ui.TextInput;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
@@ -63,24 +78,588 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected static final String PARAMETER_CASE_PK = "prm_case_pk";
 	protected static final String PARAMETER_PROJECT_PK = "prm_project_pk";
 	protected static final String PARAMETER_PROJECT_SEARCH_KEY = "prm_project_search_key";
-	protected static final String PARAMETER_CUSTOMER_PK = "prm_customer_pk";
 	protected static final String PARAMETER_PROJECT_NAME = "prm_project_name";
+	protected static final String PARAMETER_COMPANY_ID = "prm_company_id";
 	
 	protected static final String PARAMETER_CASE_CATEGORY_PK = "prm_case_category_pk";
 	protected static final String PARAMETER_SUB_CASE_CATEGORY_PK = "prm_sub_case_category_pk";
 	protected static final String PARAMETER_CASE_TYPE_PK = "prm_case_type_pk";
 	
+	protected static final String PARAMETER_ADDRESS1 = "prm_address_1";
+	protected static final String PARAMETER_ADDRESS2 = "prm_address_2";
+	protected static final String PARAMETER_COMPANY_NAME = "prm_company_name";
+	protected static final String PARAMETER_COUNTY = "prm_county";
+	protected static final String PARAMETER_COUNTRY = "prm_country";
+	protected static final String PARAMETER_EMAIL = "prm_email";
+	protected static final String PARAMETER_FAX = "prm_fax";
+	protected static final String PARAMETER_HOMEPAGE = "prm_homepage";
+	protected static final String PARAMETER_LANGUAGE = "prm_language";
+	protected static final String PARAMETER_LOCATION = "prm_location";
+	protected static final String PARAMETER_PHONE_WORK = "prm_phone_work";
+	protected static final String PARAMETER_PHONE_HOME = "prm_phone_home";
+	protected static final String PARAMETER_PHONE_OFFICE = "prm_phone_office";
+	protected static final String PARAMETER_POST_ADDRESS = "prm_post_address";
+	protected static final String PARAMETER_SOC_NUMBER = "prm_soc_number";
+	protected static final String PARAMETER_STATUS = "prm_status";
+	protected static final String PARAMETER_AVARP = "prm_avarp";
+	protected static final String PARAMETER_PERSON_NAME = "prm_person_name";
+	protected static final String PARAMETER_BEEPER = "prm_beeper1";
+	protected static final String PARAMETER_DEPARTMENT = "prm_department";
+	protected static final String PARAMETER_CARPHONE = "prm_carphone";
+	protected static final String PARAMETER_FAXOFFICE = "prm_fax_office";
+	protected static final String PARAMETER_CONTACT_SEPERATOR = "prm_contact_separator";
+	protected static final String PARAMETER_GSM = "prm_gsm";
+	protected static final String PARAMETER_TITLE = "prm_title";
+	protected static final String PARAMETER_TARGET_MAIL = "prm_target_mail";
+	
 	protected static final String FOCAL_JS = "/idegaweb/bundles/is.idega.idegaweb.egov.cases.focal.bundle/resources/javascript/focal.js";
-	protected static final String DWR_ENGINE_JS = "/dwr/engine.js";
-	protected static final String DWR_FOCAL_JS = "/dwr/interface/FocalCasesIntegration.js";
 
 	protected static final int ACTION_VIEW = 1;
 	protected static final int ACTION_PROCESS = 2;
 	protected static final int ACTION_SAVE = 3;
 	protected static final int ACTION_MOVE_FOCAL = 4;
 	protected static final int ACTION_SAVE_FOCAL = 5;
-	protected static final int ACTION_CREATE_CUSTOMER = 6;
-	protected static final int ACTION_UPDATE_CUSTOMER = 7;
+	protected static final int ACTION_UPDATE_PERSON = 6;
+	protected static final int ACTION_CREATE_COMPANY = 8;
+	protected static final int ACTION_SAVE_COMPANY = 9;
+	protected static final int ACTION_SEARCH_COMPANY = 10;
+	protected static final int ACTION_SAVE_PERSON = 11;
+	protected static final int ACTION_CREATE_PERSON = 12;
+	protected static final int ACTION_SEARCH_PERSON = 13;
+	
+	protected void present(IWContext iwc) throws Exception {
+		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
+		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
+		
+		String result = null;
+		
+		switch (parseAction(iwc)) {
+			case ACTION_VIEW:
+				showList(iwc, ACTION_VIEW, null);
+				break;
+
+			case ACTION_PROCESS:
+				showProcessor(iwc, iwc.getParameter(PARAMETER_CASE_PK));
+				break;
+
+			case ACTION_SAVE:
+				save(iwc);
+				showList(iwc, ACTION_VIEW, null);
+				break;
+				
+			case ACTION_MOVE_FOCAL:
+				String values[] = iwc.getParameterValues(PARAMETER_CASE_PK);
+				if(values != null && values.length > 0) {
+					result = findProjects(iwc);
+					showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
+				} else {
+					showList(iwc, ACTION_MOVE_FOCAL, null);
+				}
+				break;
+				
+			case ACTION_SAVE_FOCAL:
+				result = saveToFocal(iwc);
+				if(result.equals(FocalConstants.STATUS_SUCCESS_SAVE)) {
+					showList(iwc, ACTION_SAVE_FOCAL, result);
+				} else {
+					showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
+				}
+				break;
+				
+			case ACTION_CREATE_COMPANY:
+				showCreateCustomer(iwc, ACTION_CREATE_COMPANY, null, null, true);
+				break;
+				
+			case ACTION_CREATE_PERSON:
+				showCreateCustomer(iwc, ACTION_CREATE_PERSON, null, null, false);
+				break;
+				
+			case ACTION_UPDATE_PERSON:
+				showCreateCustomer(iwc, ACTION_UPDATE_PERSON, null, searchPerson(iwc), false);
+				break;
+				
+			case ACTION_SAVE_COMPANY:
+				result = saveCompany(iwc);
+				showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
+				break;
+				
+			case ACTION_SAVE_PERSON:
+				result = savePerson(iwc);
+				showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
+				break;
+				
+			case ACTION_SEARCH_COMPANY:
+				Company company = searchCompany(iwc);
+				showCreateCustomer(iwc, ACTION_CREATE_COMPANY, getCompanyHome().create(), null, false);
+				break;
+				
+			case ACTION_SEARCH_PERSON:
+				NationalRegister natReg = searchPerson(iwc);
+				showCreateCustomer(iwc, ACTION_SEARCH_PERSON, null, getNationalRegisterHome().create(), false);
+				break;
+				
+		}
+	}
+	
+	protected NationalRegister searchPerson(IWContext iwc) {
+		try {
+			String searchKey = iwc.getParameter(PARAMETER_COMPANY_ID);
+			if(searchKey != null && !searchKey.equals("")) {
+				NationalRegister customer = getNationalRegisterBusiness(iwc).getEntryBySSN(searchKey);
+				return customer;
+			}
+			return null;
+		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while searching for a person", e);
+			return null;
+		}
+	}
+	
+	protected Company searchCompany(IWContext iwc) {
+		try {
+			String searchKey = iwc.getParameter(PARAMETER_COMPANY_ID);
+			if(searchKey != null && !searchKey.equals("")) {
+				Company customer = getCompanyRegisterBusiness(iwc).getEntryByPersonalId(searchKey);
+				return customer;
+			}
+			return null;
+		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while searching for a company", e);
+			return null;
+		}
+	}
+	
+	protected String savePerson(IWContext iwc) {
+		try {
+			CustomerPersonalInfo bean = new CustomerPersonalInfo();
+			bean.setTITLE(iwc.getParameter(PARAMETER_TITLE));
+			bean.setGSM(iwc.getParameter(PARAMETER_GSM));
+			bean.setFAXOFFICE(iwc.getParameter(PARAMETER_FAXOFFICE));
+			bean.setAVARP(iwc.getParameter(PARAMETER_AVARP));
+			bean.setBEEPER(iwc.getParameter(PARAMETER_BEEPER));
+			bean.setCARPHONE(iwc.getParameter(PARAMETER_CARPHONE));
+			bean.setCONTACTSEPERATOR("");
+			bean.setJOBSTATUS(iwc.getParameter(PARAMETER_STATUS));
+			bean.setPHONEHOME(iwc.getParameter(PARAMETER_PHONE_HOME));
+			bean.setPHONEOFFICE(iwc.getParameter(PARAMETER_PHONE_OFFICE));
+			bean.setADDRESS1(iwc.getParameter(PARAMETER_ADDRESS1));
+			bean.setADDRESS2(iwc.getParameter(PARAMETER_ADDRESS2));
+			bean.setCUSTOMERNAME(iwc.getParameter(PARAMETER_PERSON_NAME));
+			bean.setCOUNTY(iwc.getParameter(PARAMETER_COUNTY));
+			bean.setCOUNTRY(iwc.getParameter(PARAMETER_COUNTRY));
+			bean.setEMAILADDRESS(iwc.getParameter(PARAMETER_EMAIL));
+			bean.setFAX(iwc.getParameter(PARAMETER_FAX));
+			bean.setHOMEPAGE(iwc.getParameter(PARAMETER_HOMEPAGE));
+			bean.setLANGUAGE(iwc.getParameter(PARAMETER_LANGUAGE));
+			bean.setPHONEWORK(iwc.getParameter(PARAMETER_PHONE_WORK));
+			bean.setPOSTADDRESS(iwc.getParameter(PARAMETER_POST_ADDRESS));
+			bean.setSocNr(iwc.getParameter(PARAMETER_SOC_NUMBER));
+			bean.setTargetMail(iwc.isParameterSet(PARAMETER_TARGET_MAIL) ? new Boolean(iwc.getParameter(PARAMETER_TARGET_MAIL)).booleanValue() : false);
+			Status status = getFocalCasesIntegration(iwc).createUpdateCustomer(bean);
+			if(status.getStatus().intValue() == 0) {
+				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
+			} else {
+				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+			}
+		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while creating customer", e);
+			return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+		}
+	}
+	
+	protected String saveCompany(IWContext iwc) {
+		try {
+			CompanyInfo bean = new CompanyInfo();
+			bean.setAddress1(iwc.getParameter(PARAMETER_ADDRESS1));
+			bean.setAddress2(iwc.getParameter(PARAMETER_ADDRESS2));
+			bean.setCompanyName(iwc.getParameter(PARAMETER_COMPANY_NAME));
+			bean.setCounty(iwc.getParameter(PARAMETER_COUNTY));
+			bean.setCountry(iwc.getParameter(PARAMETER_COUNTRY));
+			bean.setEmail(iwc.getParameter(PARAMETER_EMAIL));
+			bean.setFax(iwc.getParameter(PARAMETER_FAX));
+			bean.setHomepage(iwc.getParameter(PARAMETER_HOMEPAGE));
+			bean.setLanguage(iwc.getParameter(PARAMETER_LANGUAGE));
+			bean.setLocation(iwc.getParameter(PARAMETER_LOCATION));
+			bean.setPhoneWork(iwc.getParameter(PARAMETER_PHONE_WORK));
+			bean.setPostAddress(iwc.getParameter(PARAMETER_POST_ADDRESS));
+			bean.setSocNumber(iwc.getParameter(PARAMETER_SOC_NUMBER));
+			bean.setStatus(iwc.getParameter(PARAMETER_STATUS));
+			bean.setTargetMail(iwc.isParameterSet(PARAMETER_TARGET_MAIL) ? new Boolean(iwc.getParameter(PARAMETER_TARGET_MAIL)).booleanValue() : false);
+			Status status = getFocalCasesIntegration(iwc).createCompany(bean);
+			if(status.getStatus().intValue() == 0) {
+				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
+			} else {
+				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+			}
+		} catch(Exception e) {
+			logger.log(Level.SEVERE, "Exception while creating customer", e);
+			return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+		}
+	}
+	
+	protected void showCreateCustomer(IWContext iwc, int action, Company company, NationalRegister natReg, boolean searchForCompany) throws RemoteException {
+		Form form = new Form();
+		form.setId("focalProjectSearchForm");
+		form.addParameter(PARAMETER_ACTION, "");
+		form.maintainParameter(PARAMETER_CASE_PK);
+		
+		Layer projectSection = new Layer(Layer.DIV);
+		projectSection.setStyleClass("formSection");
+		
+		boolean isCompany = false;
+		if(company != null) {
+			isCompany = true;
+		} else if(natReg != null) {
+			isCompany = false;
+		}
+		
+		
+		
+		if(company == null && natReg == null) {
+			Heading1 heading = null;
+			if(searchForCompany) {
+				heading = new Heading1(getResourceBundle().getLocalizedString("company_information", "Company information"));
+			} else {
+				heading = new Heading1(getResourceBundle().getLocalizedString("customer_information", "Customer information"));
+			}
+			heading.setStyleClass("subHeader");
+			heading.setStyleClass("topSubHeader");
+			projectSection.add(heading);
+			
+			Layer searchSection = new Layer(Layer.DIV);
+			searchSection.setStyleClass("searchSection");
+			
+			TextInput searchField = new TextInput();
+			searchField.setLabel("Search text");
+			searchField.setName(PARAMETER_COMPANY_ID);
+//			searchField.setOnKeyPress("searchProjects(event);");
+			searchSection.add(searchField);
+			
+			Link next = null;
+			if(searchForCompany) {
+				next = getButtonLink(getResourceBundle().getLocalizedString("find_company_focal", "Find company"));
+				next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');");
+			} else {
+				next = getButtonLink(getResourceBundle().getLocalizedString("find_person_focal", "Find person"));
+				next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');");
+			}
+			next.setStyleClass("searchButton");
+			next.setToFormSubmit(form);
+			searchSection.add(next);
+			
+			projectSection.add(searchSection);
+			
+			form.add(projectSection);
+			
+			Layer bottom = new Layer(Layer.DIV);
+			bottom.setStyleClass("bottom");
+			form.add(bottom);
+
+			Link cancel = getButtonLink(getResourceBundle().getLocalizedString("cancel", "Cancel"));
+			cancel.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
+			cancel.setToFormSubmit(form);
+			bottom.add(cancel);
+			
+			add(form);
+			return;
+		}
+		
+		Heading1 heading = null;
+		if(isCompany) {
+			heading = new Heading1(getResourceBundle().getLocalizedString("company_information", "Company information"));
+		} else {
+			heading = new Heading1(getResourceBundle().getLocalizedString("customer_information", "Customer information"));
+		}
+		heading.setStyleClass("subHeader");
+		heading.setStyleClass("topSubHeader");
+		projectSection.add(heading);
+		
+		Layer searchSection = new Layer(Layer.DIV);
+		searchSection.setStyleClass("searchSection");
+		
+		TextInput searchField = new TextInput();
+		searchField.setLabel("Search text");
+		searchField.setName(PARAMETER_COMPANY_ID);
+//		searchField.setOnKeyPress("searchProjects(event);");
+		searchSection.add(searchField);
+		
+		Link next = null;
+		if(isCompany) {
+			next = getButtonLink(getResourceBundle().getLocalizedString("find_company_focal", "Find company"));
+			next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');");
+		} else {
+			next = getButtonLink(getResourceBundle().getLocalizedString("find_person_focal", "Find person"));
+			next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');");
+		}
+		next.setStyleClass("searchButton");
+		next.setToFormSubmit(form);
+		searchSection.add(next);
+		
+		projectSection.add(searchSection);
+		
+		form.add(projectSection);
+			
+		Layer section = new Layer(Layer.DIV);
+		section.setStyleClass("formSection");
+		form.add(section);
+		
+		TextInput textInput = null;
+		Label label = null;
+		Layer formItem = null;
+		
+		if(!isCompany) {
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_TITLE);
+			label = new Label(getResourceBundle().getLocalizedString("person_title", "Title"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+		}
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		if(isCompany) {
+			textInput = new TextInput(PARAMETER_COMPANY_NAME, company.getName());
+			label = new Label(getResourceBundle().getLocalizedString("company_name", "Company name"), textInput);
+		} else {
+			textInput = new TextInput(PARAMETER_PERSON_NAME, natReg.getName());
+			label = new Label(getResourceBundle().getLocalizedString("person_name", "Full name"), textInput);
+		}
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+		
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_SOC_NUMBER, isCompany ? company.getPersonalID() : natReg.getSSN());
+		label = new Label(getResourceBundle().getLocalizedString("soc_sec_number", "Social security number"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		TextArea details = new TextArea(PARAMETER_ADDRESS1, isCompany ? (company.getAddress() == null ? "" : company.getAddress().getStreetAddress()) : natReg.getAddress());
+		details.setStyleClass("details");
+		label = new Label(getResourceBundle().getLocalizedString("adress_1", "Address 1"), textInput);
+		formItem.add(label);
+		formItem.add(details);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		details = new TextArea(PARAMETER_ADDRESS2, "");
+		details.setStyleClass("details");
+		label = new Label(getResourceBundle().getLocalizedString("adress_2", "Address 2"), textInput);
+		formItem.add(label);
+		formItem.add(details);
+		section.add(formItem);
+			
+		Collection communes = getCommuneBusiness(iwc).getCommunes();
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		DropdownMenu dropdown = new DropdownMenu(PARAMETER_COUNTY);
+		dropdown.addMenuElementFirst("", "Select commune");
+		dropdown.addMenuElement("Yorkshire", "Yorkshire");
+		dropdown.addMenuElement("Devonshire", "Devonshire");
+		dropdown.addMenuElement("Moore", "Moore");
+		for(Iterator it = communes.iterator(); it.hasNext(); ) {
+			Commune commune = (Commune) it.next();
+			dropdown.addMenuElement(commune.getCommuneName(), commune.getCommuneName());
+		}
+		dropdown.setSelectedElement(isCompany ? (company.getLegalCommune() == null ? "" : company.getLegalCommune().getCommuneName()) : natReg.getCommune());
+		label = new Label(getResourceBundle().getLocalizedString("commune", "Commune"), dropdown);
+		formItem.add(label);
+		formItem.add(dropdown);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		String country = "";
+		if(isCompany) {
+			if(company.getAddress() != null) {
+				if(company.getAddress().getCountry() != null) {
+					country = company.getAddress().getCountry().getName();
+				}
+			}
+		}
+		textInput = new TextInput(PARAMETER_COUNTRY, country);
+		label = new Label(getResourceBundle().getLocalizedString("country", "Country"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_EMAIL, isCompany ? (company.getEmail() == null ? "" : company.getEmail().getEmailAddress()) : "");
+		label = new Label(getResourceBundle().getLocalizedString("email", "Email"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_FAX, isCompany ? (company.getFax() == null ? "" : company.getFax().getNumber()) : "");
+		label = new Label(getResourceBundle().getLocalizedString("Fax", "Fax"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+		
+		if(isCompany) {
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_LOCATION, isCompany ? company.getName() : "");
+			label = new Label(getResourceBundle().getLocalizedString("location", "Location"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+		}
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_LANGUAGE);
+		label = new Label(getResourceBundle().getLocalizedString("language", "Language"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		details = new TextArea(PARAMETER_POST_ADDRESS, isCompany ? (company.getAddress() == null ? "" : company.getAddress().getPostalAddress()) : natReg.getAddress());
+		details.setStyleClass("details");
+		label = new Label(getResourceBundle().getLocalizedString("post_address", "Postal address"), textInput);
+		formItem.add(label);
+		formItem.add(details);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_HOMEPAGE, isCompany ? company.getWebPage() : "");
+		label = new Label(getResourceBundle().getLocalizedString("homepage", "Homepage"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_PHONE_WORK, isCompany ? (company.getPhone() == null ? "" : company.getPhone().getNumber()) : "");
+		label = new Label(getResourceBundle().getLocalizedString("phone_work", "Work phone number"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_STATUS);
+		if(isCompany) {
+			label = new Label(getResourceBundle().getLocalizedString("company_status", "Status"), textInput);
+		} else {
+			label = new Label(getResourceBundle().getLocalizedString("person_job_status", "Job status"), textInput);
+		}
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
+
+		
+		RadioButton yes = new RadioButton(PARAMETER_TARGET_MAIL, Boolean.TRUE.toString());
+		yes.setStyleClass("radiobutton");
+		RadioButton no = new RadioButton(PARAMETER_TARGET_MAIL, Boolean.FALSE.toString());
+		no.setStyleClass("radiobutton");
+			
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		label = new Label(getResourceBundle().getLocalizedString("target_mail", "Target mail"), yes);
+		formItem.add(label);
+		section.add(formItem);
+			
+		Layer selectItem = new Layer(Layer.DIV);
+		selectItem.setStyleClass("formItem");
+		selectItem.setStyleClass("radioButtonItem");
+		label = new Label(getResourceBundle().getLocalizedString("yes", "Yes"), yes);
+		selectItem.add(yes);
+		selectItem.add(label);
+		formItem.add(selectItem);
+
+		selectItem = new Layer(Layer.DIV);
+		selectItem.setStyleClass("formItem");
+		selectItem.setStyleClass("radioButtonItem");
+		label = new Label(getResourceBundle().getLocalizedString("no", "No"), no);
+		selectItem.add(no);
+		selectItem.add(label);
+		formItem.add(selectItem);
+		
+		if(!isCompany) {
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_AVARP);
+			label = new Label(getResourceBundle().getLocalizedString("avarp", "Avarp"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+				
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_BEEPER);
+			label = new Label(getResourceBundle().getLocalizedString("beeper", "Beeper"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+			
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_CARPHONE);
+			label = new Label(getResourceBundle().getLocalizedString("car_phone", "Car phone"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+				
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_GSM);
+			label = new Label(getResourceBundle().getLocalizedString("gsm_phone", "GSM"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+			
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_PHONE_OFFICE);
+			label = new Label(getResourceBundle().getLocalizedString("phone_office", "Office phone"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+				
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_PHONE_HOME);
+			label = new Label(getResourceBundle().getLocalizedString("phone_home", "Home phone"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+		}
+			
+		Layer bottom = new Layer(Layer.DIV);
+		bottom.setStyleClass("bottom");
+		form.add(bottom);
+
+		Link cancel = getButtonLink(getResourceBundle().getLocalizedString("cancel", "Cancel"));
+		cancel.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
+		cancel.setToFormSubmit(form);
+		bottom.add(cancel);
+		
+		Link save = getButtonLink(getResourceBundle().getLocalizedString("save", "Save"));
+		save.setToFormSubmit(form);
+		if(isCompany) {	
+			save.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_SAVE_COMPANY) + "');");
+		} else {
+			save.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_SAVE_PERSON) + "');");
+		}
+		bottom.add(save);
+			
+		add(form);
+	}
 	
 	protected void showList(IWContext iwc, int action, String result) throws RemoteException {
 		Form form = new Form();
@@ -257,82 +836,29 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		add(form);
 	}
 
-	protected void present(IWContext iwc) throws Exception {
-		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
-		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, DWR_ENGINE_JS);
-		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, DWR_FOCAL_JS);
-		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
-		
-		String result = null;
-		
-		switch (parseAction(iwc)) {
-			case ACTION_VIEW:
-				showList(iwc, ACTION_VIEW, null);
-				break;
-
-			case ACTION_PROCESS:
-				showProcessor(iwc, iwc.getParameter(PARAMETER_CASE_PK));
-				break;
-
-			case ACTION_SAVE:
-				save(iwc);
-				showList(iwc, ACTION_VIEW, null);
-				break;
-				
-			case ACTION_MOVE_FOCAL:
-				String values[] = iwc.getParameterValues(PARAMETER_CASE_PK);
-				if(values != null && values.length > 0) {
-					result = findProjects(iwc);
-					showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
-				} else {
-					showList(iwc, ACTION_MOVE_FOCAL, null);
-				}
-				break;
-				
-			case ACTION_SAVE_FOCAL:
-				result = saveToFocal(iwc);
-				if(result.equals(FocalConstants.STATUS_SUCCESS_SAVE)) {
-					showList(iwc, ACTION_SAVE_FOCAL, result);
-				} else {
-					showProjectSearch(iwc, ACTION_MOVE_FOCAL, result);
-				}
-				break;
-				
-			case ACTION_CREATE_CUSTOMER:
-				result = createUpdateCustomer(iwc, false);
-				showProjectSearch(iwc, ACTION_CREATE_CUSTOMER, result);
-				break;
-				
-			case ACTION_UPDATE_CUSTOMER:
-				result = createUpdateCustomer(iwc, true);
-				showProjectSearch(iwc, ACTION_UPDATE_CUSTOMER, result);
-				break;
-		}
-	}
-	
-	protected String createUpdateCustomer(IWContext iwc, boolean exist) {
-		try {
-			String customerId = iwc.getParameter(PARAMETER_CUSTOMER_PK);
-			if(customerId != null && !customerId.equals("")) {
-				CustomerPersonalInfo ci = getFocalCasesIntegration(iwc).createCustomerBean(customerId, iwc);		
-				if(ci != null) {
-					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
-				}
-			}
-			if(exist) {
-				return FocalConstants.STATUS_SUCCESS_UPDATE_CUSTOMER;
-			} else {
-				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
-			}
-		} catch(Exception e) {
-			logger.log(Level.SEVERE, "Exception while creating customer", e);
-			if(exist) {
-				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
-			} else {
-				return FocalConstants.STATUS_ERROR_CREATE_CUSTOMER;
-			}
-		}
-	}
+//	protected String createUpdateCustomer(IWContext iwc, boolean exist) {
+//		try {
+//			String customerId = iwc.getParameter(PARAMETER_CUSTOMER_PK);
+//			if(customerId != null && !customerId.equals("")) {
+//				CustomerPersonalInfo ci = getFocalCasesIntegration(iwc).createCustomerBean(customerId, iwc);		
+//				if(ci != null) {
+//					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
+//				}
+//			}
+//			if(exist) {
+//				return FocalConstants.STATUS_SUCCESS_UPDATE_CUSTOMER;
+//			} else {
+//				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
+//			}
+//		} catch(Exception e) {
+//			logger.log(Level.SEVERE, "Exception while creating customer", e);
+//			if(exist) {
+//				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+//			} else {
+//				return FocalConstants.STATUS_ERROR_CREATE_CUSTOMER;
+//			}
+//		}
+//	}
 	
 	protected String saveToFocal(IWContext iwc) {
 		try {
@@ -396,7 +922,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		form.addParameter(PARAMETER_ACTION, "");
 		form.addParameter(PARAMETER_PROJECT_PK, "");
 		form.addParameter(PARAMETER_PROJECT_NAME, "");
-		form.addParameter(PARAMETER_CUSTOMER_PK, "");
+//		form.addParameter(PARAMETER_CUSTOMER_PK, "");
 		form.maintainParameter(PARAMETER_CASE_PK);
 		
 		if(result != null) {
@@ -517,6 +1043,15 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		projectSection.add(tableSection);
 		form.add(projectSection);
 		
+		Layer middle = new Layer(Layer.DIV);
+		middle.setStyleClass("bottom");
+		form.add(middle);
+
+		Link createCompany = getButtonLink(getResourceBundle().getLocalizedString("create_company", "Create Company"));
+		createCompany.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_CREATE_COMPANY + "');");
+		createCompany.setToFormSubmit(form);
+		middle.add(createCompany);
+		
 		Layer customerSection = new Layer(Layer.DIV);
 		customerSection.setStyleClass("formSection");
 		
@@ -597,12 +1132,19 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 							Link createCustomer = null;
 							if(customer != null) {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
-								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_CUSTOMER));
+								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_PERSON));
 							} else {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_CUSTOMER));
+								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_PERSON));
 							}
-							createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_CUSTOMER_PK + "'), '" + id + "');");
+							createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_COMPANY_ID + "'), '" + id + "');");
+							createCustomer.setStyleClass("homeButton");
+							
+							createCustomer.setToFormSubmit(form);
+							cCell.add(createCustomer);
+						} else {
+							Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
+							createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_PERSON));
 							createCustomer.setStyleClass("homeButton");
 							
 							createCustomer.setToFormSubmit(form);
@@ -675,6 +1217,33 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		}
 	}
 	
+	protected CompanyRegisterBusiness getCompanyRegisterBusiness(IWApplicationContext iwac) {
+		try {
+			return (CompanyRegisterBusiness) IBOLookup.getServiceInstance(iwac, CompanyRegisterBusiness.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
+	}
+	
+	protected NationalRegisterBusiness getNationalRegisterBusiness(IWApplicationContext iwac) {
+		try {
+			return (NationalRegisterBusiness) IBOLookup.getServiceInstance(iwac, NationalRegisterBusiness.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
+	}
+	
+	protected CommuneBusiness getCommuneBusiness(IWApplicationContext iwac) {
+		try {
+			return (CommuneBusiness) IBOLookup.getServiceInstance(iwac, CommuneBusiness.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
+	}
+	
 	protected ExportCasesManagement getExportCasesManagement(IWApplicationContext iwac) {
 		try {
 			return (ExportCasesManagement) IBOLookup.getServiceInstance(iwac, ExportCasesManagement.class);
@@ -734,6 +1303,30 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	
 	protected boolean showCheckBox() {
 		return false;
+	}
+	
+	protected CompanyHome getCompanyHome() {
+		CompanyHome home = null;
+		try {
+			home = (CompanyHome) IDOLookup.getHome(Company.class);
+		}
+		catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+		return home;
+	}
+	
+	protected NationalRegisterHome getNationalRegisterHome() {
+		NationalRegisterHome home = null;
+		try {
+			home = (NationalRegisterHome) IDOLookup.getHome(NationalRegister.class);
+		}
+		catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+		return home;
 	}
 
 }

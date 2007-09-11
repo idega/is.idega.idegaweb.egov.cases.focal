@@ -1,12 +1,16 @@
 package is.idega.idegaweb.egov.cases.focal.business;
 
+import is.idega.block.nationalregister.business.NationalRegisterBusiness;
+import is.idega.block.nationalregister.data.NationalRegister;
 import is.idega.idegaweb.egov.cases.data.CaseCategory;
 import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
 import is.idega.idegaweb.egov.cases.focal.business.beans.CaseArg;
+import is.idega.idegaweb.egov.cases.focal.business.beans.CompanyInfo;
 import is.idega.idegaweb.egov.cases.focal.business.beans.Status;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ATTACHMENT;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CASEDATA;
+import is.idega.idegaweb.egov.cases.focal.business.server.focalService.COMPANYINFO;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.CUSTOMER;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.NOTESPROJECTARRAY;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.PERSONINFO;
@@ -18,6 +22,7 @@ import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.Cus
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +32,8 @@ import javax.ejb.FinderException;
 import javax.xml.rpc.ServiceException;
 
 import com.idega.business.IBOLookup;
+import com.idega.business.IBOLookupException;
+import com.idega.business.IBORuntimeException;
 import com.idega.business.IBOServiceBean;
 import com.idega.core.contact.data.Email;
 import com.idega.core.contact.data.EmailHome;
@@ -36,6 +43,7 @@ import com.idega.core.file.data.ICFile;
 import com.idega.core.location.data.Address;
 import com.idega.core.location.data.Commune;
 import com.idega.core.location.data.Country;
+import com.idega.idegaweb.IWApplicationContext;
 import com.idega.idegaweb.IWMainApplication;
 import com.idega.presentation.IWContext;
 import com.idega.user.business.UserBusiness;
@@ -44,10 +52,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/09/07 11:38:00 $ by $Author: alexis $
+ * Last modified: $Date: 2007/09/11 12:29:08 $ by $Author: alexis $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -99,6 +107,59 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			result_project_list.addAll(Arrays.asList(project_list.getPROJECTARRAY()));
 		
 		return result_project_list;
+	}
+	
+	public Status createCompany(CompanyInfo companyInfo) throws Exception {
+		
+		Project service = getFocalService();
+		
+		String[] loging_pass = getLoginAndPassword();
+		
+		if(loging_pass == null)
+			throw new NullPointerException("Login and pass for focal ws not set as application properties.");
+		
+		COMPANYINFO company_info = new COMPANYINFO(
+				companyInfo.getAddress1(),								//ADDRESS2
+				companyInfo.getAddress2(), 								//ADDRESS2
+				companyInfo.getCompanyName(),							//COMPANYNAME
+				companyInfo.getCounty(), 								//COUNTY
+				companyInfo.getCountry(), 								//COUNTRY
+				companyInfo.getEmail(),									//EMAIL
+				companyInfo.getFax(), 									//FAX
+				companyInfo.getHomepage(),								//HOMEPAGE
+				companyInfo.getLanguage(), 								//LANGUAGE
+				companyInfo.getLocation(), 								//LOCATION
+				companyInfo.getPhoneWork(),								//PHONEWORK
+				companyInfo.getPostAddress(), 							//POSTADDRESS
+				companyInfo.getSocNumber(),		 						//SOCSECNUM
+				companyInfo.getStatus(), 								//STATUS
+				companyInfo.isTargetMail()				 				//TARGETMAIL
+		);
+		
+		RETURNSTATUS ret_status = service.CREATEUPDATECOMPANY(company_info, const_project_list, loging_pass[0], loging_pass[1]);
+		
+		try {
+			int status_code = Integer.parseInt(ret_status.getSTATUS());
+			
+			if(status_code == Status.success)
+				return new Status(Status.success);
+			else if(status_code == Status.failed_to_save) {
+				logger.log(Level.WARNING, "Error occured while doing CREATEUPDATECOMPANY. Status message: "+ret_status.getERRORTEXT());
+				return new Status(Status.failed_to_save);
+			} else {
+				logger.log(Level.WARNING, "Error occured while doing CREATEUPDATECOMPANY. Status message: "+ret_status.getERRORTEXT());
+				return new Status(Status.unknown_fail);
+			}
+			
+		} catch (Exception e) {
+			
+			if(ret_status == null)
+				logger.log(Level.SEVERE, "No status was retrieved", e);
+			else
+				logger.log(Level.SEVERE, "Exception while parsing status code. Status message: "+ret_status.getERRORTEXT(), e);
+			
+			return new Status(Status.unknown_fail);
+		}
 	}
 	
 	private void setNoOverwriteFaxValue(CUSTOMER customerFocal, CustomerPersonalInfo ci) {
@@ -374,13 +435,53 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			CUSTOMER customerFocal = findCustomer(personalID);
 			UserBusiness userBusiness = (UserBusiness) IBOLookup.getServiceInstance(iwc, UserBusiness.class);
 			if(userBusiness != null) {
-				
+				boolean isIWUser = true;
+				NationalRegister nationalCustomer = getNationalRegisterBusiness(iwc).getEntryBySSN(personalID);
+				if(nationalCustomer == null) {
+					return null;
+				}
 				User customer = userBusiness.getUser(personalID);
-				if(customer != null) {
-					int id = ((Integer) customer.getPrimaryKey()).intValue();
+				if(customer == null) {
+					isIWUser = false;
+				}
+				int id = ((Integer) customer.getPrimaryKey()).intValue();
+				String address1Value = nationalCustomer.getAddress();
+				if(address1Value != null && !address1Value.equals("")) {
+					ci.setADDRESS1(address1Value);
+				} else if(isIWUser) {
+					
+				} else {
+					setNoOverwriteAddress1Value(customerFocal, ci);
+				}
+//					customer.getAVARP(), 								//AVARP
+//					customer.getBEEPER(), 								//BEEPER
+//					customer.getCARPHONE(), 							//CARPHONE
+//					customer.getCOUNTRY(), 								//COUNTRY
+//					customer.getFAX(), 									//FAX
+//					customer.getGSM(),	 								//GSM
+//					customer.getHOMEPAGE(),								//HOMEPAGE
+//					customer.getLANGUAGE(), 							//LANGUAGE
+//					customer.getPHONEHOME(),							//PHONEHOME
+//					customer.getPHONEOFFICE(),							//PHONEOFFICE
+//					customer.getPHONEWORK(),							//PHONEWORK
+//					customer.getCONTACTSEPERATOR(),						//SEPERATOR
+//					customer.getJOBSTATUS(), 							//STATUS
+//					customer.getTargetMail(),				 			//TARGETMAIL
+//					customer.getTITLE() 								//TITLE
+					
+					String address2Value = nationalCustomer.getAddress();
+					String postAddress = nationalCustomer.getAddress();
+//					String country = nationalCustomer.get
+					String communne = nationalCustomer.getCommune();
+//					Collection email = nationalCustomer.getEmails();
+					String socNumber = nationalCustomer.getSSN();
+					String customerName = nationalCustomer.getName();
+//					String phoneHome = nationalCustomer.g
+					
+					
 					Address address1 = userBusiness.getUsersMainAddress(id);
 					if(address1 != null) {
-						String address1Value = address1.getStreetAddress();
+//						String address1Value = address1.getStreetAddress();
 						if(address1Value != null && !address1Value.equals("")) {
 							ci.setADDRESS1(address1Value);
 						} else {
@@ -412,7 +513,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					}
 					Address address2 = userBusiness.getUsersCoAddress(id);
 					if(address2 != null) {
-						String address2Value = address2.getStreetAddress();
+//						String address2Value = address2.getStreetAddress();
 						if(address2Value != null && !address2Value.equals("")) {
 							ci.setADDRESS2(address2Value);
 						} else {
@@ -437,7 +538,6 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwritePhonehomeValue(customerFocal, ci);
-//							logger.log(Level.SEVERE, "Could not get user home phone: ", fe);
 						}
 						try {
 							Phone work = phoneHome.findUsersWorkPhone(customer);
@@ -457,7 +557,6 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 						} catch(FinderException fe) {
 							setNoOverwritePhoneworkValue(customerFocal, ci);
 							setNoOverwritePhoneofficeValue(customerFocal, ci);
-//							logger.log(Level.SEVERE, "Could not get user work phone: ", fe);
 						}
 						try {
 							Phone mobile = phoneHome.findUsersMobilePhone(customer);
@@ -473,7 +572,6 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwriteGsmValue(customerFocal, ci);
-//							logger.log(Level.SEVERE, "Could not get user mobile phone: ", fe);
 						}
 						try {
 							Phone fax = phoneHome.findUsersFaxPhone(customer);
@@ -490,7 +588,6 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwriteFaxValue(customerFocal, ci);
-//							logger.log(Level.SEVERE, "Could not get user fax number: ", fe);
 						}
 						setNoOverwriteCarphoneValue(customerFocal, ci);
 						setNoOverwriteBeeperValue(customerFocal, ci);
@@ -516,7 +613,6 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 							}
 						} catch(FinderException fe) {
 							setNoOverwriteEmailaddressValue(customerFocal, ci);
-//							logger.log(Level.SEVERE, "Could not get user email address: ", fe);
 						}
 					} else {
 						setNoOverwriteEmailaddressValue(customerFocal, ci);
@@ -552,7 +648,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 					ci.setCONTACTSEPERATOR(" ");
 				}
 			}
-		}
+//		}
 		return ci;
 	}
 	
@@ -654,25 +750,23 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			CaseCategory category = gen_case.getCaseCategory();
 			CaseType type = gen_case.getCaseType();
 			
-//			logger.info("Case data: " + gen_case);
-//			logger.info("Case owner: " + gen_case.getOwner());
-//			logger.info("Case created: " + gen_case.getCreated());
-//			logger.info("Case type: " + type.getName());
-//			logger.info("Case category: " + category.getName());
-			
 			CASEDATA case_data = new CASEDATA(
 					gen_case.getMessage(),								//"BODY"
 					
-					gen_case.getOwner() == null ? null :
-					gen_case.getOwner().getName(), 						//"CUSTOMERNAME"
+					gen_case.getOwner() == null ? "" :
+					(gen_case.getOwner().getName() == null ? "" :
+					gen_case.getOwner().getName()), 					//"CUSTOMERNAME"
 					
-					gen_case.getCreated() == null ? null : gen_case.getCreated().toString(),
+					gen_case.getCreated() == null ? "" : 
+					(gen_case.getCreated() == null ? "" :
+					gen_case.getCreated().toString()),					//CREATEDATE
 					
 					projectName,									 	//"PROJECTNAME"
 				    project_id,											//"PROJECTNUMBER"
 					
-				    gen_case.getOwner() == null ? null :
-					gen_case.getOwner().getPersonalID(),				//"SOCSECNUM"
+				    gen_case.getOwner() == null ? "" :
+					(gen_case.getOwner().getPersonalID() == null ? "" :
+					gen_case.getOwner().getPersonalID()),				//"SOCSECNUM"
 					
 					category.getName() + " - " + type.getName()			//"SUBJECT"
 					
@@ -820,5 +914,14 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 				
 				return new Status(Status.unknown_fail);
 			}
+	}
+	
+	protected NationalRegisterBusiness getNationalRegisterBusiness(IWApplicationContext iwac) {
+		try {
+			return (NationalRegisterBusiness) IBOLookup.getServiceInstance(iwac, NationalRegisterBusiness.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
 	}
 }
