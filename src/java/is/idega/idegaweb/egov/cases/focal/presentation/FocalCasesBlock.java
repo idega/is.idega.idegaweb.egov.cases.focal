@@ -313,8 +313,6 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			isCompany = false;
 		}
 		
-		
-		
 		if(company == null && natReg == null) {
 			Heading1 heading = null;
 			if(searchForCompany) {
@@ -330,7 +328,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			searchSection.setStyleClass("searchSection");
 			
 			TextInput searchField = new TextInput();
-			searchField.setLabel("Search text");
+			searchField.setLabel(getResourceBundle().getLocalizedString("soc_sec_number", "Social security number"));
 			searchField.setName(PARAMETER_COMPANY_ID);
 //			searchField.setOnKeyPress("searchProjects(event);");
 			searchSection.add(searchField);
@@ -498,6 +496,57 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem.add(label);
 		formItem.add(textInput);
 		section.add(formItem);
+		
+		if(!isCompany) {
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_PHONE_HOME);
+			label = new Label(getResourceBundle().getLocalizedString("phone_home", "Home phone"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+			
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_GSM);
+			label = new Label(getResourceBundle().getLocalizedString("gsm_phone", "GSM"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+			
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_PHONE_OFFICE);
+			label = new Label(getResourceBundle().getLocalizedString("phone_office", "Office phone"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+			
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_CARPHONE);
+			label = new Label(getResourceBundle().getLocalizedString("car_phone", "Car phone"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+				
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_BEEPER);
+			label = new Label(getResourceBundle().getLocalizedString("beeper", "Beeper"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+			
+		}
+		
+		formItem = new Layer(Layer.DIV);
+		formItem.setStyleClass("formItem");
+		textInput = new TextInput(PARAMETER_PHONE_WORK, isCompany ? (company.getPhone() == null ? "" : company.getPhone().getNumber()) : "");
+		label = new Label(getResourceBundle().getLocalizedString("phone_work", "Work phone number"), textInput);
+		formItem.add(label);
+		formItem.add(textInput);
+		section.add(formItem);
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
@@ -544,14 +593,6 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		textInput = new TextInput(PARAMETER_PHONE_WORK, isCompany ? (company.getPhone() == null ? "" : company.getPhone().getNumber()) : "");
-		label = new Label(getResourceBundle().getLocalizedString("phone_work", "Work phone number"), textInput);
-		formItem.add(label);
-		formItem.add(textInput);
-		section.add(formItem);
-			
-		formItem = new Layer(Layer.DIV);
-		formItem.setStyleClass("formItem");
 		textInput = new TextInput(PARAMETER_STATUS);
 		if(isCompany) {
 			label = new Label(getResourceBundle().getLocalizedString("company_status", "Status"), textInput);
@@ -561,6 +602,16 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem.add(label);
 		formItem.add(textInput);
 		section.add(formItem);
+		
+		if(isCompany) {
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_AVARP);
+			label = new Label(getResourceBundle().getLocalizedString("avarp", "Avarp"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
+		}
 
 		
 		RadioButton yes = new RadioButton(PARAMETER_TARGET_MAIL, Boolean.TRUE.toString());
@@ -590,56 +641,6 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		selectItem.add(label);
 		formItem.add(selectItem);
 		
-		if(!isCompany) {
-			formItem = new Layer(Layer.DIV);
-			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_AVARP);
-			label = new Label(getResourceBundle().getLocalizedString("avarp", "Avarp"), textInput);
-			formItem.add(label);
-			formItem.add(textInput);
-			section.add(formItem);
-				
-			formItem = new Layer(Layer.DIV);
-			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_BEEPER);
-			label = new Label(getResourceBundle().getLocalizedString("beeper", "Beeper"), textInput);
-			formItem.add(label);
-			formItem.add(textInput);
-			section.add(formItem);
-			
-			formItem = new Layer(Layer.DIV);
-			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_CARPHONE);
-			label = new Label(getResourceBundle().getLocalizedString("car_phone", "Car phone"), textInput);
-			formItem.add(label);
-			formItem.add(textInput);
-			section.add(formItem);
-				
-			formItem = new Layer(Layer.DIV);
-			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_GSM);
-			label = new Label(getResourceBundle().getLocalizedString("gsm_phone", "GSM"), textInput);
-			formItem.add(label);
-			formItem.add(textInput);
-			section.add(formItem);
-			
-			formItem = new Layer(Layer.DIV);
-			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_PHONE_OFFICE);
-			label = new Label(getResourceBundle().getLocalizedString("phone_office", "Office phone"), textInput);
-			formItem.add(label);
-			formItem.add(textInput);
-			section.add(formItem);
-				
-			formItem = new Layer(Layer.DIV);
-			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_PHONE_HOME);
-			label = new Label(getResourceBundle().getLocalizedString("phone_home", "Home phone"), textInput);
-			formItem.add(label);
-			formItem.add(textInput);
-			section.add(formItem);
-		}
-			
 		Layer bottom = new Layer(Layer.DIV);
 		bottom.setStyleClass("bottom");
 		form.add(bottom);
