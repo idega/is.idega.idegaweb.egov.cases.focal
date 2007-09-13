@@ -1,5 +1,17 @@
 var focal_project_row_id = null;
 
+function searchValid() {
+	var searchField = findObj('prm_company_id');
+	if(searchField != null) {
+		if(searchField.value) {
+			if(searchField.value.length == 10) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 function selectFocalCasesRow(e) {
 	if(e) {
 		var temp = focal_project_row_id;

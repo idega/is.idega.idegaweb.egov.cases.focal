@@ -28,9 +28,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.myfaces.renderkit.html.util.AddResource;
-import org.apache.myfaces.renderkit.html.util.AddResourceFactory;
-
 import com.idega.block.process.data.CaseStatus;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
@@ -45,6 +42,7 @@ import com.idega.idegaweb.IWApplicationContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
 import com.idega.presentation.PresentationObject;
+import com.idega.presentation.Script;
 import com.idega.presentation.Table2;
 import com.idega.presentation.TableCell2;
 import com.idega.presentation.TableColumn;
@@ -128,8 +126,10 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected static final int ACTION_SEARCH_PERSON = 13;
 	
 	protected void present(IWContext iwc) throws Exception {
-		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
-		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
+		Script script = new Script();
+		script.setScriptSource(FOCAL_JS);
+//		AddResource resourceAdder = AddResourceFactory.getInstance(iwc);
+//		resourceAdder.addJavaScriptAtPosition(iwc, AddResource.HEADER_BEGIN, FOCAL_JS);
 		
 		String result = null;
 		
@@ -190,7 +190,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 				
 			case ACTION_SEARCH_COMPANY:
 				Company company = searchCompany(iwc);
-				showCreateCustomer(iwc, ACTION_CREATE_COMPANY, company, null, false);
+				showCreateCustomer(iwc, ACTION_SEARCH_COMPANY, company, null, false);
 				break;
 				
 			case ACTION_SEARCH_PERSON:
@@ -199,16 +199,17 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 				break;
 				
 		}
+		add(script);
 	}
 	
 	protected NationalRegister searchPerson(IWContext iwc) {
 		try {
 			String searchKey = iwc.getParameter(PARAMETER_COMPANY_ID);
-			if(searchKey != null && !searchKey.equals("")) {
-				NationalRegister customer = getNationalRegisterBusiness(iwc).getEntryBySSN(searchKey);
-				return customer;
+			if(searchKey == null || searchKey.equals("")) {
+				throw new Exception("Search parameter empty");
 			}
-			return null;
+			NationalRegister customer = getNationalRegisterBusiness(iwc).getEntryBySSN(searchKey);
+			return customer;
 		} catch(Exception e) {
 			logger.log(Level.SEVERE, "Exception while searching for a person", e);
 			return null;
@@ -257,13 +258,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			bean.setTargetMail(iwc.isParameterSet(PARAMETER_TARGET_MAIL) ? new Boolean(iwc.getParameter(PARAMETER_TARGET_MAIL)).booleanValue() : false);
 			Status status = getFocalCasesIntegration(iwc).createUpdateCustomer(bean);
 			if(status.getStatus().intValue() == 0) {
-				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
+				return FocalConstants.STATUS_SUCCESS_SAVE_CUSTOMER;
 			} else {
-				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+				return FocalConstants.STATUS_ERROR_SAVE_CUSTOMER;
 			}
 		} catch(Exception e) {
 			logger.log(Level.SEVERE, "Exception while creating customer", e);
-			return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+			return FocalConstants.STATUS_ERROR_SAVE_CUSTOMER;
 		}
 	}
 	
@@ -287,13 +288,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			bean.setTargetMail(iwc.isParameterSet(PARAMETER_TARGET_MAIL) ? new Boolean(iwc.getParameter(PARAMETER_TARGET_MAIL)).booleanValue() : false);
 			Status status = getFocalCasesIntegration(iwc).createCompany(bean);
 			if(status.getStatus().intValue() == 0) {
-				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
+				return FocalConstants.STATUS_SUCCESS_CREATE_COMPANY;
 			} else {
-				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+				return FocalConstants.STATUS_ERROR_CREATE_COMPANY;
 			}
 		} catch(Exception e) {
 			logger.log(Level.SEVERE, "Exception while creating customer", e);
-			return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
+			return FocalConstants.STATUS_ERROR_CREATE_COMPANY;
 		}
 	}
 	
@@ -307,13 +308,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		projectSection.setStyleClass("formSection");
 		
 		boolean isCompany = false;
-		if(company != null) {
+		if(action == ACTION_SEARCH_COMPANY) {
 			isCompany = true;
-		} else if(natReg != null) {
-			isCompany = false;
 		}
 		
-		if(company == null && natReg == null) {
+		if(company == null && natReg == null && action != ACTION_SEARCH_COMPANY && action != ACTION_SEARCH_PERSON) {
 			Heading1 heading = null;
 			if(searchForCompany) {
 				heading = new Heading1(getResourceBundle().getLocalizedString("company_information", "Company information"));
@@ -336,10 +335,10 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			Link next = null;
 			if(searchForCompany) {
 				next = getButtonLink(getResourceBundle().getLocalizedString("find_company_focal", "Find company"));
-				next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');");
+				next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');} else {alert('Please enter a valid SSN'); return false;}");
 			} else {
 				next = getButtonLink(getResourceBundle().getLocalizedString("find_person_focal", "Find person"));
-				next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');");
+				next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');} else {alert('Please enter a valid SSN'); return false;}");
 			}
 			next.setStyleClass("searchButton");
 			next.setToFormSubmit(form);
@@ -384,10 +383,10 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		Link next = null;
 		if(isCompany) {
 			next = getButtonLink(getResourceBundle().getLocalizedString("find_company_focal", "Find company"));
-			next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');");
+			next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');} else {alert('Please enter a valid SSN'); return false;}");
 		} else {
 			next = getButtonLink(getResourceBundle().getLocalizedString("find_person_focal", "Find person"));
-			next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');");
+			next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');} else {alert('Please enter a valid SSN'); return false;}");
 		}
 		next.setStyleClass("searchButton");
 		next.setToFormSubmit(form);
@@ -396,6 +395,24 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		projectSection.add(searchSection);
 		
 		form.add(projectSection);
+		
+		if((company == null && action == ACTION_SEARCH_COMPANY) || (natReg == null && action == ACTION_SEARCH_PERSON)) {
+			Layer errorSection = new Layer(Layer.DIV);
+			errorSection.setStyleClass("receipt");
+			
+			Layer icon = new Layer(Layer.DIV);
+			icon.setStyleClass("receiptImage");
+			errorSection.add(icon);
+			
+			Heading1 heading2 = new Heading1(getResourceBundle(iwc).getLocalizedString("focal_entity_not_found", "Nothing found"));
+			errorSection.add(heading2);
+			
+			Paragraph message = new Paragraph();
+			message.addText(getResourceBundle(iwc).getLocalizedString("focal_enter_info_manually", "Please enter the required information manually"));
+			errorSection.add(message);
+			
+			form.add(errorSection);
+		}
 			
 		Layer section = new Layer(Layer.DIV);
 		section.setStyleClass("formSection");
@@ -418,10 +435,12 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
 		if(isCompany) {
-			textInput = new TextInput(PARAMETER_COMPANY_NAME, company.getName());
+			String companyName = (company == null) ? "" : company.getName();
+			textInput = new TextInput(PARAMETER_COMPANY_NAME, companyName);
 			label = new Label(getResourceBundle().getLocalizedString("company_name", "Company name"), textInput);
 		} else {
-			textInput = new TextInput(PARAMETER_PERSON_NAME, natReg.getName());
+			String natRegName = (natReg == null) ? "" : natReg.getName();
+			textInput = new TextInput(PARAMETER_PERSON_NAME, natRegName);
 			label = new Label(getResourceBundle().getLocalizedString("person_name", "Full name"), textInput);
 		}
 		formItem.add(label);
@@ -430,7 +449,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		textInput = new TextInput(PARAMETER_SOC_NUMBER, isCompany ? company.getPersonalID() : natReg.getSSN());
+		if(isCompany) {
+			String companySocNr = (company == null) ? "" : company.getPersonalID();
+			textInput = new TextInput(PARAMETER_SOC_NUMBER, companySocNr);
+		} else {
+			String natRegSocNr = (natReg == null) ? "" : natReg.getSSN();
+			textInput = new TextInput(PARAMETER_SOC_NUMBER, natRegSocNr);
+		}
 		label = new Label(getResourceBundle().getLocalizedString("soc_sec_number", "Social security number"), textInput);
 		formItem.add(label);
 		formItem.add(textInput);
@@ -438,7 +463,14 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		TextArea details = new TextArea(PARAMETER_ADDRESS1, isCompany ? (company.getAddress() == null ? "" : company.getAddress().getStreetAddress()) : natReg.getAddress());
+		TextArea details = null;
+		if(isCompany) {
+			String address1 = (company == null ? "" : (company.getAddress() == null ? "" : company.getAddress().getStreetAddress()));
+			details = new TextArea(PARAMETER_ADDRESS1, address1);
+		} else {
+			String address1 = natReg == null ? "" : natReg.getAddress();
+			details = new TextArea(PARAMETER_ADDRESS1, address1);
+		}
 		details.setStyleClass("details");
 		label = new Label(getResourceBundle().getLocalizedString("adress_1", "Address 1"), textInput);
 		formItem.add(label);
@@ -459,15 +491,18 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
 		DropdownMenu dropdown = new DropdownMenu(PARAMETER_COUNTY);
-		dropdown.addMenuElementFirst("", "Select commune");
-		dropdown.addMenuElement("Yorkshire", "Yorkshire");
-		dropdown.addMenuElement("Devonshire", "Devonshire");
-		dropdown.addMenuElement("Moore", "Moore");
+		dropdown.addMenuElementFirst("", getResourceBundle().getLocalizedString("select_commune", "Select commune"));
 		for(Iterator it = communes.iterator(); it.hasNext(); ) {
 			Commune commune = (Commune) it.next();
 			dropdown.addMenuElement(commune.getCommuneName(), commune.getCommuneName());
 		}
-		dropdown.setSelectedElement(isCompany ? (company.getLegalCommune() == null ? "" : company.getLegalCommune().getCommuneName()) : natReg.getCommune());
+		if(isCompany) {
+			String communeValue = (company == null ? "" : (company.getLegalCommune() == null ? "" : company.getLegalCommune().getCommuneName()));
+			dropdown.setSelectedElement(communeValue);
+		} else {
+			String communeValue = natReg == null ? "" : natReg.getCommune();
+			dropdown.setSelectedElement(communeValue);
+		}
 		label = new Label(getResourceBundle().getLocalizedString("commune", "Commune"), dropdown);
 		formItem.add(label);
 		formItem.add(dropdown);
@@ -477,9 +512,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem.setStyleClass("formItem");
 		String country = "";
 		if(isCompany) {
-			if(company.getAddress() != null) {
-				if(company.getAddress().getCountry() != null) {
-					country = company.getAddress().getCountry().getName();
+			if(company != null) {
+				if(company.getAddress() != null) {
+					if(company.getAddress().getCountry() != null) {
+						country = company.getAddress().getCountry().getName();
+					}
 				}
 			}
 		}
@@ -491,7 +528,12 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		textInput = new TextInput(PARAMETER_EMAIL, isCompany ? (company.getEmail() == null ? "" : company.getEmail().getEmailAddress()) : "");
+		if(isCompany) {
+			String email = company == null ? "" : (company.getEmail() == null ? "" : company.getEmail().getEmailAddress());
+			textInput = new TextInput(PARAMETER_EMAIL, email);
+		} else {
+			textInput = new TextInput(PARAMETER_EMAIL, "");
+		}
 		label = new Label(getResourceBundle().getLocalizedString("email", "Email"), textInput);
 		formItem.add(label);
 		formItem.add(textInput);
@@ -529,6 +571,14 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			formItem.add(label);
 			formItem.add(textInput);
 			section.add(formItem);
+			
+			formItem = new Layer(Layer.DIV);
+			formItem.setStyleClass("formItem");
+			textInput = new TextInput(PARAMETER_FAXOFFICE);
+			label = new Label(getResourceBundle().getLocalizedString("fax_office", "Office fax"), textInput);
+			formItem.add(label);
+			formItem.add(textInput);
+			section.add(formItem);
 				
 			formItem = new Layer(Layer.DIV);
 			formItem.setStyleClass("formItem");
@@ -542,7 +592,12 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		textInput = new TextInput(PARAMETER_PHONE_WORK, isCompany ? (company.getPhone() == null ? "" : company.getPhone().getNumber()) : "");
+		if(isCompany) {
+			String phone = company == null ? "" : (company.getPhone() == null ? "" : company.getPhone().getNumber());
+			textInput = new TextInput(PARAMETER_PHONE_WORK, phone);
+		} else {
+			textInput = new TextInput(PARAMETER_PHONE_WORK, "");
+		}
 		label = new Label(getResourceBundle().getLocalizedString("phone_work", "Work phone number"), textInput);
 		formItem.add(label);
 		formItem.add(textInput);
@@ -550,7 +605,12 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		textInput = new TextInput(PARAMETER_FAX, isCompany ? (company.getFax() == null ? "" : company.getFax().getNumber()) : "");
+		if(isCompany) {
+			String fax = company == null ? "" : (company.getFax() == null ? "" : company.getFax().getNumber());
+			textInput = new TextInput(PARAMETER_FAX, fax);
+		} else {
+			textInput = new TextInput(PARAMETER_FAX, "");
+		}
 		label = new Label(getResourceBundle().getLocalizedString("Fax", "Fax"), textInput);
 		formItem.add(label);
 		formItem.add(textInput);
@@ -559,7 +619,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		if(isCompany) {
 			formItem = new Layer(Layer.DIV);
 			formItem.setStyleClass("formItem");
-			textInput = new TextInput(PARAMETER_LOCATION, isCompany ? company.getName() : "");
+			textInput = new TextInput(PARAMETER_LOCATION, company == null ? "" : company.getName());
 			label = new Label(getResourceBundle().getLocalizedString("location", "Location"), textInput);
 			formItem.add(label);
 			formItem.add(textInput);
@@ -576,7 +636,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		details = new TextArea(PARAMETER_POST_ADDRESS, isCompany ? (company.getAddress() == null ? "" : company.getAddress().getPostalAddress()) : natReg.getAddress());
+		if(isCompany) {
+			String postAddress = company == null ? "" : (company.getAddress() == null ? "" : company.getAddress().getPostalAddress());
+			details = new TextArea(PARAMETER_POST_ADDRESS, postAddress);
+		} else {
+			String postAddress = natReg == null ? "" : natReg.getAddress();
+			details = new TextArea(PARAMETER_POST_ADDRESS, postAddress);
+		}
 		details.setStyleClass("details");
 		label = new Label(getResourceBundle().getLocalizedString("post_address", "Postal address"), textInput);
 		formItem.add(label);
@@ -585,7 +651,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			
 		formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		textInput = new TextInput(PARAMETER_HOMEPAGE, isCompany ? company.getWebPage() : "");
+		if(isCompany) {
+			textInput = new TextInput(PARAMETER_HOMEPAGE, company == null ? "" : company.getWebPage());
+		} else {
+			textInput = new TextInput(PARAMETER_HOMEPAGE, "");
+		}
 		label = new Label(getResourceBundle().getLocalizedString("homepage", "Homepage"), textInput);
 		formItem.add(label);
 		formItem.add(textInput);
@@ -603,7 +673,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem.add(textInput);
 		section.add(formItem);
 		
-		if(isCompany) {
+		if(!isCompany) {
 			formItem = new Layer(Layer.DIV);
 			formItem.setStyleClass("formItem");
 			textInput = new TextInput(PARAMETER_AVARP);
@@ -626,7 +696,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		section.add(formItem);
 			
 		Layer selectItem = new Layer(Layer.DIV);
-		selectItem.setStyleClass("formItem");
+//		selectItem.setStyleClass("formItem");
 		selectItem.setStyleClass("radioButtonItem");
 		label = new Label(getResourceBundle().getLocalizedString("yes", "Yes"), yes);
 		selectItem.add(yes);
@@ -634,7 +704,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		formItem.add(selectItem);
 
 		selectItem = new Layer(Layer.DIV);
-		selectItem.setStyleClass("formItem");
+//		selectItem.setStyleClass("formItem");
 		selectItem.setStyleClass("radioButtonItem");
 		label = new Label(getResourceBundle().getLocalizedString("no", "No"), no);
 		selectItem.add(no);
@@ -644,8 +714,9 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		Layer bottom = new Layer(Layer.DIV);
 		bottom.setStyleClass("bottom");
 		form.add(bottom);
-
+		
 		Link cancel = getButtonLink(getResourceBundle().getLocalizedString("cancel", "Cancel"));
+		cancel.setStyleClass("homeButton");
 		cancel.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
 		cancel.setToFormSubmit(form);
 		bottom.add(cancel);
@@ -929,13 +1000,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		if(result != null) {
 			if(FocalConstants.STATUS_ERROR_SAVE.equals(result)) {			
 				form.add(getErrorNotificationBox(iwc, result));
-			} else if(FocalConstants.STATUS_SUCCESS_UPDATE_CUSTOMER.equals(result)) {
+			} else if(FocalConstants.STATUS_SUCCESS_SAVE_CUSTOMER.equals(result)) {
 				form.add(getConfirmationBox(iwc, result));
-			} else if(FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER.equals(result)) {
+			} else if(FocalConstants.STATUS_SUCCESS_CREATE_COMPANY.equals(result)) {
 				form.add(getConfirmationBox(iwc, result));
-			} else if(FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER.equals(result)) {
+			} else if(FocalConstants.STATUS_ERROR_SAVE_CUSTOMER.equals(result)) {
 				form.add(getErrorNotificationBox(iwc, result));
-			} else if(FocalConstants.STATUS_ERROR_CREATE_CUSTOMER.equals(result)) {
+			} else if(FocalConstants.STATUS_ERROR_CREATE_COMPANY.equals(result)) {
 				form.add(getErrorNotificationBox(iwc, result));
 			} else if(FocalConstants.STATUS_ERROR_FIND_PROJECTS.equals(result)) {
 				form.add(getErrorNotificationBox(iwc, result));

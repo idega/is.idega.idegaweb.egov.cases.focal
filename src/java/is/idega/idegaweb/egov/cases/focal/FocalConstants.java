@@ -17,21 +17,21 @@ public class FocalConstants {
 	public static final String STATUS_SUCCESS_SAVE_TITLE = "focal.status.success.save.title";
 	public static final String STATUS_SUCCESS_SAVE_MESSAGE = "focal.status.success.save.message";
 	
-	public static final String STATUS_ERROR_CREATE_CUSTOMER = "focal.status.error.create.customer";
-	public static final String STATUS_ERROR_CREATE_CUSTOMER_TITLE = "focal.status.error.create.customer.title";
-	public static final String STATUS_ERROR_CREATE_CUSTOMER_MESSAGE = "focal.status.error.create.customer.message";
+	public static final String STATUS_ERROR_SAVE_CUSTOMER = "focal.status.error.save.customer";
+	public static final String STATUS_ERROR_SAVE_CUSTOMER_TITLE = "focal.status.error.save.customer.title";
+	public static final String STATUS_ERROR_SAVE_CUSTOMER_MESSAGE = "focal.status.error.save.customer.message";
 	
-	public static final String STATUS_ERROR_UPDATE_CUSTOMER = "focal.status.error.update.customer";
-	public static final String STATUS_ERROR_UPDATE_CUSTOMER_TITLE = "focal.status.error.update.customer.title";
-	public static final String STATUS_ERROR_UPDATE_CUSTOMER_MESSAGE = "focal.status.error.update.customer.message";
+	public static final String STATUS_SUCCESS_SAVE_CUSTOMER = "focal.status.success.save.customer";
+	public static final String STATUS_SUCCESS_SAVE_CUSTOMER_TITLE = "focal.status.success.save.customer.title";
+	public static final String STATUS_SUCCESS_SAVE_CUSTOMER_MESSAGE = "focal.status.success.save.customer.message";
 	
-	public static final String STATUS_SUCCESS_CREATE_CUSTOMER = "focal.status.success.create.customer";
-	public static final String STATUS_SUCCESS_CREATE_CUSTOMER_TITLE = "focal.status.success.create.customer.title";
-	public static final String STATUS_SUCCESS_CREATE_CUSTOMER_MESSAGE = "focal.status.success.create.customer.message";
+	public static final String STATUS_SUCCESS_CREATE_COMPANY = "focal.status.success.create.company";
+	public static final String STATUS_SUCCESS_CREATE_COMPANY_TITLE = "focal.status.success.create.company.title";
+	public static final String STATUS_SUCCESS_CREATE_COMPANY_MESSAGE = "focal.status.success.create.company.message";
 	
-	public static final String STATUS_SUCCESS_UPDATE_CUSTOMER = "focal.status.success.update.customer";
-	public static final String STATUS_SUCCESS_UPDATE_CUSTOMER_TITLE = "focal.status.success.update.customer.title";
-	public static final String STATUS_SUCCESS_UPDATE_CUSTOMER_MESSAGE = "focal.status.success.update.customer.message";
+	public static final String STATUS_ERROR_CREATE_COMPANY = "focal.status.error.create.company";
+	public static final String STATUS_ERROR_CREATE_COMPANY_TITLE = "focal.status.error.create.company.title";
+	public static final String STATUS_ERROR_CREATE_COMPANY_MESSAGE = "focal.status.error.create.company.message";
 	
 	public static final String STATUS_ERROR_FIND_PROJECTS = "focal.status.error.findprojects";
 	public static final String STATUS_ERROR_FIND_PROJECTS_TITLE = "focal.status.error.findprojects.title";
