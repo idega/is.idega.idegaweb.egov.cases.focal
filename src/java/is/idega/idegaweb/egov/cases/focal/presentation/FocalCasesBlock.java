@@ -752,12 +752,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected void showList(IWContext iwc, int action, String result) throws RemoteException {
 		Form form = new Form();
 		form.addParameter(PARAMETER_ACTION, "");
+		boolean showCheckBoxes = true;
 
 		super.getParentPage().addJavascriptURL(getBundle().getResourcesPath() + "/js/jquery-1.2.1.pack.js");
 		super.getParentPage().addJavascriptURL(getBundle().getResourcesPath() + "/js/jquery.tablesorter.pack.js");
 
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("$(document).ready(function() { $('#" + getBlockID() + "').tablesorter( { headers: { 2: { sorter: false }, " + (getBusiness().useTypes() ? 6 : 5) + ": { sorter: false}" + (showCheckBox() ? ", " + (getBusiness().useTypes() ? 7 : 6) + ": { sorter: false}" : "") + "}, sortList: [[0,0]] } ); } );");
+		buffer.append("$(document).ready(function() { $('#" + getBlockID() + "').tablesorter( { headers: { 2: { sorter: false }, " + (getBusiness().useTypes() ? 6 : 5) + ": { sorter: false}" + (showCheckBoxes ? ", " + (getBusiness().useTypes() ? 7 : 6) + ": { sorter: false}" : "") + "}, sortList: [[0,0]] } ); } );");
 
 		super.getParentPage().getAssociatedScript().addFunction("tableSorter", buffer.toString());
 
@@ -780,7 +781,6 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
 
-		boolean showCheckBoxes = true;
 		TableCell2 cell = row.createHeaderCell();
 		cell.setStyleClass("firstColumn");
 		cell.setStyleClass("caseNumber");
