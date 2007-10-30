@@ -22,27 +22,30 @@ import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
 
 public class FocalClosedCases extends FocalCasesBlock {
-	
+
+	protected void initializeTableSorter(IWContext arg0) throws RemoteException {
+	}
+
 	protected String getBlockID() {
 		return "closedCases";
 	}
-	
+
 	protected Collection getCases(User user) throws RemoteException {
 		Collection groups = getUserBusiness().getUserGroupsDirectlyRelated(user);
 		return getBusiness().getClosedCases(groups);
 	}
-	
+
 	protected void save(IWContext iwc) throws RemoteException {
 		Object casePK = iwc.getParameter(PARAMETER_CASE_PK);
 
 		try {
-			getBusiness().reactivateCase(casePK, iwc.getCurrentUser(), iwc);
+			getBusiness().reactivateCase(getBusiness().getGeneralCase(casePK), iwc.getCurrentUser(), iwc);
 		}
 		catch (FinderException fe) {
 			fe.printStackTrace();
 		}
 	}
-	
+
 	protected void showProcessor(IWContext iwc, Object casePK) throws RemoteException {
 		Form form = new Form();
 		form.setStyleClass("adminForm");
@@ -222,7 +225,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		next.setToFormSubmit(form);
 		bottom.add(next);
-		
+
 		if (theCase.getExternalId() == null) {
 			Link focal = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
 			focal.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
@@ -232,5 +235,5 @@ public class FocalClosedCases extends FocalCasesBlock {
 
 		add(form);
 	}
-	
+
 }

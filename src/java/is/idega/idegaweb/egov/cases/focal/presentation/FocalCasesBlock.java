@@ -77,10 +77,6 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected static final String PARAMETER_PROJECT_NAME = "prm_project_name";
 	protected static final String PARAMETER_COMPANY_ID = "prm_company_id";
 
-	protected static final String PARAMETER_CASE_CATEGORY_PK = "prm_case_category_pk";
-	protected static final String PARAMETER_SUB_CASE_CATEGORY_PK = "prm_sub_case_category_pk";
-	protected static final String PARAMETER_CASE_TYPE_PK = "prm_case_type_pk";
-
 	protected static final String PARAMETER_ADDRESS1 = "prm_address_1";
 	protected static final String PARAMETER_ADDRESS2 = "prm_address_2";
 	protected static final String PARAMETER_COMPANY_NAME = "prm_company_name";

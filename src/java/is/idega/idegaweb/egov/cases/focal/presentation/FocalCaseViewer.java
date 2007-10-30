@@ -31,24 +31,19 @@ import com.idega.util.IWTimestamp;
 import com.idega.util.text.Name;
 
 public class FocalCaseViewer extends CaseViewer {
-	
-	public static final String PARAMETER_ACTION = "cp_prm_action";
 
-	public static final String PARAMETER_ACTION_REACTIVATE = "prm_action_reactivate";
-	public static final String PARAMETER_ACTION_REVIEW = "prm_action_review";
 	public static final String PARAMETER_CASE_PK = "prm_case_pk";
 
 	protected static final int ACTION_SAVE = 1;
 
-	private ICPage iHomePage;
 	private ICPage iBackPage;
-	
+
 	protected void present(IWContext iwc) {
 		try {
 			if (iwc.isParameterSet(PARAMETER_CASE_PK)) {
 				if (iwc.isParameterSet(PARAMETER_ACTION_REACTIVATE)) {
 					try {
-						getCasesBusiness(iwc).reactivateCase(iwc.getParameter(PARAMETER_CASE_PK), iwc.getCurrentUser(), iwc);
+						getCasesBusiness(iwc).reactivateCase(getCasesBusiness(iwc).getGeneralCase(iwc.getParameter(PARAMETER_CASE_PK)), iwc.getCurrentUser(), iwc);
 					}
 					catch (FinderException e) {
 						e.printStackTrace();
@@ -56,7 +51,7 @@ public class FocalCaseViewer extends CaseViewer {
 				}
 				else if (iwc.isParameterSet(PARAMETER_ACTION_REVIEW)) {
 					try {
-						getCasesBusiness(iwc).reviewCase(iwc.getParameter(PARAMETER_CASE_PK), iwc.getCurrentUser(), iwc);
+						getCasesBusiness(iwc).reviewCase(getCasesBusiness(iwc).getGeneralCase(iwc.getParameter(PARAMETER_CASE_PK)), iwc.getCurrentUser(), iwc);
 					}
 					catch (FinderException e) {
 						e.printStackTrace();
@@ -88,7 +83,7 @@ public class FocalCaseViewer extends CaseViewer {
 				fe.printStackTrace();
 				throw new IBORuntimeException(fe);
 			}
-//			theCase = new GeneralCase();
+			//			theCase = new GeneralCase();
 			CaseCategory category = theCase.getCaseCategory();
 			CaseCategory parentCategory = category.getParent();
 			CaseStatus status = theCase.getCaseStatus();
@@ -313,7 +308,7 @@ public class FocalCaseViewer extends CaseViewer {
 			throw new IBORuntimeException(re);
 		}
 	}
-	
+
 	private Layer getHandlerLayer(IWContext iwc, IWResourceBundle iwrb, Case theCase, CaseLog log) throws RemoteException {
 		Layer layer = new Layer(Layer.DIV);
 		layer.setStyleClass("handlerLayer");
