@@ -3,17 +3,21 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-  	<groupId>com.idega.block.platform</groupId>
-  	<artifactId>com.idega.block.base</artifactId>
-  	<version>4.0-SNAPSHOT</version>
+  	<groupId>com.idega.block.egov</groupId>
+  	<artifactId>com.idega.block.egov</artifactId>
+  	<version>4.0.2-SNAPSHOT</version>
   </parent>
   <packaging>jar</packaging>
   <groupId>com.idega.block.egov</groupId>
   <artifactId>is.idega.idegaweb.egov.cases.focal</artifactId>
   <name>idega eGov Cases and Focal dms integration</name>
-  <version>${com.idega.block.egov-is.idega.idegaweb.egov.cases.focal-version}</version>
+  <version>4.0.2-SNAPSHOT</version>
   <inceptionYear>2007</inceptionYear>
   <scm>
+    <!--
+    <connection>scm:cvs:ext:${user.name}@code.idega.com:/idega/cvs:${groupId}/${artifactId}/</connection>
+    <developerConnection>scm:cvs:ext:${user.name}@code.idega.com:/idega/cvs:${groupId}/${artifactId}/</developerConnection> 
+    -->
     <connection>scm:cvs:ext:${user.name}@code.idega.com:/idega/cvs:${groupId}/${artifactId}/</connection>
     <developerConnection>scm:cvs:ext:${user.name}@code.idega.com:/idega/cvs:${groupId}/${artifactId}/</developerConnection>
   </scm>
@@ -56,11 +60,11 @@
       <artifactId>com.idega.webface</artifactId>
     </dependency>
     <dependency>
-	  <groupId>com.idega.block.platform</groupId>
+	  <groupId>com.idega.block.egov</groupId>
 	  <artifactId>com.idega.company</artifactId>
   	</dependency>
   	<dependency>
-      <groupId>com.idega.block.custom</groupId>
+      <groupId>com.idega.block.egov</groupId>
       <artifactId>is.idega.block.nationalregister</artifactId>
     </dependency>
     <dependency>
