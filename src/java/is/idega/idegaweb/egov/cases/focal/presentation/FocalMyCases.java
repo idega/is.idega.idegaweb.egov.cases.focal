@@ -4,6 +4,7 @@ import is.idega.idegaweb.egov.cases.business.CaseCategoryCollectionHandler;
 import is.idega.idegaweb.egov.cases.data.CaseCategory;
 import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
+import is.idega.idegaweb.egov.cases.presentation.MyCases;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -462,8 +463,7 @@ public class FocalMyCases extends FocalCasesBlock {
 
 	@Override
 	protected String getCasesProcessorType() {
-		// TODO Auto-generated method stub
-		return null;
+		return MyCases.TYPE;
 	}
 
 }
