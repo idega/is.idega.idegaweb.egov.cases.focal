@@ -39,8 +39,9 @@ public class FocalMyCases extends FocalCasesBlock {
 		return "myCases";
 	}
 
-	protected Collection getCases(User user) throws RemoteException {
-		return getBusiness().getMyCases(user);
+	@Override
+	protected Collection<GeneralCase> getCases(User user) throws RemoteException {
+		return getCasesBusiness().getMyCases(user);
 	}
 
 	protected void save(IWContext iwc) throws RemoteException {
@@ -52,7 +53,7 @@ public class FocalMyCases extends FocalCasesBlock {
 		String reply = iwc.getParameter(PARAMETER_REPLY);
 
 		try {
-			getBusiness().handleCase(casePK, subCaseCategoryPK != null ? subCaseCategoryPK : caseCategoryPK, caseTypePK, status, iwc.getCurrentUser(), reply, iwc);
+			getCasesBusiness().handleCase(casePK, subCaseCategoryPK != null ? subCaseCategoryPK : caseCategoryPK, caseTypePK, status, iwc.getCurrentUser(), reply, iwc);
 		}
 		catch (FinderException fe) {
 			fe.printStackTrace();
@@ -245,7 +246,7 @@ public class FocalMyCases extends FocalCasesBlock {
 
 		GeneralCase theCase = null;
 		try {
-			theCase = getBusiness().getGeneralCase(casePK);
+			theCase = getCasesBusiness().getGeneralCase(casePK);
 		}
 		catch (FinderException fe) {
 			fe.printStackTrace();
@@ -277,7 +278,7 @@ public class FocalMyCases extends FocalCasesBlock {
 		clear.setStyleClass("Clear");
 
 		SelectorUtility util = new SelectorUtility();
-		DropdownMenu categories = (DropdownMenu) util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_CASE_CATEGORY_PK), getBusiness().getCaseCategories(), "getName");
+		DropdownMenu categories = (DropdownMenu) util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_CASE_CATEGORY_PK), getCasesBusiness().getCaseCategories(), "getName");
 		categories.keepStatusOnAction(true);
 		categories.setSelectedElement(parentCategory != null ? parentCategory.getPrimaryKey().toString() : category.getPrimaryKey().toString());
 		categories.setStyleClass("caseCategoryDropdown");
@@ -301,7 +302,7 @@ public class FocalMyCases extends FocalCasesBlock {
 			}
 		}
 
-		DropdownMenu types = (DropdownMenu) util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_CASE_TYPE_PK), getBusiness().getCaseTypes(), "getName");
+		DropdownMenu types = (DropdownMenu) util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_CASE_TYPE_PK), getCasesBusiness().getCaseTypes(), "getName");
 		types.keepStatusOnAction(true);
 		types.setSelectedElement(type.getPrimaryKey().toString());
 		types.setStyleClass("caseTypeDropdown");
@@ -309,9 +310,9 @@ public class FocalMyCases extends FocalCasesBlock {
 		HiddenInput hiddenType = new HiddenInput(PARAMETER_CASE_TYPE_PK, type.getPrimaryKey().toString());
 
 		DropdownMenu statuses = new DropdownMenu(PARAMETER_STATUS);
-		statuses.addMenuElement(getBusiness().getCaseStatusPending().getStatus(), getBusiness().getLocalizedCaseStatusDescription(theCase, getBusiness().getCaseStatusPending(), iwc.getCurrentLocale()));
-		statuses.addMenuElement(getBusiness().getCaseStatusWaiting().getStatus(), getBusiness().getLocalizedCaseStatusDescription(theCase, getBusiness().getCaseStatusWaiting(), iwc.getCurrentLocale()));
-		statuses.addMenuElement(getBusiness().getCaseStatusReady().getStatus(), getBusiness().getLocalizedCaseStatusDescription(theCase, getBusiness().getCaseStatusReady(), iwc.getCurrentLocale()));
+		statuses.addMenuElement(getCasesBusiness().getCaseStatusPending().getStatus(), getCasesBusiness().getLocalizedCaseStatusDescription(theCase, getCasesBusiness().getCaseStatusPending(), iwc.getCurrentLocale()));
+		statuses.addMenuElement(getCasesBusiness().getCaseStatusWaiting().getStatus(), getCasesBusiness().getLocalizedCaseStatusDescription(theCase, getCasesBusiness().getCaseStatusWaiting(), iwc.getCurrentLocale()));
+		statuses.addMenuElement(getCasesBusiness().getCaseStatusReady().getStatus(), getCasesBusiness().getLocalizedCaseStatusDescription(theCase, getCasesBusiness().getCaseStatusReady(), iwc.getCurrentLocale()));
 		statuses.setSelectedElement(theCase.getStatus());
 		statuses.setStyleClass("caseStatusDropdown");
 
@@ -325,7 +326,7 @@ public class FocalMyCases extends FocalCasesBlock {
 		reply.setStyleClass("textarea");
 		reply.keepStatusOnAction(true);
 
-		if (getBusiness().useTypes()) {
+		if (getCasesBusiness().useTypes()) {
 			Layer element = new Layer(Layer.DIV);
 			element.setStyleClass("formItem");
 			Label label = new Label(getResourceBundle().getLocalizedString("case_type", "Case type"), types);

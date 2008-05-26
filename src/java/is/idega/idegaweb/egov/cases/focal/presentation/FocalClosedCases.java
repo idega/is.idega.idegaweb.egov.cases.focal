@@ -30,16 +30,18 @@ public class FocalClosedCases extends FocalCasesBlock {
 		return "closedCases";
 	}
 
-	protected Collection getCases(User user) throws RemoteException {
+	@SuppressWarnings("unchecked")
+	@Override
+	protected Collection<GeneralCase> getCases(User user) throws RemoteException {
 		Collection groups = getUserBusiness().getUserGroupsDirectlyRelated(user);
-		return getBusiness().getClosedCases(groups);
+		return getCasesBusiness().getClosedCases(groups);
 	}
 
 	protected void save(IWContext iwc) throws RemoteException {
 		Object casePK = iwc.getParameter(PARAMETER_CASE_PK);
 
 		try {
-			getBusiness().reactivateCase(getBusiness().getGeneralCase(casePK), iwc.getCurrentUser(), iwc);
+			getCasesBusiness().reactivateCase(getCasesBusiness().getGeneralCase(casePK), iwc.getCurrentUser(), iwc);
 		}
 		catch (FinderException fe) {
 			fe.printStackTrace();
@@ -55,7 +57,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 
 		GeneralCase theCase = null;
 		try {
-			theCase = getBusiness().getGeneralCase(casePK);
+			theCase = getCasesBusiness().getGeneralCase(casePK);
 		}
 		catch (FinderException fe) {
 			fe.printStackTrace();
@@ -106,7 +108,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 		Layer createdDate = new Layer(Layer.SPAN);
 		createdDate.add(new Text(created.getLocaleDateAndTime(iwc.getCurrentLocale(), IWTimestamp.SHORT, IWTimestamp.SHORT)));
 
-		if (getBusiness().useTypes()) {
+		if (getCasesBusiness().useTypes()) {
 			Layer element = new Layer(Layer.DIV);
 			element.setStyleClass("formItem");
 			Label label = new Label();

@@ -754,7 +754,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		super.getParentPage().addJavascriptURL(getBundle().getResourcesPath() + "/js/jquery.tablesorter.pack.js");
 
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("$(document).ready(function() { $('#" + getBlockID() + "').tablesorter( { headers: { 2: { sorter: false }, " + (getBusiness().useTypes() ? 6 : 5) + ": { sorter: false}" + (showCheckBoxes ? ", " + (getBusiness().useTypes() ? 7 : 6) + ": { sorter: false}" : "") + "}, sortList: [[0,0]] } ); } );");
+		buffer.append("$(document).ready(function() { $('#" + getBlockID() + "').tablesorter( { headers: { 2: { sorter: false }, " + (getCasesBusiness().useTypes() ? 6 : 5) + ": { sorter: false}" + (showCheckBoxes ? ", " + (getCasesBusiness().useTypes() ? 7 : 6) + ": { sorter: false}" : "") + "}, sortList: [[0,0]] } ); } );");
 
 		super.getParentPage().getAssociatedScript().addFunction("tableSorter", buffer.toString());
 
@@ -772,7 +772,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		column = columnGroup.createColumn();
 		column.setSpan(1);
 		column.setWidth("12");
-		Collection cases = getCases(iwc.getCurrentUser());
+		Collection<GeneralCase> cases = getCases(iwc.getCurrentUser());
 
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
@@ -786,7 +786,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		cell.setStyleClass("sender");
 		cell.add(new Text(getResourceBundle().getLocalizedString("sender", "Sender")));
 
-		if (getBusiness().useTypes()) {
+		if (getCasesBusiness().useTypes()) {
 			cell = row.createHeaderCell();
 			cell.setStyleClass("caseType");
 			cell.add(new Text(getResourceBundle().getLocalizedString("case_type", "Case type")));
@@ -819,9 +819,9 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		group = table.createBodyRowGroup();
 		int iRow = 1;
 
-		Iterator iter = cases.iterator();
+		Iterator<GeneralCase> iter = cases.iterator();
 		while (iter.hasNext()) {
-			GeneralCase theCase = (GeneralCase) iter.next();
+			GeneralCase theCase = iter.next();
 			CaseStatus status = theCase.getCaseStatus();
 			CaseType type = theCase.getCaseType();
 			User owner = theCase.getOwner();
@@ -858,7 +858,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 				cell.add(new Text("-"));
 			}
 
-			if (getBusiness().useTypes()) {
+			if (getCasesBusiness().useTypes()) {
 				cell = row.createCell();
 				cell.setStyleClass("caseType");
 				cell.add(new Text(type.getName()));
@@ -870,7 +870,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 			cell = row.createCell();
 			cell.setStyleClass("status");
-			cell.add(new Text(getBusiness().getLocalizedCaseStatusDescription(theCase, status, iwc.getCurrentLocale())));
+			cell.add(new Text(getCasesBusiness().getLocalizedCaseStatusDescription(theCase, status, iwc.getCurrentLocale())));
 
 			User handler = theCase.getHandledBy();
 			cell = row.createCell();
@@ -1192,7 +1192,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		for (int i = 0; i < casesPKs.length; i++) {
 			GeneralCase theCase = null;
 			try {
-				theCase = getBusiness().getGeneralCase(casesPKs[i]);
+				theCase = getCasesBusiness().getGeneralCase(casesPKs[i]);
 				User owner = theCase.getOwner();
 				if (owner != null) {
 					String id = owner.getPersonalID();
