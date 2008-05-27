@@ -30,9 +30,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 		return "closedCases";
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected Collection<GeneralCase> getCases(User user) throws RemoteException {
+	protected Collection getCases(User user) throws RemoteException {
 		Collection groups = getUserBusiness().getUserGroupsDirectlyRelated(user);
 		return getCasesBusiness().getClosedCases(groups);
 	}

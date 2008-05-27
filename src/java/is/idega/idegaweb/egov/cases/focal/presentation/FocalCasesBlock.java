@@ -772,7 +772,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		column = columnGroup.createColumn();
 		column.setSpan(1);
 		column.setWidth("12");
-		Collection<GeneralCase> cases = getCases(iwc.getCurrentUser());
+		Collection cases = getCases(iwc.getCurrentUser());
 
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
@@ -819,9 +819,9 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		group = table.createBodyRowGroup();
 		int iRow = 1;
 
-		Iterator<GeneralCase> iter = cases.iterator();
+		Iterator iter = cases.iterator();
 		while (iter.hasNext()) {
-			GeneralCase theCase = iter.next();
+			GeneralCase theCase = (GeneralCase) iter.next();
 			CaseStatus status = theCase.getCaseStatus();
 			CaseType type = theCase.getCaseType();
 			User owner = theCase.getOwner();
