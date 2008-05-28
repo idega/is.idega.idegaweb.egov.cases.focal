@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import javax.ejb.FinderException;
 
+import com.idega.block.process.presentation.UserCases;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
 import com.idega.presentation.IWContext;
@@ -50,7 +51,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 		Form form = new Form();
 		form.setStyleClass("adminForm");
 		form.setStyleClass("overview");
-		form.addParameter(PARAMETER_ACTION, "");
+		form.addParameter(UserCases.PARAMETER_ACTION, "");
 		form.maintainParameter(PARAMETER_CASE_PK);
 
 		GeneralCase theCase = null;
@@ -217,18 +218,18 @@ public class FocalClosedCases extends FocalCasesBlock {
 
 		Link back = getButtonLink(getResourceBundle().getLocalizedString("back", "Back"));
 		back.setStyleClass("homeButton");
-		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
+		back.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
 		back.setToFormSubmit(form);
 		bottom.add(back);
 
 		Link next = getButtonLink(getResourceBundle().getLocalizedString(getPrefix() + "reactivate_case", "Reactivate case"));
-		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
+		next.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		next.setToFormSubmit(form);
 		bottom.add(next);
 
 		if (theCase.getExternalId() == null) {
 			Link focal = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
-			focal.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
+			focal.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 			focal.setToFormSubmit(form);
 			bottom.add(focal);
 		}

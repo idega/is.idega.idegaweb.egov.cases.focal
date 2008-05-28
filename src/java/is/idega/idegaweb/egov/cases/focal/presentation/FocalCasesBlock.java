@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.idega.block.process.data.CaseStatus;
+import com.idega.block.process.presentation.UserCases;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
@@ -299,7 +300,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected void showCreateCustomer(IWContext iwc, int action, Company company, NationalRegister natReg, boolean searchForCompany) throws RemoteException {
 		Form form = new Form();
 		form.setId("focalProjectSearchForm");
-		form.addParameter(PARAMETER_ACTION, "");
+		form.addParameter(UserCases.PARAMETER_ACTION, "");
 		form.maintainParameter(PARAMETER_CASE_PK);
 
 		Layer projectSection = new Layer(Layer.DIV);
@@ -334,11 +335,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			Link next = null;
 			if (searchForCompany) {
 				next = getButtonLink(getResourceBundle().getLocalizedString("find_company_focal", "Find company"));
-				next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');} else {alert('Please enter a valid SSN'); return false;}");
+				next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');} else {alert('Please enter a valid SSN'); return false;}");
 			}
 			else {
 				next = getButtonLink(getResourceBundle().getLocalizedString("find_person_focal", "Find person"));
-				next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');} else {alert('Please enter a valid SSN'); return false;}");
+				next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');} else {alert('Please enter a valid SSN'); return false;}");
 			}
 			next.setStyleClass("searchButton");
 			next.setToFormSubmit(form);
@@ -353,7 +354,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			form.add(bottom);
 
 			Link cancel = getButtonLink(getResourceBundle().getLocalizedString("cancel", "Cancel"));
-			cancel.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
+			cancel.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
 			cancel.setToFormSubmit(form);
 			bottom.add(cancel);
 
@@ -384,11 +385,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		Link next = null;
 		if (isCompany) {
 			next = getButtonLink(getResourceBundle().getLocalizedString("find_company_focal", "Find company"));
-			next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');} else {alert('Please enter a valid SSN'); return false;}");
+			next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_SEARCH_COMPANY + "');} else {alert('Please enter a valid SSN'); return false;}");
 		}
 		else {
 			next = getButtonLink(getResourceBundle().getLocalizedString("find_person_focal", "Find person"));
-			next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');} else {alert('Please enter a valid SSN'); return false;}");
+			next.setOnClick("if(searchValid()) {changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_SEARCH_PERSON + "');} else {alert('Please enter a valid SSN'); return false;}");
 		}
 		next.setStyleClass("searchButton");
 		next.setToFormSubmit(form);
@@ -728,17 +729,17 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 		Link cancel = getButtonLink(getResourceBundle().getLocalizedString("cancel", "Cancel"));
 		cancel.setStyleClass("homeButton");
-		cancel.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
+		cancel.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
 		cancel.setToFormSubmit(form);
 		bottom.add(cancel);
 
 		Link save = getButtonLink(getResourceBundle().getLocalizedString("save", "Save"));
 		save.setToFormSubmit(form);
 		if (isCompany) {
-			save.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_SAVE_COMPANY) + "');");
+			save.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_SAVE_COMPANY) + "');");
 		}
 		else {
-			save.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_SAVE_PERSON) + "');");
+			save.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_SAVE_PERSON) + "');");
 		}
 		bottom.add(save);
 
@@ -747,7 +748,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected void showList(IWContext iwc, int action, String result) throws RemoteException {
 		Form form = new Form();
-		form.addParameter(PARAMETER_ACTION, "");
+		form.addParameter(UserCases.PARAMETER_ACTION, "");
 		boolean showCheckBoxes = true;
 
 		super.getParentPage().addJavascriptURL(getBundle().getResourcesPath() + "/js/jquery-1.2.1.pack.js");
@@ -911,7 +912,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		form.add(bottom);
 
 		Link back = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
-		back.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
+		back.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
 		back.setToFormSubmit(form);
 		bottom.add(back);
 
@@ -1007,7 +1008,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected void showProjectSearch(IWContext iwc, int action, String result) {
 		Form form = new Form();
 		form.setId("focalProjectSearchForm");
-		form.addParameter(PARAMETER_ACTION, "");
+		form.addParameter(UserCases.PARAMETER_ACTION, "");
 		form.addParameter(PARAMETER_PROJECT_PK, "");
 		form.addParameter(PARAMETER_PROJECT_NAME, "");
 		//		form.addParameter(PARAMETER_CUSTOMER_PK, "");
@@ -1056,9 +1057,9 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 		Link next = getButtonLink(getResourceBundle().getLocalizedString("find_project_focal", "Find projects"));
 		next.setStyleClass("searchButton");
-		next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');");
-		//		next.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');changeInputValue(findObj('" + PARAMETER_PROJECT_SEARCH_KEY + "'), document.getElementById('projectSearchField').value);");
-		//		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
+		next.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');");
+		//		next.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_MOVE_FOCAL + "');changeInputValue(findObj('" + PARAMETER_PROJECT_SEARCH_KEY + "'), document.getElementById('projectSearchField').value);");
+		//		next.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 
 		next.setToFormSubmit(form);
 		searchSection.add(next);
@@ -1142,7 +1143,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		form.add(middle);
 
 		Link createCompany = getButtonLink(getResourceBundle().getLocalizedString("create_company", "Create Company"));
-		createCompany.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_CREATE_COMPANY + "');");
+		createCompany.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_CREATE_COMPANY + "');");
 		createCompany.setToFormSubmit(form);
 		middle.add(createCompany);
 
@@ -1226,11 +1227,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 							Link createCustomer = null;
 							if (customer != null) {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("update", "Update"));
-								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_PERSON));
+								createCustomer.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_UPDATE_PERSON));
 							}
 							else {
 								createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-								createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_PERSON));
+								createCustomer.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_CREATE_PERSON));
 							}
 							createCustomer.setOnClick("changeInputValue(findObj('" + PARAMETER_COMPANY_ID + "'), '" + id + "');");
 							createCustomer.setStyleClass("homeButton");
@@ -1240,7 +1241,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 						}
 						else {
 							Link createCustomer = getButtonLink(getResourceBundle().getLocalizedString("create", "Create"));
-							createCustomer.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CREATE_PERSON));
+							createCustomer.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_CREATE_PERSON));
 							createCustomer.setStyleClass("homeButton");
 
 							createCustomer.setToFormSubmit(form);
@@ -1265,12 +1266,12 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 		Link back = getButtonLink(getResourceBundle().getLocalizedString("back", "Back"));
 		back.setStyleClass("homeButton");
-		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
+		back.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
 		back.setToFormSubmit(form);
 		bottom.add(back);
 
 		Link save = getButtonLink(getResourceBundle().getLocalizedString("save", "Save to Focal"));
-		save.setOnClick("if(isProjectSelected()) {changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + ACTION_SAVE_FOCAL + "');} else {alert('" + noProjectAlert + "');return false;}");
+		save.setOnClick("if(isProjectSelected()) {changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + ACTION_SAVE_FOCAL + "');} else {alert('" + noProjectAlert + "');return false;}");
 		save.setToFormSubmit(form);
 		bottom.add(save);
 
@@ -1278,8 +1279,8 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	}
 
 	protected int parseAction(IWContext iwc) {
-		if (iwc.isParameterSet(PARAMETER_ACTION)) {
-			return Integer.parseInt(iwc.getParameter(PARAMETER_ACTION));
+		if (iwc.isParameterSet(UserCases.PARAMETER_ACTION)) {
+			return Integer.parseInt(iwc.getParameter(UserCases.PARAMETER_ACTION));
 		}
 		return ACTION_VIEW;
 	}
@@ -1357,7 +1358,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected Link getProcessLink(PresentationObject object, GeneralCase theCase) {
 		Link process = new Link(object);
 		process.addParameter(PARAMETER_CASE_PK, theCase.getPrimaryKey().toString());
-		process.addParameter(PARAMETER_ACTION, ACTION_PROCESS);
+		process.addParameter(UserCases.PARAMETER_ACTION, ACTION_PROCESS);
 
 		return process;
 	}
