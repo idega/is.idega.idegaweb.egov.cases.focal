@@ -62,7 +62,7 @@ public class FocalMyCases extends FocalCasesBlock {
 
 	//	protected void showList(IWContext iwc, int action, String result) throws RemoteException {
 	//		Form form = new Form();
-	//		form.addParameter(UserCases.PARAMETER_ACTION, "");
+	//		form.addParameter(PARAMETER_ACTION, "");
 	//		
 	//		Layer casesSection = new Layer(Layer.DIV);
 	//		casesSection.setStyleClass("formSection");
@@ -228,7 +228,7 @@ public class FocalMyCases extends FocalCasesBlock {
 	//		form.add(bottom);
 	//
 	//		Link back = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
-	//		back.setOnClick("changeInputValue(findObj('" + UserCases.PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
+	//		back.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
 	//		back.setToFormSubmit(form);
 	//		bottom.add(back);
 	//
@@ -240,7 +240,7 @@ public class FocalMyCases extends FocalCasesBlock {
 		form.setStyleClass("adminForm");
 		form.setStyleClass("overview");
 		form.maintainParameter(PARAMETER_CASE_PK);
-		form.addParameter(UserCases.PARAMETER_ACTION, "");
+		form.addParameter(PARAMETER_ACTION, "");
 
 		boolean useSubCategories = getCasesBusiness(iwc).useSubCategories();
 
@@ -441,18 +441,18 @@ public class FocalMyCases extends FocalCasesBlock {
 
 		Link back = getButtonLink(getResourceBundle().getLocalizedString("back", "Back"));
 		back.setStyleClass("homeButton");
-		back.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
+		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_VIEW));
 		back.setToFormSubmit(form);
 		bottom.add(back);
 
 		Link next = getButtonLink(getResourceBundle().getLocalizedString("process", "Process"));
-		next.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
+		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		next.setToFormSubmit(form);
 		bottom.add(next);
 
 		if (theCase.getExternalId() == null) {
 			Link focal = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
-			focal.setValueOnClick(UserCases.PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
+			focal.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_MOVE_FOCAL));
 			focal.setToFormSubmit(form);
 			bottom.add(focal);
 		}
