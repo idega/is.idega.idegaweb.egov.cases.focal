@@ -72,7 +72,7 @@
     <dependency>
       <groupId>bundles</groupId>
       <artifactId>is.idega.idegaweb.egov.cases</artifactId>
-      <version>1.0.31</version>
+      <version>1.0.38</version>
       <type>jar</type>
       <url>http://www.idega.com/</url>
     </dependency>
