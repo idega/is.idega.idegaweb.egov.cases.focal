@@ -20,6 +20,8 @@ import is.idega.idegaweb.egov.cases.focal.business.server.focalService.ProjectSe
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.RETURNSTATUS;
 import is.idega.idegaweb.egov.cases.focal.business.server.focalService.beans.CustomerPersonalInfo;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -51,10 +53,10 @@ import com.idega.util.CypherText;
 
 /**
  * 
- * Last modified: $Date: 2007/10/30 07:17:37 $ by $Author: laddi $
+ * Last modified: $Date: 2008/06/27 15:18:56 $ by $Author: tryggvil $
  * 
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCasesIntegration {
 
@@ -65,6 +67,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	private static final String const_project_type_BY_SOCIAL_NUMBER = "kt";
 	private static final String focal_service_login_app_key = "focal.ws.login";
 	private static final String focal_service_pass_app_key = "focal.ws.pass";
+	private static final String focal_service_url_app_key = "focal.ws.url";
 	private static final String ck = "ZIZYFk9nxC41RhCtJBDydBRiUNPvyKlIWmJDJ9p2xYWXvmqIrVyTNXIljGupoFBqi6TyC7bUXWLL2OxdRsWnaph2kQyETYlzHzhv";
 
 	private ProjectServiceLocator locator;
@@ -761,12 +764,24 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	}
 
 	protected Project getFocalService() throws ServiceException {
-
 		if (locator == null) {
 			locator = new ProjectServiceLocator();
 		}
-
-		return locator.getDomino();
+		IWMainApplication iwma = getIWMainApplication();
+		String urlString = iwma.getSettings().getProperty(focal_service_url_app_key);
+		if(urlString!=null){
+			URL url;
+			try {
+				url = new URL(urlString);
+				return locator.getDomino(url);
+			}
+			catch (MalformedURLException e) {
+				throw new ServiceException(e);
+			}
+		}
+		else{
+			return locator.getDomino();
+		}
 	}
 
 	protected String[] getLoginAndPassword() {
