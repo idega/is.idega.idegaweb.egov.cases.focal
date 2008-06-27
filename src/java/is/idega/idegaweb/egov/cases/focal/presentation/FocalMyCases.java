@@ -460,7 +460,6 @@ public class FocalMyCases extends FocalCasesBlock {
 		add(form);
 	}
 
-	@Override
 	protected String getCasesProcessorType() {
 		// TODO Auto-generated method stub
 		return null;
