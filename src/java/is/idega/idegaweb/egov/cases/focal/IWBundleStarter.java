@@ -1,7 +1,7 @@
 package is.idega.idegaweb.egov.cases.focal;
 
 import is.idega.idegaweb.egov.cases.business.CasesBusiness;
-import is.idega.idegaweb.egov.cases.util.CaseConstants;
+import is.idega.idegaweb.egov.cases.util.CasesConstants;
 
 import com.idega.block.process.business.CaseCodeManager;
 import com.idega.idegaweb.IWBundle;
@@ -14,7 +14,7 @@ public class IWBundleStarter implements IWBundleStartable {
 
 	public void start(IWBundle starterBundle) {
 		GlobalIncludeManager.getInstance().addBundleStyleSheet(IW_BUNDLE_IDENTIFIER, "/style/focal.css");
-		CaseCodeManager.getInstance().addCaseBusinessForCode(CaseConstants.CASE_CODE_KEY, CasesBusiness.class);
+		CaseCodeManager.getInstance().addCaseBusinessForCode(CasesConstants.CASE_CODE_KEY, CasesBusiness.class);
 		registerCaseChangeListener(starterBundle);
 	}
 
