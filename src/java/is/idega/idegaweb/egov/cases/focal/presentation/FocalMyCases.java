@@ -13,7 +13,6 @@ import java.util.Iterator;
 import javax.ejb.FinderException;
 
 import com.idega.block.process.data.CaseLog;
-import com.idega.block.process.presentation.UserCases;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
 import com.idega.presentation.IWContext;
@@ -41,7 +40,7 @@ public class FocalMyCases extends FocalCasesBlock {
 		return "myCases";
 	}
 
-	protected Collection getCases(User user) throws RemoteException {
+	protected Collection getCases(User user) {
 		return getCasesBusiness().getMyCases(user);
 	}
 

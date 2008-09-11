@@ -10,7 +10,6 @@ import java.util.Collection;
 
 import javax.ejb.FinderException;
 
-import com.idega.block.process.presentation.UserCases;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
 import com.idega.presentation.IWContext;
@@ -32,9 +31,15 @@ public class FocalClosedCases extends FocalCasesBlock {
 		return "closedCases";
 	}
 
-	protected Collection getCases(User user) throws RemoteException {
-		Collection groups = getUserBusiness().getUserGroupsDirectlyRelated(user);
-		return getCasesBusiness().getClosedCases(groups);
+	protected Collection getCases(User user) {
+		
+		try {
+			Collection groups = getUserBusiness().getUserGroupsDirectlyRelated(user);
+			return getCasesBusiness().getClosedCases(groups);
+			
+		} catch (RemoteException e) {
+			throw new IBORuntimeException(e);
+		}
 	}
 
 	protected void save(IWContext iwc) throws RemoteException {
