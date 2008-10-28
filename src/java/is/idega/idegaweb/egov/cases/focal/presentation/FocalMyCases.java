@@ -35,6 +35,7 @@ public class FocalMyCases extends FocalCasesBlock {
 	
 	private boolean usePDFDownloadColumn = true;
 	private boolean allowPDFSigning = true;
+	private boolean showStatistics;
 	
 	@Override
 	public boolean isUsePDFDownloadColumn() {
@@ -56,17 +57,31 @@ public class FocalMyCases extends FocalCasesBlock {
 		this.allowPDFSigning = allowPDFSigning;
 	}
 
+	@Override
+	public boolean isShowStatistics() {
+		return showStatistics;
+	}
+
+	@Override
+	public void setShowStatistics(boolean showStatistics) {
+		this.showStatistics = showStatistics;
+	}
+
+	@Override
 	protected void initializeTableSorter(IWContext arg0) throws RemoteException {
 	}
 
+	@Override
 	protected String getBlockID() {
 		return "myCases";
 	}
 
+	@Override
 	protected Collection getCases(User user) {
 		return getCasesBusiness().getMyCases(user);
 	}
 
+	@Override
 	protected void save(IWContext iwc) throws RemoteException {
 		Object casePK = iwc.getParameter(PARAMETER_CASE_PK);
 		Object caseCategoryPK = iwc.getParameter(PARAMETER_CASE_CATEGORY_PK);
@@ -258,6 +273,7 @@ public class FocalMyCases extends FocalCasesBlock {
 	//		add(form);
 	//	}
 
+	@Override
 	protected void showProcessor(IWContext iwc, Object casePK) throws RemoteException {
 		Form form = new Form();
 		form.setStyleClass("adminForm");
@@ -483,6 +499,7 @@ public class FocalMyCases extends FocalCasesBlock {
 		add(form);
 	}
 
+	@Override
 	protected String getCasesProcessorType() {
 		return MyCases.TYPE;
 	}
