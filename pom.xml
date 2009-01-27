@@ -5,13 +5,13 @@
   <parent>
   	<groupId>com.idega.block.egov</groupId>
   	<artifactId>com.idega.block.egov</artifactId>
-  	<version>4.1.1-SNAPSHOT</version>
+  	<version>4.1.0</version>
   </parent>
   <packaging>jar</packaging>
   <groupId>com.idega.block.egov</groupId>
   <artifactId>is.idega.idegaweb.egov.cases.focal</artifactId>
   <name>idega eGov Cases and Focal dms integration</name>
-  <version>4.1.1-SNAPSHOT</version>
+  <version>4.1.0</version>
   <inceptionYear>2007</inceptionYear>
   <scm>
     <!--
@@ -20,6 +20,7 @@
     -->
     <connection>scm:cvs:ext:idegaweb@code.idega.com:/idega/cvs:com.idega.block.egov/is.idega.idegaweb.egov.cases.focal/</connection>
     <developerConnection>scm:cvs:ext:idegaweb@code.idega.com:/idega/cvs:com.idega.block.egov/is.idega.idegaweb.egov.cases.focal/</developerConnection>
+    <tag>com_idega_block_egov-4_1_0</tag>
   </scm>
 
   <developers>
