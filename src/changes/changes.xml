@@ -1,0 +1,36 @@
+<document xmlns="http://maven.apache.org/changes/1.0.0">
+	<properties>
+		<title>NEST Focal integration changes</title>
+		<author email="alexis@idega.com">
+			Aleksandras Skrynikovas
+		</author>
+	</properties>
+
+	<body>
+		<release version="1.0.4" date="2008-06-27">
+			<action dev="tryggvil" type="update">
+				Making webservice URL settable with an application property
+			</action>
+		</release>
+		<release version="1.0.3" date="2007-09-10">
+			<action dev="alexis" type="update">
+				Adding a new view to search for or enter manually company information to save to Focal
+			</action>
+		</release>
+		<release version="1.0.2" date="2007-09-07">
+			<action dev="alexis" type="update">
+				Adding similar functionality to the FocalClosedCases block like in FocalMyCases
+			</action>
+		</release>
+		<release version="1.0.1" date="2007-09-06">
+			<action dev="alexis" type="update">
+				Updating several maven dependencies to newer versions
+			</action>
+		</release>
+		<release version="1.0.0" date="2007-08-30">
+			<action dev="alexis" type="update">
+				Initial release
+			</action>
+		</release>
+	</body>
+</document>
