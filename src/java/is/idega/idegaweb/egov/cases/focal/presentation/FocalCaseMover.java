@@ -32,6 +32,7 @@ public class FocalCaseMover extends Block {
 	}
 
 	public void main(IWContext iwc) throws Exception {
+		PresentationUtil.addStyleSheetToHeader(iwc, iwc.getIWMainApplication().getBundle("is.idega.idegaweb.egov.application").getVirtualPathWithFileNameString("style/application.css"));
 		present(iwc);
 	}
 
