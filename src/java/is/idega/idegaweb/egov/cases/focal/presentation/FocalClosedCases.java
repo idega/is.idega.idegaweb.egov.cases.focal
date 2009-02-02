@@ -3,13 +3,12 @@ package is.idega.idegaweb.egov.cases.focal.presentation;
 import is.idega.idegaweb.egov.cases.data.CaseCategory;
 import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
-import is.idega.idegaweb.egov.cases.presentation.ClosedCases;
 
 import java.rmi.RemoteException;
-import java.util.Collection;
 
 import javax.ejb.FinderException;
 
+import com.idega.block.process.business.CaseManager;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
 import com.idega.presentation.IWContext;
@@ -76,18 +75,6 @@ public class FocalClosedCases extends FocalCasesBlock {
 	@Override
 	protected String getBlockID() {
 		return "closedCases";
-	}
-
-	@Override
-	protected Collection getCases(User user) {
-		
-		try {
-			Collection groups = getUserBusiness().getUserGroupsDirectlyRelated(user);
-			return getCasesBusiness().getClosedCases(groups);
-			
-		} catch (RemoteException e) {
-			throw new IBORuntimeException(e);
-		}
 	}
 
 	@Override
@@ -295,7 +282,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 
 	@Override
 	protected String getCasesProcessorType() {
-		return ClosedCases.TYPE;
+		return CaseManager.CASE_LIST_TYPE_CLOSED;
 	}
 
 }

@@ -3,7 +3,6 @@ package is.idega.idegaweb.egov.cases.focal.presentation;
 import is.idega.block.nationalregister.business.NationalRegisterBusiness;
 import is.idega.block.nationalregister.data.NationalRegister;
 import is.idega.block.nationalregister.data.NationalRegisterHome;
-import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
 import is.idega.idegaweb.egov.cases.focal.FocalConstants;
 import is.idega.idegaweb.egov.cases.focal.IWBundleStarter;
@@ -29,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.idega.block.process.data.CaseStatus;
-import com.idega.block.process.presentation.UserCases;
+import com.idega.block.process.presentation.beans.CasePresentation;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
@@ -66,6 +65,7 @@ import com.idega.presentation.ui.TextInput;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
+import com.idega.util.expression.ELUtil;
 import com.idega.util.text.Name;
 import com.idega.webface.WFUtil;
 
@@ -773,7 +773,11 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		column = columnGroup.createColumn();
 		column.setSpan(1);
 		column.setWidth("12");
-		Collection cases = getCases(iwc.getCurrentUser());
+		
+		if (getCaseManagersProvider() == null) {
+			ELUtil.getInstance().autowire(this);
+		}
+		Collection<CasePresentation> cases = getCaseManagersProvider().getCaseManager().getCases(iwc.getCurrentUser(), getCasesProcessorType(), iwc.getLocale(), null, null, 0, -1).getCollection();
 
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
@@ -820,11 +824,10 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		group = table.createBodyRowGroup();
 		int iRow = 1;
 
-		Iterator iter = cases.iterator();
+		Iterator<CasePresentation> iter = cases.iterator();
 		while (iter.hasNext()) {
-			GeneralCase theCase = (GeneralCase) iter.next();
+			CasePresentation theCase = iter.next();
 			CaseStatus status = theCase.getCaseStatus();
-			CaseType type = theCase.getCaseType();
 			User owner = theCase.getOwner();
 			IWTimestamp created = new IWTimestamp(theCase.getCreated());
 
@@ -862,7 +865,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			if (getCasesBusiness().useTypes()) {
 				cell = row.createCell();
 				cell.setStyleClass("caseType");
-				cell.add(new Text(type.getName()));
+				cell.add(new Text(theCase.getCaseTypeName()));
 			}
 
 			cell = row.createCell();
@@ -871,7 +874,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 			cell = row.createCell();
 			cell.setStyleClass("status");
-			cell.add(new Text(getCasesBusiness().getLocalizedCaseStatusDescription(theCase, status, iwc.getCurrentLocale())));
+			cell.add(new Text(theCase.getLocalizedStatus()));
 
 			User handler = theCase.getHandledBy();
 			cell = row.createCell();
@@ -885,7 +888,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 			cell = row.createCell();
 			cell.setStyleClass("view");
-			Link edit = getProcessLink(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")), theCase);
+			Link edit = getProcessLink(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")), theCase.getPrimaryKey());
 			cell.add(edit);
 
 			cell = row.createCell();
@@ -918,30 +921,6 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 		add(form);
 	}
-
-	//	protected String createUpdateCustomer(IWContext iwc, boolean exist) {
-	//		try {
-	//			String customerId = iwc.getParameter(PARAMETER_CUSTOMER_PK);
-	//			if(customerId != null && !customerId.equals("")) {
-	//				CustomerPersonalInfo ci = getFocalCasesIntegration(iwc).createCustomerBean(customerId, iwc);		
-	//				if(ci != null) {
-	//					getFocalCasesIntegration(iwc).createUpdateCustomer(ci);
-	//				}
-	//			}
-	//			if(exist) {
-	//				return FocalConstants.STATUS_SUCCESS_UPDATE_CUSTOMER;
-	//			} else {
-	//				return FocalConstants.STATUS_SUCCESS_CREATE_CUSTOMER;
-	//			}
-	//		} catch(Exception e) {
-	//			logger.log(Level.SEVERE, "Exception while creating customer", e);
-	//			if(exist) {
-	//				return FocalConstants.STATUS_ERROR_UPDATE_CUSTOMER;
-	//			} else {
-	//				return FocalConstants.STATUS_ERROR_CREATE_CUSTOMER;
-	//			}
-	//		}
-	//	}
 
 	protected String saveToFocal(IWContext iwc) {
 		try {
@@ -1355,9 +1334,9 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		return IWBundleStarter.IW_BUNDLE_IDENTIFIER;
 	}
 
-	protected Link getProcessLink(PresentationObject object, GeneralCase theCase) {
+	protected Link getProcessLink(PresentationObject object, Integer primaryKey) {
 		Link process = new Link(object);
-		process.addParameter(PARAMETER_CASE_PK, theCase.getPrimaryKey().toString());
+		process.addParameter(PARAMETER_CASE_PK, primaryKey.toString());
 		process.addParameter(PARAMETER_ACTION, ACTION_PROCESS);
 
 		return process;

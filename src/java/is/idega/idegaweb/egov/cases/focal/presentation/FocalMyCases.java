@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 import javax.ejb.FinderException;
 
+import com.idega.block.process.business.CaseManager;
 import com.idega.block.process.data.CaseLog;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
@@ -88,11 +89,6 @@ public class FocalMyCases extends FocalCasesBlock {
 	}
 
 	@Override
-	protected Collection getCases(User user) {
-		return getCasesBusiness().getMyCases(user);
-	}
-
-	@Override
 	protected void save(IWContext iwc) throws RemoteException {
 		Object casePK = iwc.getParameter(PARAMETER_CASE_PK);
 		Object caseCategoryPK = iwc.getParameter(PARAMETER_CASE_CATEGORY_PK);
@@ -109,180 +105,6 @@ public class FocalMyCases extends FocalCasesBlock {
 		}
 	}
 
-	//	protected void showList(IWContext iwc, int action, String result) throws RemoteException {
-	//		Form form = new Form();
-	//		form.addParameter(PARAMETER_ACTION, "");
-	//		
-	//		Layer casesSection = new Layer(Layer.DIV);
-	//		casesSection.setStyleClass("formSection");
-	//
-	//		Table2 table = new Table2();
-	//		table.setWidth("100%");
-	//		table.setCellpadding(0);
-	//		table.setCellspacing(0);
-	//		table.setStyleClass("adminTable");
-	//		table.setStyleClass("ruler");
-	//		table.setID(getBlockID());
-	//
-	//		TableColumnGroup columnGroup = table.createColumnGroup();
-	//		TableColumn column = columnGroup.createColumn();
-	//		column.setSpan(6);
-	//		column = columnGroup.createColumn();
-	//		column.setSpan(1);
-	//		column.setWidth("12");
-	//		Collection cases = getCases(iwc.getCurrentUser());
-	//
-	//		TableRowGroup group = table.createHeaderRowGroup();
-	//		TableRow row = group.createRow();
-	//
-	//		boolean showCheckBoxes = true;
-	//		TableCell2 cell = row.createHeaderCell();
-	//		cell.setStyleClass("firstColumn");
-	//		cell.setStyleClass("caseNumber");
-	//		cell.add(new Text(getResourceBundle().getLocalizedString("case_nr", "Case nr.")));
-	//
-	//		cell = row.createHeaderCell();
-	//		cell.setStyleClass("sender");
-	//		cell.add(new Text(getResourceBundle().getLocalizedString("sender", "Sender")));
-	//
-	//		if (getBusiness().useTypes()) {
-	//			cell = row.createHeaderCell();
-	//			cell.setStyleClass("caseType");
-	//			cell.add(new Text(getResourceBundle().getLocalizedString("case_type", "Case type")));
-	//		}
-	//
-	//		cell = row.createHeaderCell();
-	//		cell.setStyleClass("createdDate");
-	//		cell.add(new Text(getResourceBundle().getLocalizedString("created_date", "Created date")));
-	//
-	//		cell = row.createHeaderCell();
-	//		cell.setStyleClass("status");
-	//		cell.add(new Text(getResourceBundle().getLocalizedString("status", "Status")));
-	//
-	//		cell = row.createHeaderCell();
-	//		cell.setStyleClass("handler");
-	//		cell.add(new Text(getResourceBundle().getLocalizedString("handler", "Handler")));
-	//
-	//		cell = row.createHeaderCell();
-	//		if (!showCheckBoxes) {
-	//			cell.setStyleClass("lastColumn");
-	//		}
-	//		cell.setStyleClass("view");
-	//		cell.add(new Text(getResourceBundle().getLocalizedString("view", "View")));
-	//
-	//		cell = row.createHeaderCell();
-	//		cell.setStyleClass("lastColumn");
-	//		cell.setStyleClass("multiHandle");
-	//		cell.add(Text.getNonBrakingSpace());
-	//
-	//		group = table.createBodyRowGroup();
-	//		int iRow = 1;
-	//
-	//		Iterator iter = cases.iterator();
-	//		while (iter.hasNext()) {
-	//			GeneralCase theCase = (GeneralCase) iter.next();
-	//			CaseStatus status = theCase.getCaseStatus();
-	//			CaseType type = theCase.getCaseType();
-	//			User owner = theCase.getOwner();
-	//			IWTimestamp created = new IWTimestamp(theCase.getCreated());
-	//
-	//			row = group.createRow();
-	//			if (iRow == 1) {
-	//				row.setStyleClass("firstRow");
-	//			}
-	//			else if (!iter.hasNext()) {
-	//				row.setStyleClass("lastRow");
-	//			}
-	//			if (theCase.isPrivate()) {
-	//				row.setStyleClass("isPrivate");
-	//			}
-	//			if (theCase.getExternalId() != null && !theCase.getExternalId().equals("")) {
-	//				row.setStyleClass("isInFocal");
-	//			}
-	//			if (status.equals(getCasesBusiness(iwc).getCaseStatusReview())) {
-	//				row.setStyleClass("isReview");
-	//			}
-	//
-	//			cell = row.createCell();
-	//			cell.setStyleClass("firstColumn");
-	//			cell.setStyleClass("caseNumber");
-	//			cell.add(new Text(theCase.getPrimaryKey().toString()));
-	//
-	//			cell = row.createCell();
-	//			cell.setStyleClass("sender");
-	//			if (owner != null) {
-	//				cell.add(new Text(new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName()).getName(iwc.getCurrentLocale())));
-	//			}
-	//			else {
-	//				cell.add(new Text("-"));
-	//			}
-	//
-	//			if (getBusiness().useTypes()) {
-	//				cell = row.createCell();
-	//				cell.setStyleClass("caseType");
-	//				cell.add(new Text(type.getName()));
-	//			}
-	//
-	//			cell = row.createCell();
-	//			cell.setStyleClass("createdDate");
-	//			cell.add(new Text(created.getLocaleDateAndTime(iwc.getCurrentLocale(), IWTimestamp.SHORT, IWTimestamp.SHORT)));
-	//
-	//			cell = row.createCell();
-	//			cell.setStyleClass("status");
-	//			cell.add(new Text(getBusiness().getLocalizedCaseStatusDescription(theCase, status, iwc.getCurrentLocale())));
-	//
-	//			User handler = theCase.getHandledBy();
-	//			cell = row.createCell();
-	//			cell.setStyleClass("handler");
-	//			if (handler != null) {
-	//				cell.add(new Text(new Name(handler.getFirstName(), handler.getMiddleName(), handler.getLastName()).getName(iwc.getCurrentLocale())));
-	//			}
-	//			else {
-	//				cell.add(new Text("-"));
-	//			}
-	//
-	//			cell = row.createCell();
-	//			cell.setStyleClass("view");
-	//			Link edit = getProcessLink(getBundle().getImage("edit.png", getResourceBundle().getLocalizedString("view_case", "View case")), theCase);
-	//			cell.add(edit);
-	//			
-	//			
-	//
-	//			cell = row.createCell();
-	//			cell.setStyleClass("firstColumn");
-	//			cell.setStyleClass("multiHandle");
-	//			if (theCase.getExternalId() == null) {
-	//				CheckBox box = new CheckBox(PARAMETER_CASE_PK, theCase.getPrimaryKey().toString());
-	//				cell.add(box);
-	//			}
-	//
-	//			if (iRow % 2 == 0) {
-	//				row.setStyleClass("evenRow");
-	//			}
-	//			else {
-	//				row.setStyleClass("oddRow");
-	//			}
-	//		}
-	//		casesSection.add(table);
-	//		form.add(casesSection);
-	//		
-	//		Layer legendSection = new Layer(Layer.DIV);
-	//		legendSection.setStyleClass("formSection");
-	//		legendSection.add(getLegend(iwc));
-	//		
-	//		form.add(legendSection);
-	//		
-	//		Layer bottom = new Layer(Layer.DIV);
-	//		bottom.setStyleClass("bottom");
-	//		form.add(bottom);
-	//
-	//		Link back = getButtonLink(getResourceBundle().getLocalizedString("move_focal", "Move to Focal"));
-	//		back.setOnClick("changeInputValue(findObj('" + PARAMETER_ACTION + "'), '" + String.valueOf(ACTION_MOVE_FOCAL) + "');");
-	//		back.setToFormSubmit(form);
-	//		bottom.add(back);
-	//
-	//		add(form);
-	//	}
 
 	@Override
 	protected void showProcessor(IWContext iwc, Object casePK) throws RemoteException {
@@ -512,7 +334,7 @@ public class FocalMyCases extends FocalCasesBlock {
 
 	@Override
 	protected String getCasesProcessorType() {
-		return MyCases.TYPE;
+		return CaseManager.CASE_LIST_TYPE_MY;
 	}
 
 }
