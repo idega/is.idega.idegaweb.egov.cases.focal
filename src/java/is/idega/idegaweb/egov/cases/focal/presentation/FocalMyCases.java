@@ -1,10 +1,9 @@
 package is.idega.idegaweb.egov.cases.focal.presentation;
 
-import is.idega.idegaweb.egov.cases.business.CaseCategoryCollectionHandler;
 import is.idega.idegaweb.egov.cases.data.CaseCategory;
 import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
-import is.idega.idegaweb.egov.cases.presentation.MyCases;
+import is.idega.idegaweb.egov.cases.util.CasesConstants;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -14,11 +13,11 @@ import javax.ejb.FinderException;
 
 import com.idega.block.process.business.CaseManager;
 import com.idega.block.process.data.CaseLog;
+import com.idega.block.web2.business.Web2Business;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
-import com.idega.presentation.remotescripting.RemoteScriptHandler;
 import com.idega.presentation.text.Heading1;
 import com.idega.presentation.text.Link;
 import com.idega.presentation.text.Text;
@@ -29,7 +28,10 @@ import com.idega.presentation.ui.Label;
 import com.idega.presentation.ui.TextArea;
 import com.idega.presentation.ui.util.SelectorUtility;
 import com.idega.user.data.User;
+import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
+import com.idega.util.PresentationUtil;
+import com.idega.util.expression.ELUtil;
 import com.idega.util.text.TextSoap;
 
 public class FocalMyCases extends FocalCasesBlock {
@@ -108,11 +110,22 @@ public class FocalMyCases extends FocalCasesBlock {
 
 	@Override
 	protected void showProcessor(IWContext iwc, Object casePK) throws RemoteException {
+		Web2Business business = ELUtil.getInstance().getBean(Web2Business.class);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, business.getBundleURIToJQueryLib());
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_ENGINE_SCRIPT);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, CoreConstants.DWR_UTIL_SCRIPT);
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, "/dwr/interface/CasesBusiness.js");
+		PresentationUtil.addJavaScriptSourceLineToHeader(iwc, iwc.getIWMainApplication().getBundle(CasesConstants.IW_BUNDLE_IDENTIFIER).getVirtualPathWithFileNameString("javascript/egov_cases.js"));
+
 		Form form = new Form();
 		form.setStyleClass("adminForm");
 		form.setStyleClass("overview");
 		form.maintainParameter(PARAMETER_CASE_PK);
 		form.addParameter(PARAMETER_ACTION, "");
+
+		HiddenInput localeInput = new HiddenInput("current_locale", iwc.getCurrentLocale().getCountry().toLowerCase());
+		localeInput.setID("casesLocale");
+		form.add(localeInput);
 
 		boolean useSubCategories = getCasesBusiness(iwc).useSubCategories();
 
@@ -151,11 +164,13 @@ public class FocalMyCases extends FocalCasesBlock {
 
 		SelectorUtility util = new SelectorUtility();
 		DropdownMenu categories = (DropdownMenu) util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_CASE_CATEGORY_PK), getCasesBusiness().getCaseCategories(), "getName");
+		categories.setID("casesParentCategory");
 		categories.keepStatusOnAction(true);
 		categories.setSelectedElement(parentCategory != null ? parentCategory.getPrimaryKey().toString() : category.getPrimaryKey().toString());
 		categories.setStyleClass("caseCategoryDropdown");
 
 		DropdownMenu subCategories = new DropdownMenu(PARAMETER_SUB_CASE_CATEGORY_PK);
+		subCategories.setID("casesSubCategory");
 		subCategories.keepStatusOnAction(true);
 		subCategories.setSelectedElement(category.getPrimaryKey().toString());
 		subCategories.setStyleClass("subCaseCategoryDropdown");
@@ -218,18 +233,6 @@ public class FocalMyCases extends FocalCasesBlock {
 		section.add(element);
 
 		if (useSubCategories) {
-			try {
-				RemoteScriptHandler rsh = new RemoteScriptHandler(categories, subCategories);
-				rsh.setRemoteScriptCollectionClass(CaseCategoryCollectionHandler.class);
-				element.add(rsh);
-			}
-			catch (IllegalAccessException iae) {
-				iae.printStackTrace();
-			}
-			catch (InstantiationException ie) {
-				ie.printStackTrace();
-			}
-
 			element = new Layer(Layer.DIV);
 			element.setStyleClass("formItem");
 			label = new Label(getResourceBundle().getLocalizedString("sub_case_category", "Sub case category"), subCategories);
