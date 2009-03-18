@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 import javax.ejb.FinderException;
 
-import com.idega.block.process.business.CaseManager;
+import com.idega.block.process.business.CasesRetrievalManager;
 import com.idega.block.process.data.CaseLog;
 import com.idega.block.web2.business.Web2Business;
 import com.idega.business.IBORuntimeException;
@@ -337,7 +337,7 @@ public class FocalMyCases extends FocalCasesBlock {
 
 	@Override
 	protected String getCasesProcessorType() {
-		return CaseManager.CASE_LIST_TYPE_MY;
+		return CasesRetrievalManager.CASE_LIST_TYPE_MY;
 	}
 
 }

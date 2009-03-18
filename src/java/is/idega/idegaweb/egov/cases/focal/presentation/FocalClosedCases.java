@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 
 import javax.ejb.FinderException;
 
-import com.idega.block.process.business.CaseManager;
+import com.idega.block.process.business.CasesRetrievalManager;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.file.data.ICFile;
 import com.idega.presentation.IWContext;
@@ -282,7 +282,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 
 	@Override
 	protected String getCasesProcessorType() {
-		return CaseManager.CASE_LIST_TYPE_CLOSED;
+		return CasesRetrievalManager.CASE_LIST_TYPE_CLOSED;
 	}
 
 }
