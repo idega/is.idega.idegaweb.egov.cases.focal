@@ -64,7 +64,9 @@ import com.idega.presentation.ui.TextArea;
 import com.idega.presentation.ui.TextInput;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
+import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
+import com.idega.util.StringUtil;
 import com.idega.util.expression.ELUtil;
 import com.idega.util.text.Name;
 import com.idega.webface.WFUtil;
@@ -116,6 +118,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	protected static final int ACTION_CREATE_PERSON = 12;
 	protected static final int ACTION_SEARCH_PERSON = 13;
 
+	@Override
 	protected void present(IWContext iwc) throws Exception {
 		Script script = new Script();
 		script.setScriptSource(FOCAL_JS);
@@ -844,7 +847,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			if (theCase.getExternalId() != null && !theCase.getExternalId().equals("")) {
 				row.setStyleClass("isInFocal");
 			}
-			if (status.equals(getCasesBusiness(iwc).getCaseStatusReview())) {
+			if (status != null && status.equals(getCasesBusiness(iwc).getCaseStatusReview())) {
 				row.setStyleClass("isReview");
 			}
 
@@ -874,7 +877,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 			cell = row.createCell();
 			cell.setStyleClass("status");
-			cell.add(new Text(theCase.getLocalizedStatus()));
+			cell.add(new Text(StringUtil.isEmpty(theCase.getLocalizedStatus()) ? CoreConstants.EMPTY : theCase.getLocalizedStatus()));
 
 			User handler = theCase.getHandledBy();
 			cell = row.createCell();
@@ -1257,6 +1260,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		add(form);
 	}
 
+	@Override
 	protected int parseAction(IWContext iwc) {
 		if (iwc.isParameterSet(PARAMETER_ACTION)) {
 			return Integer.parseInt(iwc.getParameter(PARAMETER_ACTION));
@@ -1264,6 +1268,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		return ACTION_VIEW;
 	}
 
+	@Override
 	protected Lists getLegend(IWContext iwc) throws RemoteException {
 		Lists list = super.getLegend(iwc);
 
@@ -1330,6 +1335,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		}
 	}
 
+	@Override
 	public String getBundleIdentifier() {
 		return IWBundleStarter.IW_BUNDLE_IDENTIFIER;
 	}
@@ -1378,6 +1384,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		return errorSection;
 	}
 
+	@Override
 	protected boolean showCheckBox() {
 		return false;
 	}
