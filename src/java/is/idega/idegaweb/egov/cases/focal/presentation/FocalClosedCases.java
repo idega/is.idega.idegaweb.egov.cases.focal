@@ -281,7 +281,7 @@ public class FocalClosedCases extends FocalCasesBlock {
 	}
 
 	@Override
-	protected String getCasesProcessorType() {
+	public String getCasesProcessorType() {
 		return CasesRetrievalManager.CASE_LIST_TYPE_CLOSED;
 	}
 

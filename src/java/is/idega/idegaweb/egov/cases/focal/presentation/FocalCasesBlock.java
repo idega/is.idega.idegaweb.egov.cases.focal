@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1385,7 +1386,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 	}
 
 	@Override
-	protected boolean showCheckBox() {
+	public boolean showCheckBox() {
 		return false;
 	}
 
@@ -1413,4 +1414,8 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		return home;
 	}
 
+	@Override
+	public Map<Object, Object> getUserCasesPageMap() {
+		return null;
+	}
 }
