@@ -67,6 +67,7 @@ import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
 import com.idega.util.CoreConstants;
 import com.idega.util.IWTimestamp;
+import com.idega.util.ListUtil;
 import com.idega.util.StringUtil;
 import com.idega.util.expression.ELUtil;
 import com.idega.util.text.Name;
@@ -781,7 +782,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		if (getCaseManagersProvider() == null) {
 			ELUtil.getInstance().autowire(this);
 		}
-		Collection<CasePresentation> cases = getCaseManagersProvider().getCaseManager().getCases(iwc.getCurrentUser(), getCasesProcessorType(), iwc.getLocale(), null, null, 0, -1).getCollection();
+		Collection<CasePresentation> cases = getCaseManagersProvider().getCaseManager().getCases(iwc.getCurrentUser(), getCasesProcessorType(), iwc.getLocale(), ListUtil.getEmptyList(), ListUtil.getEmptyList(), ListUtil.getEmptyList(), 0, -1).getCollection();
 
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
