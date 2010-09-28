@@ -782,9 +782,10 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		if (getCaseManagersProvider() == null) {
 			ELUtil.getInstance().autowire(this);
 		}
+		List<String> emptyList = ListUtil.getEmptyList();
 		Collection<CasePresentation> cases = getCaseManagersProvider().getCaseManager().getCases(
-				iwc.isLoggedOn() ? iwc.getCurrentUser() : null, getCasesProcessorType(), iwc.getLocale(), ListUtil.getEmptyList(), ListUtil.getEmptyList(),
-				ListUtil.getEmptyList(), 0, -1, isOnlySubscribedCases()).getCollection();
+				iwc.isLoggedOn() ? iwc.getCurrentUser() : null, getCasesProcessorType(), iwc.getLocale(), emptyList, emptyList, emptyList, 0, -1, isOnlySubscribedCases()
+		).getCollection();
 
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
