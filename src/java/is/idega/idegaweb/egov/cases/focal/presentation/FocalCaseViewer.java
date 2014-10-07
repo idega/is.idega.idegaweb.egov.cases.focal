@@ -28,6 +28,7 @@ import com.idega.presentation.ui.Form;
 import com.idega.presentation.ui.Label;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
+import com.idega.util.ListUtil;
 import com.idega.util.text.Name;
 
 public class FocalCaseViewer extends CaseViewer {
@@ -38,6 +39,7 @@ public class FocalCaseViewer extends CaseViewer {
 
 	private ICPage iBackPage;
 
+	@Override
 	protected void present(IWContext iwc) {
 		try {
 			if (iwc.isParameterSet(PARAMETER_CASE_PK)) {
@@ -88,7 +90,7 @@ public class FocalCaseViewer extends CaseViewer {
 			CaseCategory parentCategory = category.getParent();
 			CaseStatus status = theCase.getCaseStatus();
 			CaseType type = theCase.getCaseType();
-			ICFile attachment = theCase.getAttachment();
+			Collection<ICFile> attachments = theCase.getAttachments();
 			User user = getCasesBusiness(iwc).getLastModifier(theCase);
 			User owner = theCase.getOwner();
 			if (user.equals(owner)) {
@@ -176,21 +178,23 @@ public class FocalCaseViewer extends CaseViewer {
 			formItem.add(createdDate);
 			section.add(formItem);
 
-			if (attachment != null) {
-				Link link = new Link(new Text(attachment.getName()));
-				link.setFile(attachment);
-				link.setTarget(Link.TARGET_BLANK_WINDOW);
-
-				Layer attachmentSpan = new Layer(Layer.SPAN);
-				attachmentSpan.add(link);
-
-				formItem = new Layer(Layer.DIV);
-				formItem.setStyleClass("formItem");
-				label = new Label();
-				label.setLabel(iwrb.getLocalizedString("attachment", "Attachment"));
-				formItem.add(label);
-				formItem.add(attachmentSpan);
-				section.add(formItem);
+			if (!ListUtil.isEmpty(attachments)) {
+				for(ICFile attachment : attachments){
+					Link link = new Link(new Text(attachment.getName()));
+					link.setFile(attachment);
+					link.setTarget(Link.TARGET_BLANK_WINDOW);
+	
+					Layer attachmentSpan = new Layer(Layer.SPAN);
+					attachmentSpan.add(link);
+	
+					formItem = new Layer(Layer.DIV);
+					formItem.setStyleClass("formItem");
+					label = new Label();
+					label.setLabel(iwrb.getLocalizedString("attachment", "Attachment"));
+					formItem.add(label);
+					formItem.add(attachmentSpan);
+					section.add(formItem);
+				}
 			}
 
 			formItem = new Layer(Layer.DIV);

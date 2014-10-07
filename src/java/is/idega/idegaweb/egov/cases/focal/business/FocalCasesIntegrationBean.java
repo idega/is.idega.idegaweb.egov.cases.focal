@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,6 +51,7 @@ import com.idega.presentation.IWContext;
 import com.idega.user.business.UserBusiness;
 import com.idega.user.data.User;
 import com.idega.util.CypherText;
+import com.idega.util.ListUtil;
 
 /**
  * 
@@ -78,6 +80,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
+	@Override
 	public List findProjects(String search_txt) throws Exception {
 
 		Project service = getFocalService();
@@ -116,6 +119,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		return result_project_list;
 	}
 
+	@Override
 	public Status createCompany(CompanyInfo companyInfo) throws Exception {
 
 		Project service = getFocalService();
@@ -482,11 +486,12 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		}
 	}
 
+	@Override
 	public CustomerPersonalInfo createCustomerBean(String personalID, IWContext iwc) throws Exception {
 		CustomerPersonalInfo ci = new CustomerPersonalInfo();
 		if (personalID != null && !personalID.equals("")) {
 			CUSTOMER customerFocal = findCustomer(personalID);
-			UserBusiness userBusiness = (UserBusiness) IBOLookup.getServiceInstance(iwc, UserBusiness.class);
+			UserBusiness userBusiness = IBOLookup.getServiceInstance(iwc, UserBusiness.class);
 			if (userBusiness != null) {
 				boolean isIWUser = true;
 				NationalRegister nationalCustomer = getNationalRegisterBusiness(iwc).getEntryBySSN(personalID);
@@ -732,6 +737,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
+	@Override
 	public CUSTOMER findCustomer(String search_txt) throws Exception {
 
 		Project service = getFocalService();
@@ -814,6 +820,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
+	@Override
 	public List createCasesUnderProject(String project_id, String projectName, List cases) throws Exception {
 
 		if (cases == null || cases.isEmpty()) {
@@ -892,9 +899,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		return cases;
 	}
 
-	private void addAttachment(CaseArg case_arg, String UNID, Project service) {
-		ICFile att_file = case_arg.getGcase().getAttachment();
-
+	private void addAttachment(CaseArg case_arg,ICFile att_file, String UNID, Project service) {
 		if (att_file == null) {
 			case_arg.setStatus(new Status(Status.success));
 			return;
@@ -950,11 +955,21 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			}
 		}
 	}
+	private void addAttachment(CaseArg case_arg, String UNID, Project service) {
+		Collection<ICFile> attachments = case_arg.getGcase().getAttachments();
+		if(ListUtil.isEmpty(attachments)){
+			return;
+		}
+		for(ICFile attachment : attachments){
+			addAttachment(case_arg, attachment, UNID, service);
+		}
+	}
 
 	/**
 	 * @see FocalCasesIntegration method description
 	 * 
 	 */
+	@Override
 	public Status createUpdateCustomer(CustomerPersonalInfo customer) throws Exception {
 
 		Project service = getFocalService();
@@ -1017,7 +1032,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 
 	protected NationalRegisterBusiness getNationalRegisterBusiness(IWApplicationContext iwac) {
 		try {
-			return (NationalRegisterBusiness) IBOLookup.getServiceInstance(iwac, NationalRegisterBusiness.class);
+			return IBOLookup.getServiceInstance(iwac, NationalRegisterBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
