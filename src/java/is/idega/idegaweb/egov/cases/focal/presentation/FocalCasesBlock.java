@@ -192,7 +192,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 				break;
 
 			case ACTION_SEARCH_PERSON:
-				NationalRegister natReg = searchPerson(iwc);
+				is.idega.block.nationalregister.data.bean.NationalRegister natReg = searchPerson(iwc);
 				showCreateCustomer(iwc, ACTION_SEARCH_PERSON, null, natReg, false);
 				break;
 
@@ -200,13 +200,13 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		add(script);
 	}
 
-	protected NationalRegister searchPerson(IWContext iwc) {
+	protected is.idega.block.nationalregister.data.bean.NationalRegister searchPerson(IWContext iwc) {
 		try {
 			String searchKey = iwc.getParameter(PARAMETER_COMPANY_ID);
 			if (searchKey == null || searchKey.equals("")) {
 				throw new Exception("Search parameter empty");
 			}
-			NationalRegister customer = getNationalRegisterBusiness(iwc).getEntryBySSN(searchKey);
+			is.idega.block.nationalregister.data.bean.NationalRegister customer = getNationalRegisterBusiness(iwc).getEntryBySSN(searchKey);
 			return customer;
 		}
 		catch (Exception e) {
@@ -302,7 +302,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		}
 	}
 
-	protected void showCreateCustomer(IWContext iwc, int action, Company company, NationalRegister natReg, boolean searchForCompany) throws RemoteException {
+	protected void showCreateCustomer(IWContext iwc, int action, Company company, is.idega.block.nationalregister.data.bean.NationalRegister natReg, boolean searchForCompany) throws RemoteException {
 		Form form = new Form();
 		form.setId("focalProjectSearchForm");
 		form.addParameter(PARAMETER_ACTION, "");
@@ -463,7 +463,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 			textInput = new TextInput(PARAMETER_SOC_NUMBER, companySocNr);
 		}
 		else {
-			String natRegSocNr = (natReg == null) ? "" : natReg.getSSN();
+			String natRegSocNr = (natReg == null) ? "" : natReg.getSsn();
 			textInput = new TextInput(PARAMETER_SOC_NUMBER, natRegSocNr);
 		}
 		label = new Label(getResourceBundle().getLocalizedString("soc_sec_number", "Social security number"), textInput);
@@ -778,7 +778,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 		column = columnGroup.createColumn();
 		column.setSpan(1);
 		column.setWidth("12");
-		
+
 		if (getCaseManagersProvider() == null) {
 			ELUtil.getInstance().autowire(this);
 		}
@@ -1288,7 +1288,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected FocalCasesIntegration getFocalCasesIntegration(IWApplicationContext iwac) {
 		try {
-			return (FocalCasesIntegration) IBOLookup.getServiceInstance(iwac, FocalCasesIntegration.class);
+			return IBOLookup.getServiceInstance(iwac, FocalCasesIntegration.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
@@ -1297,7 +1297,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected UserBusiness getUserBusiness(IWApplicationContext iwac) {
 		try {
-			return (UserBusiness) IBOLookup.getServiceInstance(iwac, UserBusiness.class);
+			return IBOLookup.getServiceInstance(iwac, UserBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
@@ -1306,7 +1306,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected CompanyRegisterBusiness getCompanyRegisterBusiness(IWApplicationContext iwac) {
 		try {
-			return (CompanyRegisterBusiness) IBOLookup.getServiceInstance(iwac, CompanyRegisterBusiness.class);
+			return IBOLookup.getServiceInstance(iwac, CompanyRegisterBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
@@ -1315,7 +1315,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected NationalRegisterBusiness getNationalRegisterBusiness(IWApplicationContext iwac) {
 		try {
-			return (NationalRegisterBusiness) IBOLookup.getServiceInstance(iwac, NationalRegisterBusiness.class);
+			return IBOLookup.getServiceInstance(iwac, NationalRegisterBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
@@ -1324,7 +1324,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected CommuneBusiness getCommuneBusiness(IWApplicationContext iwac) {
 		try {
-			return (CommuneBusiness) IBOLookup.getServiceInstance(iwac, CommuneBusiness.class);
+			return IBOLookup.getServiceInstance(iwac, CommuneBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
@@ -1333,7 +1333,7 @@ public abstract class FocalCasesBlock extends CasesProcessor {
 
 	protected ExportCasesManagement getExportCasesManagement(IWApplicationContext iwac) {
 		try {
-			return (ExportCasesManagement) IBOLookup.getServiceInstance(iwac, ExportCasesManagement.class);
+			return IBOLookup.getServiceInstance(iwac, ExportCasesManagement.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);

@@ -1,7 +1,6 @@
 package is.idega.idegaweb.egov.cases.focal.business;
 
 import is.idega.block.nationalregister.business.NationalRegisterBusiness;
-import is.idega.block.nationalregister.data.NationalRegister;
 import is.idega.idegaweb.egov.cases.data.CaseCategory;
 import is.idega.idegaweb.egov.cases.data.CaseType;
 import is.idega.idegaweb.egov.cases.data.GeneralCase;
@@ -54,9 +53,9 @@ import com.idega.util.CypherText;
 import com.idega.util.ListUtil;
 
 /**
- * 
+ *
  * Last modified: $Date: 2008/06/27 15:18:56 $ by $Author: tryggvil $
- * 
+ *
  * @author <a href="civilis@idega.com">Vytautas Čivilis</a>
  * @version $Revision: 1.32 $
  */
@@ -78,7 +77,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 
 	/**
 	 * @see FocalCasesIntegration method description
-	 * 
+	 *
 	 */
 	@Override
 	public List findProjects(String search_txt) throws Exception {
@@ -494,7 +493,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 			UserBusiness userBusiness = IBOLookup.getServiceInstance(iwc, UserBusiness.class);
 			if (userBusiness != null) {
 				boolean isIWUser = true;
-				NationalRegister nationalCustomer = getNationalRegisterBusiness(iwc).getEntryBySSN(personalID);
+				is.idega.block.nationalregister.data.bean.NationalRegister nationalCustomer = getNationalRegisterBusiness(iwc).getEntryBySSN(personalID);
 				if (nationalCustomer == null) {
 					return null;
 				}
@@ -735,7 +734,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 
 	/**
 	 * @see FocalCasesIntegration method description
-	 * 
+	 *
 	 */
 	@Override
 	public CUSTOMER findCustomer(String search_txt) throws Exception {
@@ -751,19 +750,19 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 		return service.FINDCUSTOMER(search_txt, const_project_list, loging_pass[0], loging_pass[1]);
 
 		//		String xml_str = service.FINDCUSTOMER(search_txt, const_project_list, loging_pass[0], loging_pass[1]);
-		//		
+		//
 		//		if(xml_str == null)
 		//			return null;
-		//		
+		//
 		//		XStream xstream = new XStream();
-		//		
+		//
 		//		xstream.alias(const_customer, Customer.class);
-		//		
+		//
 		//		try {
 		//			return (Customer)xstream.fromXML(xml_str);
-		//			
+		//
 		//		} catch (StreamException e) {
-		//			
+		//
 		//			logger.log(Level.WARNING, "Exception while parsing xml to bean. This can be either an error in document, or that's how focal returns when nothing is found (plain string with blah blah ;])", e);
 		//			return null;
 		//		}
@@ -818,7 +817,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 
 	/**
 	 * @see FocalCasesIntegration method description
-	 * 
+	 *
 	 */
 	@Override
 	public List createCasesUnderProject(String project_id, String projectName, List cases) throws Exception {
@@ -967,7 +966,7 @@ public class FocalCasesIntegrationBean extends IBOServiceBean implements FocalCa
 
 	/**
 	 * @see FocalCasesIntegration method description
-	 * 
+	 *
 	 */
 	@Override
 	public Status createUpdateCustomer(CustomerPersonalInfo customer) throws Exception {
